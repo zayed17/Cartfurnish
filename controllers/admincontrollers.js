@@ -1,5 +1,6 @@
 const Admin = require('../models/adminmodel');
-const adminRoute = require('../routes/adminroute');
+const User = require('../models/usermodel');
+const bcrypt = require('bcrypt');
 
 
 const loadadmin = async(req,res)=>{
@@ -14,13 +15,13 @@ const verifyLogin = async(req,res)=>{
     try {
         const email = req.body.email;
         const password = req.body.password;
-        const adminData = await Admin.findOne({email:email});
+        const adminData = await User.findOne({email:email});
 
         if(adminData){
             const passwordMatch = await bcrypt.compare(password, adminData.password);
             if(passwordMatch){
                 req.session.admin_id = adminData._id;
-                res.redirect('/dashboard')
+                res.redirect('/admin/dashboard')
             }else{
                 res.render('admin-login',{message:"Email and password are incorrect"});
             }
@@ -35,14 +36,36 @@ const verifyLogin = async(req,res)=>{
 
 const loaddashboard = async(req,res)=>{
     try {
-        res.render('index')
+        res.render('dashboard')
     } catch (error) {
         console.log(error);
     }
 }
 
+// const loaduser = async(req,res)=>{
+//     try {
+//         res.render('users')
+//     } catch (error) {
+//         console.log(error);
+//     }
+// }
+
+
+const loaduser = async (req, res) => {
+    try {
+
+        const userData = await User.find();
+        res.render('users', { users: userData });
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+
+
 module.exports = {
     loadadmin,
     verifyLogin,
-    loaddashboard
+    loaddashboard,
+    loaduser
 }

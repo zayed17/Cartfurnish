@@ -19,7 +19,7 @@ userRoute.use(express.urlencoded({ extended: true }));
 
 // Set the view engine and views directory
 userRoute.set('view engine', 'ejs');
-userRoute.set('views', 'views/user');
+userRoute.set('views', './views/user');
 
 userRoute.get('/',auth.isLogout,usercontrollers.loadhome);
 userRoute.get('/home',auth.isLogin,usercontrollers.loadhome);

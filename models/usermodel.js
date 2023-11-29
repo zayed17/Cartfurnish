@@ -21,7 +21,11 @@ const userSchema  = mongoose.Schema({
     type:Boolean,
     default:false,
     required:true
-}
+  },
+is_blocked: {
+    type: Boolean,
+    default: false
+  }
 }); 
 
 module.exports = mongoose.model('users',userSchema); 

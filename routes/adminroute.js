@@ -17,13 +17,15 @@ adminRoute.use(express.urlencoded({ extended: true }));
 
 // Set the view engine and views directory
 adminRoute.set('view engine', 'ejs');
-adminRoute.set('views', 'views/admin');
+adminRoute.set('views', './views/admin');
 
 
 
 adminRoute.get('/',admincontrollers.loadadmin);
 adminRoute.post('/',admincontrollers.verifyLogin);
 adminRoute.get('/dashboard',admincontrollers.loaddashboard);
+adminRoute.get('/users',admincontrollers.loaduser)
+
 
 
 
