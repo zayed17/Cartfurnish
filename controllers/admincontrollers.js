@@ -1,7 +1,7 @@
 const Admin = require('../models/adminmodel');
 const User = require('../models/usermodel');
 const bcrypt = require('bcrypt');
-
+const Category = require('../models/category')
 
 const loadadmin = async(req,res)=>{
     try {
@@ -42,14 +42,6 @@ const loaddashboard = async(req,res)=>{
     }
 }
 
-// const loaduser = async(req,res)=>{
-//     try {
-//         res.render('users')
-//     } catch (error) {
-//         console.log(error);
-//     }
-// }
-
 
 const loaduser = async (req, res) => {
     try {
@@ -61,11 +53,47 @@ const loaduser = async (req, res) => {
     }
 }
 
+const loadcategory = async(req,res)=>{
+    try {
+        const category = await Category.find({})
+        res.render('categories',{category })
+    } catch (error) {
+        console.log(error);
+    }
+}
 
+const loadaddcategory = async (req,res)=>{
+    try {
+        res.render('addcategory')
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+const addcategory = async(req,res)=>{
+    try {
+        const name = req.body.name.trim();
+        const description = req.body.description.trim();
+        const isExists = await Category.findOne({ name: { $regex: '.*' + name + '.*', $options: 'i' } })
+
+        if(!isExists){
+            const category = new Category({
+                name,
+                description
+            })
+            await category.save();
+        }
+
+    } catch (error) {
+        console.log(error);
+    }
+}
 
 module.exports = {
     loadadmin,
     verifyLogin,
     loaddashboard,
-    loaduser
+    loaduser,
+    loadaddcategory,
+    addcategory
 }

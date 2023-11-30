@@ -25,6 +25,8 @@ adminRoute.get('/',admincontrollers.loadadmin);
 adminRoute.post('/',admincontrollers.verifyLogin);
 adminRoute.get('/dashboard',admincontrollers.loaddashboard);
 adminRoute.get('/users',admincontrollers.loaduser)
+adminRoute.get('/addcategory',admincontrollers.loadaddcategory)
+adminRoute.post('/addcategory',admincontrollers.addcategory)
 
 
 
