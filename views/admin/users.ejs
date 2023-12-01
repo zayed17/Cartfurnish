@@ -48,7 +48,7 @@
                     </li>
 
                     <li class="menu-item ">
-                        <a class="menu-link" href="categories">
+                        <a class="menu-link" href="category">
                             <i class="icon material-icons md-shopping_cart"></i>
                             <span class="text">Categories</span>
                         </a>
@@ -170,7 +170,7 @@
                     <div class="card mt-4">
                         <div class="table-data">
                             <div class="order">
-                                <% if(users.length > 0) { %>
+                                <% if(users.length > 0 && users.map(user => !user.is_admin)) { %>
                                     <div class="table-responsive">
                                         <table id="tablePagination" class="table table-bordered table-hover table-striped">
                                             <thead class="thead-dark">
@@ -185,24 +185,26 @@
                                             </thead>
                                             <tbody>
                                                 <% for(let i = 0; i < users.length; i++) { %>
-                                                    <tr>
-                                                        <td align="center"><%= i+1 %></td>
-                                                        <td align="center"><%= users[i].name %></td>
-                                                        <td align="center"><%= users[i].email %></td>
-                                                        <td align="center"><%= users[i].mobile %></td>
-                                                        <td align="center"><%= users[i].is_verified ? "True" : "False" %></td>
-                                                        <td align="center">
-                                                            <% if(users[i].isBlocked === false) { %>
-                                                                <span class="badge badge-success block-button" data-id="<%= users[i]._id %>">
-                                                                    Active
-                                                                </span>
-                                                            <% } else { %>
-                                                                <span class="badge badge-danger unBlock-button" data-id="<%= users[i]._id %>">
-                                                                    Blocked
-                                                                </span>
-                                                            <% } %>
-                                                        </td>
-                                                    </tr>
+                                                    <% if (!users[i].is_admin) { %> <!-- Add this condition -->
+                                                        <tr>
+                                                            <td align="center"><%= i+1 %></td>
+                                                            <td align="center"><%= users[i].name %></td>
+                                                            <td align="center"><%= users[i].email %></td>
+                                                            <td align="center"><%= users[i].mobile %></td>
+                                                            <td align="center"><%= users[i].is_verified ? "True" : "False" %></td>
+                                                            <td align="center">
+                                                                <% if(users[i].is_blocked) { %>
+                                                                    <button class="btn btn-success unblock-button" data-id="<%= users[i]._id %>">
+                                                                        UnBlock
+                                                                    </button>
+                                                                <% } else { %>
+                                                                    <button class="btn btn-danger block-button" data-id="<%= users[i]._id %>">
+                                                                        Block
+                                                                    </button>
+                                                                <% } %>
+                                                            </td>                            
+                                                        </tr>
+                                                    <% } %>
                                                 <% } %>
                                             </tbody>
                                         </table>
@@ -210,6 +212,7 @@
                                 <% } else { %>
                                     <p>No users found in the database.</p>
                                 <% } %>
+                                
                             </div>
                         </div>
                     </div>
@@ -231,6 +234,13 @@
                 </div>
             </footer>
         </main>
+
+
+       
+        
+
+
+
         <script src="/public/assets/js/vendors/jquery-3.6.0.min.js"></script>
         <script src="/public/assets/js/vendors/bootstrap.bundle.min.js"></script>
         <script src="/public/assets/js/vendors/select2.min.js"></script>

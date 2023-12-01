@@ -48,7 +48,7 @@
                     </li>
 
                     <li class="menu-item ">
-                        <a class="menu-link" href="categories">
+                        <a class="menu-link" href="category">
                             <i class="icon material-icons md-shopping_cart"></i>
                             <span class="text">Categories</span>
                         </a>
@@ -163,14 +163,21 @@
                 </div>
             </header>
 
-            
-
+                    
             <section class="content-main">
                 <div class="container-fluid">
+                   
+                    <div class="left">
+                        <a href="addcategory" class="btn btn-success btn-download">
+                            <i class='bx bxs-plus-circle'></i>
+                            <span class="text">Add New Category</span>
+                        </a>
+                    </div>
+                    
                     <div class="card mt-4">
                         <div class="table-data">
                             <div class="order">
-                                <% if(users.length > 0) { %>
+                                <% if(category.length > 0) { %>
                                     <div class="table-responsive">
                                         <table id="tablePagination" class="table table-bordered table-hover table-striped">
                                             <thead class="thead-dark">
@@ -184,20 +191,20 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <% for(let i = 0; i < users.length; i++) { %>
+                                                <% for(let i = 0; i < category.length; i++) { %>
                                                     <tr>
                                                         <td align="center"><%= i+1 %></td>
-                                                        <td align="center"><%= users[i].name %></td>
-                                                        <td align="center"><%= users[i].email %></td>
-                                                        <td align="center"><%= users[i].mobile %></td>
-                                                        <td align="center"><%= users[i].is_verified ? "True" : "False" %></td>
+                                                        <td align="center"><%= category[i].name %></td>
+                                                        <td align="center"><%= category[i].email %></td>
+                                                        <td align="center"><%= category[i].mobile %></td>
+                                                        <td align="center"><%= category[i].is_verified ? "True" : "False" %></td>
                                                         <td align="center">
-                                                            <% if(users[i].isBlocked === false) { %>
-                                                                <span class="badge badge-success block-button" data-id="<%= users[i]._id %>">
+                                                            <% if(category[i].isBlocked === false) { %>
+                                                                <span class="badge badge-success block-button" data-id="<%= category[i]._id %>">
                                                                     Active
                                                                 </span>
                                                             <% } else { %>
-                                                                <span class="badge badge-danger unBlock-button" data-id="<%= users[i]._id %>">
+                                                                <span class="badge badge-danger unBlock-button" data-id="<%= category[i]._id %>">
                                                                     Blocked
                                                                 </span>
                                                             <% } %>
