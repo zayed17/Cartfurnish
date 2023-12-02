@@ -18,7 +18,8 @@ const securePassword = async (password) => {
 
 const loadhome = async (req, res) => {
     try {
-        res.render('home');
+        const userData = await User.findOne({_id:req.session.user_id})
+        res.render('home',{user:userData});
     } catch (error) {
         console.log(error.message);
     }
@@ -275,7 +276,8 @@ const sendOtpVerificationEmail = async ({ email, _id }, res) => {
             await User.updateOne({_id:userId},{$set:{is_verified:true }})
             //delete the used otp of otp database 
             await userOtpVerification.deleteOne({userId})
-            return res.redirect('/')
+            // req.session.user_id = userData._id;
+            return res.redirect('/home')
         
   
     } catch (error) {
@@ -329,10 +331,10 @@ const verifyLogin = async (req, res) => {
         const email = req.body.email;
         const password = req.body.password;
 
-        const userData = await User.findOne({ email: email });
+        const userData = await User.findOne({ email });
 
         if (userData) {
-            if (userData.is_verified === true) {
+            if (userData.is_verified) {
                 const passwordMatch = await bcrypt.compare(password, userData.password);
 
                 if (passwordMatch) {
@@ -391,7 +393,14 @@ const loadlogin = async (req, res) => {
     }
 }
 
-
+const userLogout = async (req, res) => {
+    try {
+        req.session.destroy();
+        res.redirect('/home');
+    } catch (error) {
+        console.log(error.message);
+    }
+}
 
 
 const loadshop = async (req, res) => {
@@ -404,7 +413,6 @@ const loadshop = async (req, res) => {
 
 
 module.exports = {
-    securePassword,
     loadhome,
     loadshop,
     loadlogin,
@@ -414,5 +422,6 @@ module.exports = {
     loadVerificationPage,
     verifyLogin,
     sentOtpbyMail,
-    loademailinput
+    loademailinput,
+    userLogout
 }

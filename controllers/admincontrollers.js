@@ -1,7 +1,7 @@
 const Admin = require('../models/adminmodel');
 const User = require('../models/usermodel');
 const bcrypt = require('bcrypt');
-const Category = require('../models/category')
+const Category = require('../models/categorymodal')
 
 const loadadmin = async(req,res)=>{
     try {
@@ -93,29 +93,33 @@ const loadcategory = async(req,res)=>{
     }
 }
 
-const blockUser = async (req, res) => {
+const blockUser = async(req,res)=>{
     try {
-      const userId = req.query.id
-      // console.log(userId)
-      const userData = await User.findOne({ _id: userId })
-      const value = userData.is_blocked
-      // console.log(value)
-      if (value === true) {
-        await User.findByIdAndUpdate({ _id: userId }, { $set: { is_blocked: false } })
-        res.redirect('/admin/users')
-      } else if (value === false) {
-        await User.findByIdAndUpdate({ _id: userId }, { $set: { is_blocked: true } })
-        if (req.session.user_id === userId) {
-          req.session.user_id = ''
-        }
-        res.redirect('/admin    /users')
-        // console.log(userData)
+  
+      const user_id =  req.body.userId
+      const userData = await User.findOne({_id:user_id})
+  
+      if(userData.is_blocked){
+       await User.findByIdAndUpdate({_id:user_id},{$set:{is_blocked:false}}) 
+      }else{  
+        await User.findByIdAndUpdate({_id:user_id},{$set:{is_blocked:true}})
       }
+  
+      res.json({block:true}) 
+  
     } catch (error) {
-      console.log(error.message)
+        console.log(error.message);
+        // res.render('500Error')
     }
   }
-  
+
+const loadaddproduct = async(req,res)=>{
+    try {
+        res.render('addproduct')
+    } catch (error) {
+        console.log();
+    }
+}
 
 module.exports = {
     loadadmin,
@@ -125,5 +129,6 @@ module.exports = {
     loadaddcategory,
     addcategory,
     loadcategory,
-    blockUser
+    blockUser,
+    loadaddproduct
 }

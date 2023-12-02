@@ -33,5 +33,6 @@ userRoute.get('/shop',usercontrollers.loadshop);
 userRoute.get('/loginwithotp',usercontrollers.loademailinput)
 userRoute.post('/loginwithotp',usercontrollers.sentOtpbyMail)
 
+userRoute.get('/logout', usercontrollers.userLogout);
 
 module.exports = userRoute;
