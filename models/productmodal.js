@@ -12,17 +12,16 @@ const productSchema = mongoose.Schema({
     category: {
         type: String,
         required: true,
-        ref: "Category",
     },
     price: {
         type: Number,
         required: true
     },
-    offer: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Offer",
-        required: false
-    },
+    // offer: {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: "Offer",
+    //     required: false
+    // },
     description: {
         type: String,
         required: true

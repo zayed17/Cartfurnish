@@ -1,30 +1,50 @@
-const isLogin = (req, res, next) => {
+const User = require("../models/usermodel");
+
+
+const isLogin = async (req, res, next) => {
     try {
-        if (req.session.user_id) {
-            // User is logged in, continue to the next middleware or route handler
-            next();
-        } else {
-            // User is not logged in, redirect to the login page or another appropriate route
-            res.redirect('/login');
+        
+        if(req.session.user_id){
+            const userData = await User.findById(req.session.user_id)
+            if(userData.is_blocked){
+                res.redirect('/login')
+            }else{
+                next();
+            }   
+        }else{
+            res.redirect('/login')
         }
+        
     } catch (error) {
+        
         console.log(error.message);
+
     }
 }
 
-const isLogout = (req, res, next) => {
+const isLogout = async (req, res, next) => {
     try {
+        
         if (req.session.user_id) {
-            // User is logged in, redirect to the home page or another appropriate route
-            res.redirect('/home');
+            const userData = await User.findById(req.session.user_id)
+            if(userData.is_blocked){
+                next();
+            }else{
+                res.redirect('/')
+            }
         } else {
-            // User is not logged in, continue to the next middleware or route handler
             next();
         }
+        
     } catch (error) {
+        
         console.log(error.message);
+
     }
 }
+
+
+
 
 module.exports = {
     isLogin,

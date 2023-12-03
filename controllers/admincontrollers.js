@@ -2,6 +2,9 @@ const Admin = require('../models/adminmodel');
 const User = require('../models/usermodel');
 const bcrypt = require('bcrypt');
 const Category = require('../models/categorymodal')
+const Product = require('../models/productmodal')
+const Sharp = require('sharp');
+
 
 const loadadmin = async(req,res)=>{
     try {
@@ -121,6 +124,57 @@ const loadaddproduct = async(req,res)=>{
     }
 }
 
+
+// const addproduct = async (req, res) => {
+//     try {
+//       const { name, quantity, category, price, description } = req.body;
+      
+//       // Check if required fields are present
+  
+//       // Get file information
+//       const files = req.files;
+//       const imagePaths = [];
+  
+//       // Process and save each image using Sharp
+//       for (const key in files) {
+//         if (Object.prototype.hasOwnProperty.call(files, key)) {
+//           const image = files[key][0];
+//           const imagePath = `public/assets/images/products/original/${image.filename}`;
+//           const sharpPath = `public/assets/images/products/sharpened/${image.filename}`;
+  
+//           await Sharp(image.path).resize(500, 500).toFile(sharpPath);
+  
+//           imagePaths.push({
+//             fieldName: key,
+//             originalPath: imagePath,
+//             sharpPath: sharpPath,
+//           });
+//         }
+//       }
+  
+//       // Create a product instance
+//       const product = new Product({
+//         name,
+//         quantity,
+//         category: category,
+//         price,
+//         offer: null,
+//         description,
+//         images: imagePaths,
+//         is_blocked: false,
+//       });
+  
+//       // Save the product to the database
+//       await product.save();
+  
+//       res.redirect('/addproduct');
+//     } catch (error) {
+//       console.error(error.message);
+//       res.status(500).send("Internal Server Error");
+//     }
+//   };
+  
+  
 module.exports = {
     loadadmin,
     verifyLogin,
@@ -130,5 +184,6 @@ module.exports = {
     addcategory,
     loadcategory,
     blockUser,
-    loadaddproduct
+    loadaddproduct,
+    
 }

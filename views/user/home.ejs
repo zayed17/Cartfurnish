@@ -40,50 +40,7 @@
 <body>
     <div class="page-wrapper">
         <header class="header header-2 header-intro-clearance">
-            <div class="header-top">
-                <div class="container">
-                    <div class="header-left">
-                        <p>Special collection already available.</p><a href="#">&nbsp;Read more ...</a>
-                    </div><!-- End .header-left -->
-
-                    <div class="header-right">
-
-                        <ul class="top-menu">
-                            <li>
-                                <a href="#">Links</a>
-                                <ul>
-                                    <li>
-                                        <div class="header-dropdown">
-                                            <a href="#">USD</a>
-                                            <div class="header-menu">
-                                                <ul>
-                                                    <li><a href="#">Eur</a></li>
-                                                    <li><a href="#">Usd</a></li>
-                                                </ul>
-                                            </div><!-- End .header-menu -->
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="header-dropdown">
-                                            <a href="#">English</a>
-                                            <div class="header-menu">
-                                                <ul>
-                                                    <li><a href="#">English</a></li>
-                                                    <li><a href="#">French</a></li>
-                                                    <li><a href="#">Spanish</a></li>
-                                                </ul>
-                                            </div><!-- End .header-menu -->
-                                        </div>
-                                    </li>
-                                    <li><a href="signup" >Sign in / Sign up</a></li>
-                                    
-                                </ul>
-                            </li>
-                        </ul><!-- End .top-menu -->
-                    </div><!-- End .header-right -->
-
-                </div><!-- End .container -->
-            </div><!-- End .header-top -->
+            <<!-- End .header-top -->
 
             <div class="header-middle">
                 <div class="container">
@@ -123,17 +80,12 @@
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="accountDropdown">
                                     <li><a class="dropdown-item" href="dashboard" title="My account">My Account</a></li>
-                                    <li><a class="dropdown-item" href="#">Another Action</a></li>
-                                    <li><hr class="dropdown-divider"></li>
                                     <li><a class="dropdown-item" href="/logout">Logout</a></li>
                                 </ul>
                             </div>
                         <% } else { %>
-                            <!-- Show Login and Signup buttons if the user is not authenticated -->
-                            <div class="login-signup">
-                                <a href="/login" class="btn btn-primary" title="Login">Login</a>
-                                <span class="divider">|</span>
-                                <a href="/signup" class="btn btn-success" title="Signup">Signup</a>
+                            <div class="login-signup ">
+                                <a href="/signup" class="btn btn-primary">Register</a>
                             </div>
                         <% } %>
                         

@@ -4,6 +4,7 @@ const app = express();
 const port = 3009;
 const mongoose = require('mongoose');
 const dbUrl = 'mongodb://127.0.0.1:27017/furni';
+const noCache = require('nocache')
 
 mongoose.connect(dbUrl);
 
@@ -22,7 +23,7 @@ mongoose.connection.on('error', (err) => {
 app.use('/public', express.static(path.join(__dirname, 'public')));
 
 app.set('view engine', 'ejs');
-app.set('views', './views');
+app.use(noCache())
 
 // User_Routes
 const userRoute = require("./routes/userroute");

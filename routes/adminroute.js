@@ -3,7 +3,7 @@ const adminRoute = express();
 const session = require('express-session');
 const config = require('../config/config');
 const admincontrollers = require('../controllers/admincontrollers');
-
+const multer = require('../middleware/multer')
 
 adminRoute.use(session({
     secret: config.sessionSecret,
@@ -16,7 +16,6 @@ adminRoute.use(express.json());
 adminRoute.use(express.urlencoded({ extended: true }));
 
 // Set the view engine and views directory
-adminRoute.set('view engine', 'ejs');
 adminRoute.set('views', './views/admin');
 
 
@@ -31,6 +30,7 @@ adminRoute.get('/addcategory',admincontrollers.loadaddcategory)
 adminRoute.post('/addcategory',admincontrollers.addcategory)
 
 adminRoute.get('/addproduct',admincontrollers.loadaddproduct)
+// adminRoute.post('/addproduct',multer.uploadproduct,admincontrollers.addproduct)
 
 
 module.exports = adminRoute;
