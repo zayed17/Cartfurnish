@@ -5,14 +5,14 @@ const productSchema = mongoose.Schema({
         type: String,
         required: true
     },
+    quantity: {
+        type: Number,
+        required: true
+    },
     category: {
         type: String,
         required: true,
         ref: "Category",
-    },
-    quantity: {
-        type: Number,
-        required: true
     },
     price: {
         type: Number,
@@ -23,16 +23,16 @@ const productSchema = mongoose.Schema({
         ref: "Offer",
         required: false
     },
+    description: {
+        type: String,
+        required: true
+    },
     images: [
         { type: String, required: true },
         { type: String, required: true },
         { type: String, required: true },
         { type: String, required: true }
     ],
-    description: {
-        type: String,
-        required: true
-    },
     is_blocked: {
         type: Boolean,
         default: false,

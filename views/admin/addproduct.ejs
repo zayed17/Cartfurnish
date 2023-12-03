@@ -150,76 +150,105 @@
                 </div>
             </header>
 
-            <section class="content-main bg-light py-4">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-9">
-                            <div class="content-header">
-                                <h2 class="content-title">Add New Product</h2>
-                                <div class="d-flex">
-                                    <button class="btn btn-light rounded mr-2">Save to Draft</button>
-                                    <button class="btn btn-primary btn-md rounded">Publish</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="card mb-4">
-                                <div class="card-body">
-                                    <div class="form-group">
-                                        <label for="product_title" class="form-label">Product title</label>
-                                        <input type="text" class="form-control" id="product_title" placeholder="Type here">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="product_brand" class="form-label">Brand</label>
-                                        <input type="text" class="form-control" id="product_brand" placeholder="Type here">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card mb-4">
-                                <div class="card-body">
-                                    <div class="form-group">
-                                        <label class="form-label">Description</label>
-                                        <textarea class="form-control" rows="4" placeholder="Type here"></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card mb-4">
-                                <div class="card-body">
-                                    <div class="form-group">
-                                        <label class="form-label">Images</label>
-                                        <input class="form-control" type="file">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-3">
-                            <div class="card mb-4">
-                                <div class="card-body">
-                                    <div class="form-group">
-                                        <label class="form-label">Price</label>
-                                        <input type="text" class="form-control" placeholder="Type here">
-                                    </div>
-                                    <hr>
-                                    <div class="card mb-4">
-                                        <div class="card-body">
-                                            <div class="form-group">
-                                                <label class="form-label">Category</label>
-                                                <select class="form-control" id="product-category">
-                                                    <option value="sofa">Sofa</option>
-                                                    <option value="bed">Bed</option>
-                                                    <option value="chair">Chair</option>
-                                                    <option value="light">Light</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+   
+<section class="content-main py-4">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12 col-md-9">
+                <div class="content-header">
+                    <h2 class="content-title">Add New Product</h2>
+                    <div class="d-flex">
+                        <button class="btn btn-light mr-2">Save to Draft</button>
+                        <button class="btn btn-primary btn-md">Publish</button>
                     </div>
                 </div>
-            </section>
-
+            </div>
+            <div class="col-12 col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="product_title">Product title</label>
+                            <input type="text" class="form-control" id="product_title" placeholder="Type here">
+                        </div>
+                        <div class="form-group">
+                            <label for="quantity">Quantity</label>
+                            <input type="number" class="form-control" id="quantity" placeholder="Type here">
+                        </div>
+                        <div class="form-group">
+                            <label>Category</label>
+                            <select class="form-control" id="product-category">
+                                <option value="sofa">Sofa</option>
+                                <option value="chair">Chair</option>
+                                <option value="light">Light</option>
+                                <option value="cushion">Cushion</option>
+                                <option value="bean-bag">Bean Bag</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Price</label>
+                            <input type="text" class="form-control" placeholder="Type here">
+                        </div>
+                        <div class="form-group">
+                            <label for="offer">Offer</label>
+                            <input type="text" class="form-control" id="offer" placeholder="Type here">
+                        </div>
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea class="form-control" rows="4" placeholder="Type here"></textarea>
+                        </div>
+                        <div class="row d-flex justify-content-center ">
+                            <div class="row d-flex justify-content-between ">
+                              <div class="col-lg-3 col-md-6 rounded-image-preview">
+                                <label for="imageInput1" class="image-label">Image 1
+                                  <div class="rounded-image-preview">
+                                    <img id="imagePreview1"
+                                      src="/public/assets/images/add Image.jpg"
+                                    alt="Preview" />
+                                  </div>
+                                  <input name="image1" type="file" accept="image/*" id="imageInput1" class="imageInput"  >
+                                </label>
+                              </div>
+                
+                              <div class="col-lg-3 col-md-6 rounded-image-preview">
+                                <label for="imageInput2" class="image-label">Image 2
+                                  <div class="rounded-image-preview">
+                                    <img id="imagePreview2"
+                                        src="/public/assets/images/add Image.jpg"
+                                      alt="Preview" />
+                                  </div>
+                                  <input name="image2" type="file" accept="image/*" id="imageInput2" class="imageInput">
+                                </label>
+                              </div>
+                              
+                              <div class="col-lg-3 col-md-6 rounded-image-preview">
+                                <label for="imageInput3" class="image-label">Image 3
+                                  <div class="rounded-image-preview">
+                                    <img id="imagePreview3"
+                                      src="/public/assets/images/add Image.jpg"
+                                      alt="Preview" />
+                                  </div>
+                                  <input name="image3" type="file" accept="image/*" id="imageInput3" class="imageInput">
+                                </label>
+                              </div>
+                              
+                              
+                
+                              <div class="col-lg-3 col-md-6 rounded-image-preview">
+                                <label for="imageInput4" class="image-label">Image 4
+                                  <div class="rounded-image-preview">
+                                    <img id="imagePreview4"
+                                        src="/public/assets/images/add Image.jpg"
+                                      alt="Preview" />
+                                  </div>
+                                  <input name="image4" type="file" accept="image/*" id="imageInput4" class="imageInput" >
+                                </label>
+                              </div>                     
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
      <footer class="main-footer font-xs">
                 <div class="row pb-30 pt-15">
                     <div class="col-sm-6">

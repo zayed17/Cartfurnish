@@ -175,7 +175,7 @@
                 <div class="card mt-4">
                     <div class="table-data">
                         <div class="order">
-                            <% if(users.length> 0 && users.map(user => !user.is_admin)) { %>
+                            <% if(users.length> 0) { %>
                                 <div class="table-responsive">
                                     <table id="tablePagination" class="table table-bordered table-hover table-striped">
                                         <thead class="thead-dark">
@@ -202,7 +202,7 @@
                                         </thead>
                                         <tbody>
                                             <% for (let i = 0; i < users.length; i++) { %>
-                                                <% if (!users[i].is_admin) { %>
+                                                <% if (users[i].is_admin == false) { %>
                                                     <tr>
                                                         <td align="center">
                                                             <%= i + 1 %>
