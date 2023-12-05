@@ -233,17 +233,21 @@
                             <div class="text-center text-dark ">
                                 Sign-Up
                             </div>
-                            <% if (typeof message !== 'undefined') { %>
-                                <p style="color: blue;"><%= message %></p>
-                            <% } %>
-	            			<!-- <ul class="nav nav-pills nav-fill" role="tablist">
-							    <li class="nav-item">
-							        <a class="nav-link" id="signin-tab-2" data-toggle="tab" href="#signin-2" role="tab" aria-controls="signin-2" aria-selected="false">Sign In</a>
-							    </li>
-							    <li class="nav-item">
-							        <a class="nav-link active" id="register-tab-2" data-toggle="tab" href="#register-2" role="tab" aria-controls="register-2" aria-selected="true">Register</a>
-							    </li>
-							</ul> -->
+                            <% if (typeof message !=='undefined' ) { %>
+                                <p id="message" style="color: rgb(255, 0, 0);">
+                                    <%= message %>
+                                </p>
+                                <script>
+                                    // Set a timer to remove the message after 5000 milliseconds (5 seconds)
+                                    setTimeout(function () {
+                                        var messageElement = document.getElementById('message');
+                                        if (messageElement) {
+                                            messageElement.style.display = 'none';
+                                        }
+                                    }, 3500);
+                                </script>
+                                <% } %>
+
 							<div class="tab-content">
 							    
 							    <div class="tab-pane fade show active" id="register-2" role="tabpanel" aria-labelledby="register-tab-2">

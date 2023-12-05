@@ -223,30 +223,7 @@
   </section>
 
 
-<!--  SweetAlert2 script -->
-   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-   <!-- block -->
-  <script>
-    const blockButtons = document.querySelectorAll('.block-button');
-    blockButtons.forEach((blockButton) => {
-      blockButton.addEventListener('click', (event) => {
-        event.preventDefault();
-        const authorId = blockButton.getAttribute('data-id');
-        Swal.fire({
-          title: 'Are you sure to block User ?',
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#d33',
-          cancelButtonColor: '#3085d6',
-          confirmButtonText: 'Yes, Block'
-        }).then((result) => {
-          if (result.isConfirmed) {
-            window.location.href = `/admin/blockUser?id=${authorId}`;
-          }
-        });
-      });
-    });
-  </script>
+
 
   <!-- unBlock-button -->
   <script>

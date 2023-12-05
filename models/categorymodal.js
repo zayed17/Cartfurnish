@@ -11,7 +11,7 @@ const mongoose = require("mongoose");
     },
     is_list:{
         type:Boolean,
-        default:false
+        default:true
     },
     is_deleted:{
         type:Boolean,

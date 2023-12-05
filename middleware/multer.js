@@ -1,7 +1,7 @@
 const  multer=require('multer');
 
 const productStorage = multer.diskStorage({
-    destination: "\public\assets\images\products",
+    destination: "public/assets/images/products/original",
 
     filename:(req,file,cb)=>{
         const filename = file.originalname;

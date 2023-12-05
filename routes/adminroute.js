@@ -3,6 +3,7 @@ const adminRoute = express();
 const session = require('express-session');
 const config = require('../config/config');
 const admincontrollers = require('../controllers/admincontrollers');
+const productcontrollers = require('../controllers/productcontrollers')
 const multer = require('../middleware/multer')
 
 adminRoute.use(session({
@@ -24,13 +25,14 @@ adminRoute.get('/',admincontrollers.loadadmin);
 adminRoute.post('/',admincontrollers.verifyLogin);
 adminRoute.get('/dashboard',admincontrollers.loaddashboard);
 adminRoute.get('/users',admincontrollers.loaduser)
-adminRoute.post('/blockUser',admincontrollers.blockUser)
+adminRoute.patch('/blockusers/:id',admincontrollers.blockUser)
 adminRoute.get('/category',admincontrollers.loadcategory)
+adminRoute.get('/listcategory/:id',admincontrollers.loadcategory)
 adminRoute.get('/addcategory',admincontrollers.loadaddcategory)
 adminRoute.post('/addcategory',admincontrollers.addcategory)
-
-adminRoute.get('/addproduct',admincontrollers.loadaddproduct)
-// adminRoute.post('/addproduct',multer.uploadproduct,admincontrollers.addproduct)
+adminRoute.get("/product",productcontrollers.loadproduct)
+adminRoute.get('/addproduct',productcontrollers.loadaddproduct)
+adminRoute.post('/addproduct',multer.uploadproduct,productcontrollers.addproduct)
 
 
 module.exports = adminRoute;

@@ -17,21 +17,32 @@ const productSchema = mongoose.Schema({
         type: Number,
         required: true
     },
-    // offer: {
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     ref: "Offer",
-    //     required: false
-    // },
+    offer: {
+        type: String,
+        required: false
+    },
     description: {
         type: String,
         required: true
     },
-    images: [
-        { type: String, required: true },
-        { type: String, required: true },
-        { type: String, required: true },
-        { type: String, required: true }
-    ],
+    images: {
+        image1:{
+          type:String,
+          required:true
+        },
+        image2:{
+          type:String,
+          required:true
+        },
+        image3:{
+          type:String,
+          required:true
+        },
+        image4:{
+          type:String,
+          required:true
+        }
+      },
     is_blocked: {
         type: Boolean,
         default: false,

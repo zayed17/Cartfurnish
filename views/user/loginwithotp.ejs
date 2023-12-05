@@ -237,9 +237,20 @@
 							    <div class="tab-pane fade show active" id="register-2" role="tabpanel" aria-labelledby="register-tab-2">
                                   
                                     <form action="/loginwithotp" method="post">
-                                        <% if (typeof message !== 'undefined') { %>
-                                            <p style="color: blue;"><%= message %></p>
-                                        <% } %>
+                                        <% if (typeof message !=='undefined' ) { %>
+                                            <p id="message" style="color: rgb(255, 0, 0);">
+                                                <%= message %>
+                                            </p>
+                                            <script>
+                                                // Set a timer to remove the message after 5000 milliseconds (5 seconds)
+                                                setTimeout(function () {
+                                                    var messageElement = document.getElementById('message');
+                                                    if (messageElement) {
+                                                        messageElement.style.display = 'none';
+                                                    }
+                                                }, 3500);
+                                            </script>
+                                            <% } %>
                                         <div class="mb-3">
                                             <input type="hidden" name="email">
                                         </div>

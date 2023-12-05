@@ -96,83 +96,58 @@ const loadcategory = async(req,res)=>{
     }
 }
 
-const blockUser = async(req,res)=>{
+
+const listcategory = async (req, res) => {
     try {
-  
-      const user_id =  req.body.userId
-      const userData = await User.findOne({_id:user_id})
-  
-      if(userData.is_blocked){
-       await User.findByIdAndUpdate({_id:user_id},{$set:{is_blocked:false}}) 
-      }else{  
-        await User.findByIdAndUpdate({_id:user_id},{$set:{is_blocked:true}})
+      const category = req.params.id;
+      const userValue = await Category.findOne({ _id: category });
+      if (userValue.is_listed) {
+        await Category.updateOne({ _id: user }, { $set: { is_listed: false } });
+        // req.session.user_id = null;
+      } else {
+        await Category.updateOne({ _id: user }, { $set: { is_listed: true } });
       }
-  
-      res.json({block:true}) 
-  
+      res.json({ block: true });
     } catch (error) {
-        console.log(error.message);
-        // res.render('500Error')
+      console.log(error.message);
     }
-  }
-
-const loadaddproduct = async(req,res)=>{
-    try {
-        res.render('addproduct')
-    } catch (error) {
-        console.log();
-    }
-}
-
-
-// const addproduct = async (req, res) => {
+  };
+// const blockUser = async(req,res)=>{
 //     try {
-//       const { name, quantity, category, price, description } = req.body;
-      
-//       // Check if required fields are present
   
-//       // Get file information
-//       const files = req.files;
-//       const imagePaths = [];
+//       const user_id =  req.body.userId
+//       const userData = await User.findOne({_id:user_id})
   
-//       // Process and save each image using Sharp
-//       for (const key in files) {
-//         if (Object.prototype.hasOwnProperty.call(files, key)) {
-//           const image = files[key][0];
-//           const imagePath = `public/assets/images/products/original/${image.filename}`;
-//           const sharpPath = `public/assets/images/products/sharpened/${image.filename}`;
-  
-//           await Sharp(image.path).resize(500, 500).toFile(sharpPath);
-  
-//           imagePaths.push({
-//             fieldName: key,
-//             originalPath: imagePath,
-//             sharpPath: sharpPath,
-//           });
-//         }
+//       if(userData.is_blocked){
+//        await User.findByIdAndUpdate({_id:user_id},{$set:{is_blocked:false}}) 
+//       }else{  
+//         await User.findByIdAndUpdate({_id:user_id},{$set:{is_blocked:true}})
 //       }
   
-//       // Create a product instance
-//       const product = new Product({
-//         name,
-//         quantity,
-//         category: category,
-//         price,
-//         offer: null,
-//         description,
-//         images: imagePaths,
-//         is_blocked: false,
-//       });
+//       res.json({block:true}) 
   
-//       // Save the product to the database
-//       await product.save();
-  
-//       res.redirect('/addproduct');
 //     } catch (error) {
-//       console.error(error.message);
-//       res.status(500).send("Internal Server Error");
+//         console.log(error.message);
+//         // res.render('500Error')
 //     }
-//   };
+//   }
+
+const blockUser = async (req, res) => {
+    try {
+      const user = req.params.id;
+      const userValue = await User.findOne({ _id: user });
+      if (userValue.is_blocked) {
+        await User.updateOne({ _id: user }, { $set: { is_blocked: false } });
+        req.session.user_id = null;
+      } else {
+        await User.updateOne({ _id: user }, { $set: { is_blocked: true } });
+      }
+      res.json({ block: true });
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+  
   
   
 module.exports = {
@@ -184,6 +159,5 @@ module.exports = {
     addcategory,
     loadcategory,
     blockUser,
-    loadaddproduct,
-    
+
 }

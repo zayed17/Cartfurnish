@@ -42,7 +42,7 @@
                     </a>
                 </li>
  
-                <li class="menu-item ">
+                <li class="menu-item active">
                     <a class="menu-link" href="product">
                         <i class="icon material-icons md-shopping_bag"></i>
                         <span class="text">Products</span>
@@ -56,7 +56,7 @@
                     </a>
                 </li>
 
-                <li class="menu-item active">
+                <li class="menu-item">
                     <a class="menu-link" href="users">
                         <i class="icon material-icons md-perm_identity"></i>
                         <span class="text">Users</span>
@@ -70,7 +70,7 @@
             <div class="container">
                 <div class="head-title">
                     <div class="left">
-                        <h1>Users</h1>
+                        <h1>Products</h1>
                     </div>
                 </div>
 
@@ -137,10 +137,17 @@
 
         <section class="content-main">
             <div class="container-fluid">
+                <div class="left">
+                    <a href="addproduct" class="btn btn-success btn-download">
+                        <i class='bx bxs-plus-circle'></i>
+                        <span class="text">Add New product</span>
+                    </a>
+                </div>
+                
                 <div class="card mt-4">
                     <div class="table-data">
                         <div class="order">
-                            <% if(users.length> 0) { %>
+                            <% if(products.length> 0) { %>
                                 <div class="table-responsive">
                                     <table id="tablePagination" class="table table-bordered table-hover table-striped">
                                         <thead class="thead-dark">
@@ -149,16 +156,25 @@
                                                     <center>Sl.No.</center>
                                                 </th>
                                                 <th scope="col">
+                                                    <center>Image</center>
+                                                </th>
+                                                <th scope="col">
                                                     <center>Name</center>
                                                 </th>
                                                 <th scope="col">
-                                                    <center>Email</center>
+                                                    <center>Quantity</center>
                                                 </th>
                                                 <th scope="col">
-                                                    <center>Mobile</center>
+                                                    <center>Category</center>
                                                 </th>
                                                 <th scope="col">
-                                                    <center>Verified</center>
+                                                    <center>Price</center>
+                                                </th>
+                                                <th scope="col">
+                                                    <center>Offer</center>
+                                                </th>
+                                                <th scope="col">
+                                                    <center>Update</center>
                                                 </th>
                                                 <th scope="col">
                                                     <center>Block / Unblock</center>
@@ -166,39 +182,44 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <% for (let i = 0; i < users.length; i++) { %>
-                                                <% if (users[i].is_admin == false) { %>
+                                            <% for (let i = 0; i < products.length; i++) { %>
+                                                <% if (products[i].is_blocked == false) { %>
                                                     <tr>
                                                         <td align="center">
-                                                            <%= i %>
+                                                            <%= i + 1 %>
                                                         </td>
                                                         <td align="center">
-                                                            <%= users[i].name %>
+                                                            <img src="/public/assets/images/products/sharpened/<%=products[i].images.image1 %>" style="max-width: 50px; max-height: 50px;" alt="">
                                                         </td>
                                                         <td align="center">
-                                                            <%= users[i].email %>
+                                                            <%= products[i].name %>
                                                         </td>
                                                         <td align="center">
-                                                            <%= users[i].mobile %>
+                                                            <%= products[i].quantity %>
                                                         </td>
                                                         <td align="center">
-                                                            <%= users[i].is_verified ? "True" : "False" %>
+                                                            <%= products[i].category %>
                                                         </td>
-
-
                                                         <td align="center">
-                                                            <% if (users[i].is_blocked) { %>
-                                                                <a class="unblock-user" data-user-id="<%= users[i]._id %>"><span
-                                                                        class="badge rounded-pill alert-success">unblock</span></a>
-                                                                <% } else { %>
-                                                                    <a class="block-user"
-                                                                        data-user-id="<%= users[i]._id %>"><span
-                                                                            class="badge rounded-pill alert-warning">block</span></a>
-                                                                    <% } %>
+                                                            <%= products[i].price %>
                                                         </td>
-
+                                                        <td align="center">
+                                                            <%= products[i].offer %>
+                                                        </td>
+                                                        <td align="center">
+                                                            <button class="show-details-btn" data-product-id="<%= products._id %>">
+                                                                Show Details
+                                                            </button>
+                                                        </td>
+                                                        <td align="center">
+                                                            <button class="btn btn-outline-danger block-button"
+                                                                data-user-id="<%= products[i]._id %>"
+                                                                data-initial-status="<%= products[i].is_blocked %>"
+                                                                onclick="block('<%= products[i]._id %>')">
+                                                                <%= products[i].is_blocked ? "Unblock" : "Block" %>
+                                                            </button>
+                                                        </td>
                                                     </tr>
-                                                    
                                                 <% } %>
                                             <% } %>
                                         </tbody>
@@ -206,7 +227,7 @@
                                     
                                 </div>
                                 <% } else { %>
-                                    <p>No users found in the database.</p>
+                                    <p>No products found in the database.</p>
                                     <% } %>
         
                         </div>
@@ -231,38 +252,35 @@
         </footer>
     </main>
 
-    <script>
-        document.querySelectorAll('.block-user, .unblock-user').forEach(function (element) {
-            console.log(element);
-            element.addEventListener('click', function (event) {
-                event.preventDefault();
-
-                const userId = element.getAttribute('data-user-id');
-                const action = element.classList.contains('block-user') ? 'block' : 'unblock';
-
-                fetch(`/admin/blockusers/${userId}`, {
-                    method: 'PATCH',
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.block === true) {
-                            //updating the button text and color
-                            element.querySelector('span').classList.toggle('alert-success');
-                            element.querySelector('span').classList.toggle('alert-warning');
-                            element.querySelector('span').innerText = action === 'block' ? 'unblock' : 'block';
-                            
-                            // Replace button class
-                            element.classList.remove(action === 'block' ? 'block-user' : 'unblock-user');
-                            element.classList.add(action === 'block' ? 'unblock-user' : 'block-user');
-
-                        }
-                    }).catch((error) => {
-                        console.log(error.message);
-                    })
-
-            });
+<script>
+    function block(userId) {
+        const data = { userId: userId };
+        console.log(data);
+      
+        const button = $(`button[data-user-id="${userId}"]`); // Select the button by data-user-id attribute
+      
+        $.ajax({
+          method: 'POST',
+          url: '/admin/blockUser',
+          data: JSON.stringify(data),
+          contentType: 'application/json',
+          success: function (response) {
+            if (response.block === true) {
+              // Update the button text and data-initial-status attribute
+              button.text("Unblock").attr("data-initial-status", false);
+              $('#reloadArea').load('/admin/user #reloadArea');
+            } else {
+              swal("Stock Limit Reached", "", "error");
+              $('#reloadArea').load('/cart #reloadArea');
+            }
+          },
+          error: function (error) {
+            console.error(error);
+          }
         });
-    </script>
+      }
+</script>`      
+
 
 
 
@@ -272,7 +290,6 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="/public/assets/js/vendors/select2.min.js"></script>
     <script src="/public/assets/js/vendors/perfect-scrollbar.js"></script>
-    
     <script src="/public/assets/js/vendors/jquery.fullscreen.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
     <script src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>
