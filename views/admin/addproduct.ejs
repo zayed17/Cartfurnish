@@ -16,6 +16,7 @@
         <link href="/public/assets/css/main.css?v=1.1" rel="stylesheet" type="text/css" />
     </head>
 
+      
     <body>
         <div class="screen-overlay"></div>
         <aside class="navbar-aside" id="offcanvas_aside">
@@ -226,6 +227,56 @@
                 </div>
             </footer>
         </main>
+
+        <script>
+const imageInputs = document.querySelectorAll('.imageInput');
+const imagePreviews = document.querySelectorAll('.rounded-image-preview img');
+
+imageInputs.forEach(imageInput => {
+  imageInput.addEventListener('change', (event) => {
+    const file = event.target.files[0];
+    const imagePreview = document.getElementById(`imagePreview${imageInput.id.slice(-1)}`);
+
+    if (file) {
+      const reader = new FileReader();
+
+      reader.onload = (event) => {
+        const image = new Image();
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+
+        image.onload = () => {
+          const maxWidth = imagePreview.width;
+          const maxHeight = imagePreview.height;
+          const ratio = Math.min(maxWidth / image.width, maxHeight / image.height);
+
+          const resizedWidth = image.width * ratio;
+          const resizedHeight = image.height * ratio;
+
+          canvas.width = resizedWidth;
+          canvas.height = resizedHeight;
+
+          ctx.drawImage(image, 0, 0, resizedWidth, resizedHeight);
+
+          const dataURL = canvas.toDataURL('image/jpeg');
+
+          imagePreview.src = dataURL;
+        };
+
+        image.src = event.target.result;
+      };
+
+      reader.readAsDataURL(file);
+    } else {
+      imagePreview.src = '';
+    }
+  });
+});
+
+        </script>
+
+
+
         <script src="/public/assets/js/vendors/jquery-3.6.0.min.js"></script>
         <script src="/public/assets/js/vendors/bootstrap.bundle.min.js"></script>
         <script src="/public/assets/js/vendors/select2.min.js"></script>

@@ -80,6 +80,7 @@ const loadaddproduct = async (req, res) => {
 const addproduct = async (req, res) => {
     try {
       const details = req.body;
+      // console.log(details);
       const files = await req.files;
       const img = [
         files.image1[0].filename,
@@ -93,6 +94,9 @@ const addproduct = async (req, res) => {
           .toFile("public/assets/images/products/sharpened/" + img[i]);
       }
   
+console.log(req.body.quantity);
+console.log(req.body.price);
+
       if (details.quantity > 0 && details.price > 0) {
         const product = new Product({
           name: details.name,
@@ -106,10 +110,10 @@ const addproduct = async (req, res) => {
           "images.image3": files.image3[0].filename,
           "images.image4": files.image4[0].filename,
         });
-        console.log(product);
+        // console.log(product);
   
         const result = await product.save();
-        // console.log(result);
+        console.log(result);
         res.redirect("/admin/product");
       } else {
         // Provide specific error message
@@ -126,14 +130,17 @@ const addproduct = async (req, res) => {
   const loadeditproduct = async(req,res)=>{
     try {
       const productid = req.query.id;
-      const productData = await Product.findOne({_id:productid})
-      const categoryData = await Category.find({is_blocked:false})
+      const productData = await Product.findOne({_id:productid}).populate('category')
+      const categoryData = await Category.find({is_list:true})
+
       res.render('editproduct',{product:productData,category:categoryData})
     } catch (error) {
       console.log();
     }
   }
   
+
+  // const editproduct = as
 
   module.exports = {
     loadaddproduct,

@@ -121,42 +121,43 @@
                     <div class="row">
                         <div class="col-12 col-md-9">
                             <div class="content-header">
-                                <h2 class="content-title">Add New Product</h2>
+                                <h2 class="content-title">Edit Product</h2>
                             </div>
                         </div>
                         <div class="col-12 col-md-12">
                             <div class="card">
                                 <div class="card-body">
-                                    <form action="" method="post" enctype="multipart/form-data">
+                                    <form action="/admin/editProduct?_id=<%= product._id %>" method="post" enctype="multipart/form-data">
                                         <div class="form-group">
                                             <label for="product_title">Product Name</label>
-                                            <input type="text" class="form-control" id="product_title" name="name" placeholder="Type here">
+                                            <input type="text" class="form-control" id="product_title" name="name" value="<%=product.name%>">
                                         </div>
                                         <div class="form-group">
                                             <label for="quantity">Quantity</label>
-                                            <input type="number" class="form-control" id="quantity" name="quantity" placeholder="Type here">
+                                            <input type="number" class="form-control" id="quantity" name="quantity" value="<%=product.quantity%>">
                                         </div>
                                         <div class="form-group">
                                             <label>Category</label>
                                             <select class="form-control" id="product-category" name="category">
-                                                <option value="sofa">Sofa</option>
-                                                <option value="chair">Chair</option>
-                                                <option value="light">Light</option>
-                                                <option value="cushion">Cushion</option>
-                                                <option value="bean-bag">Bean Bag</option>
+                                                <option value="<%= product.category._id %>"><%= product.category %></option>
+                                                <% for (let i = 0; i < category.length; i++) { %>
+                                                    <option value="<%= category[i].name %>"><%= category[i].name %></option>
+                                                <% } %>
+
                                             </select>
                                         </div>
+                                        
                                         <div class="form-group">
                                             <label>Price</label>
-                                            <input type="text" class="form-control" name="price" placeholder="Type here">
+                                            <input type="text" class="form-control" name="price" value="<%=product.price%>">
                                         </div>
                                         <div class="form-group">
                                             <label for="offer">Offer</label>
-                                            <input type="text" class="form-control" id="offer" name="offer" placeholder="Type here">
+                                            <input type="text" class="form-control" value="<%=product.offer%>" id="offer" name="offer" >
                                         </div>
                                         <div class="form-group">
                                             <label>Description</label>
-                                            <textarea class="form-control" rows="4" name="description" placeholder="Type here"></textarea>
+                                            <input type="text" class="form-control" value="<%=product.description%>" name="description" required>   
                                         </div>
                                         <div class="row d-flex justify-content-center ">
                                             <div class="row d-flex justify-content-between ">
@@ -188,14 +189,23 @@
                                                 </div>
             
                                                 <div class="col-lg-3 col-md-6 rounded-image-preview">
-                                                    <label for="imageInput4" class="image-label">Image 4
+                                                    <label for="imageInput4" class="image-label"><%= product.images.imag1 %>
                                                         <div class="rounded-image-preview">
-                                                            <img id="imagePreview4" src="/public/assets/images/add Image.jpg" alt="Preview" />
+                                                            <img id="imagePreview4" src="/public/assets/images/products/sharpened/<%= product.images.image4 %>" alt="Preview" />
                                                         </div>
                                                         <input name="image4" type="file" accept="image/*" id="imageInput4" class="imageInput">
                                                     </label>
                                                 </div>
                                             </div>
+
+
+
+
+                                           
+
+
+
+
                                         </div>
                                         <div class="form-group mt-3">
                                             <button type="submit" class="btn btn-primary">Submit</button>
