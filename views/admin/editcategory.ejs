@@ -128,8 +128,7 @@
                     </div>
                 </div>
             </header>
-
-            
+           
 
             <section class="content-main">
                 <div class="container-fluid">
@@ -139,21 +138,20 @@
                         </div>
                         <div class="card-body">
                             <!-- Category Form -->
-                            <form action="/admin/addcategory" method="post">
+                            <form action="/admin/addcategory?id=<%= categoryData._id%>" method="post">
                                 <!-- Category Name -->
                                 <div class="form-group">
                                     <label for="name">Name:</label>
-                                    <input type="text" class="form-control" id="categoryName" name="name" required>
+                                    <input type="text" class="form-control" value="<%=categoryData.name%>"  name="name" required>
                                 </div>
             
                                 <!-- Category Description -->
                                 <div class="form-group">
                                     <label for="description">Description:</label>
-                                    <textarea class="form-control" id="categoryDescription" name="description" rows="4"
-                                        required></textarea>
+                                    <input type="text" class="form-control" value="<%=categoryData.description%>" name="description" required>    
                                 </div>
                                 <div  style="margin-top: 1.2rem;">
-                                    <button type="submit" class="btn btn-primary">Add Category</button>
+                                    <button type="submit" class="btn btn-primary">Update Cate</button>
                                     <a href="/admin/category" type="submit" class="btn btn-primary">Back</a>
                                 </div>
                             </form>

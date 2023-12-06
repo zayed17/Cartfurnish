@@ -27,12 +27,16 @@ adminRoute.get('/dashboard',admincontrollers.loaddashboard);
 adminRoute.get('/users',admincontrollers.loaduser)
 adminRoute.patch('/blockusers/:id',admincontrollers.blockUser)
 adminRoute.get('/category',admincontrollers.loadcategory)
-adminRoute.get('/listcategory/:id',admincontrollers.loadcategory)
+adminRoute.get('/editcategory',admincontrollers.loadeditCategory)
+adminRoute.post('/editcategory',admincontrollers.editCategory)
+adminRoute.patch('/listcategory/:id',admincontrollers.listcategory)
 adminRoute.get('/addcategory',admincontrollers.loadaddcategory)
 adminRoute.post('/addcategory',admincontrollers.addcategory)
 adminRoute.get("/product",productcontrollers.loadproduct)
 adminRoute.get('/addproduct',productcontrollers.loadaddproduct)
 adminRoute.post('/addproduct',multer.uploadproduct,productcontrollers.addproduct)
+adminRoute.get('/editproduct',productcontrollers.loadeditproduct)
+
 
 
 module.exports = adminRoute;

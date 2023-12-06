@@ -102,36 +102,21 @@ const listcategory = async (req, res) => {
       const category = req.params.id;
       const userValue = await Category.findOne({ _id: category });
       if (userValue.is_listed) {
-        await Category.updateOne({ _id: user }, { $set: { is_listed: false } });
+        await Category.updateOne({ _id: category }, { $set: { is_listed: false } });
         // req.session.user_id = null;
       } else {
-        await Category.updateOne({ _id: user }, { $set: { is_listed: true } });
+        await Category.updateOne({ _id: category }, { $set: { is_listed: true } });
       }
       res.json({ block: true });
     } catch (error) {
       console.log(error.message);
     }
   };
-// const blockUser = async(req,res)=>{
-//     try {
-  
-//       const user_id =  req.body.userId
-//       const userData = await User.findOne({_id:user_id})
-  
-//       if(userData.is_blocked){
-//        await User.findByIdAndUpdate({_id:user_id},{$set:{is_blocked:false}}) 
-//       }else{  
-//         await User.findByIdAndUpdate({_id:user_id},{$set:{is_blocked:true}})
-//       }
-  
-//       res.json({block:true}) 
-  
-//     } catch (error) {
-//         console.log(error.message);
-//         // res.render('500Error')
-//     }
-//   }
 
+
+
+
+  
 const blockUser = async (req, res) => {
     try {
       const user = req.params.id;
@@ -149,6 +134,41 @@ const blockUser = async (req, res) => {
   };
   
   
+  const loadeditCategory = async(req,res)=>{
+
+    try {
+        const categoryId = req.query.id;
+        const categoryData = await Category.findOne({_id:categoryId})
+        res.render('editcategory',{categoryData})
+    } catch (error) {
+        console.log(error);
+    }
+  }
+
+
+
+const editCategory = async (req, res) => {
+    try {
+        const id = req.query.id;
+        const categoryData = await Category.findOne({ _id: id });
+        const categoryName = req.body.name.trim();
+
+
+        const isExists = await Category.findOne({ name: { $regex: '.*' + categoryName + '.*', $options: 'i' } })
+        // console.log('is exists : ' + isExists)
+        if (categoryData.name === categoryName) {
+            await Category.findByIdAndUpdate({ _id: id }, { $set: { description: req.body.description.trim() } })
+            res.redirect('/admin/category')
+        } else if (isExists === null) {
+            await Category.findByIdAndUpdate({ _id: id }, { $set: { name: categoryName, description: req.body.description.trim() } })
+            res.redirect('/admin/category')
+        } else {
+            res.render('updateCategory', { category: categoryData, message: 'Category Name already exists' })
+        }
+    } catch (error) {
+        console.log(error.mesage)
+    }
+}
   
 module.exports = {
     loadadmin,
@@ -159,5 +179,7 @@ module.exports = {
     addcategory,
     loadcategory,
     blockUser,
-
+    listcategory,
+    loadeditCategory,
+    editCategory
 }

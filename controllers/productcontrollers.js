@@ -1,6 +1,6 @@
 const Product = require('../models/productmodal')
 const Sharp = require('sharp');
-
+const Category = require('../models/categorymodal')
 
 
 
@@ -13,14 +13,17 @@ const loadproduct = async (req,res)=>{
         console.log(error);
     }
 }
+const loadaddproduct = async (req, res) => {
+  try {
+      // Assuming is_list is a field in your Category model
+      const categories = await Category.find({ is_list: true });
 
-const loadaddproduct = async(req,res)=>{
-    try {
-        res.render('addproduct')
-    } catch (error) {
-        console.log();
-    }
-}
+      res.render('addproduct', { categories });
+  } catch (error) {
+      console.log(error);
+  }
+};
+
 
 
 // const addproduct = async (req, res) => {
@@ -118,10 +121,23 @@ const addproduct = async (req, res) => {
       res.status(500).send("Internal Server Error");
     }
   };
+
+
+  const loadeditproduct = async(req,res)=>{
+    try {
+      const productid = req.query.id;
+      const productData = await Product.findOne({_id:productid})
+      const categoryData = await Category.find({is_blocked:false})
+      res.render('editproduct',{product:productData,category:categoryData})
+    } catch (error) {
+      console.log();
+    }
+  }
   
 
   module.exports = {
     loadaddproduct,
     addproduct,
-    loadproduct
+    loadproduct,
+    loadeditproduct
   }
