@@ -246,37 +246,58 @@
                     <div class="product-details-top">
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="product-gallery product-gallery-vertical">
-                                    <div class="row">
-                                        <figure class="product-main-image">
-                                            <img id="product-zoom" src="/public/assets/images/products/sharpened/<%= product.images.image1 %>" data-zoom-image="/public/assets/images/products/original/<%= product.images.image1 %>" alt="product image">
+                              <div class="product-gallery product-gallery-vertical">
+                                <div class="row">
+                                  <figure class="product-main-image">
+                                    <img id="mainImage" src="/public/assets/images/products/sharpened/<%= product.images.image1 %>" alt="Product image">
+                                  </figure><!-- End .product-main-image -->
+                            
+                                  <div id="product-zoom-gallery" class="product-image-gallery">
+                                    <a class="product-gallery-item active" href="#" data-image="/public/assets/images/products/sharpened/<%= product.images.image1 %>" data-zoom-image="/public/assets/images/products/original/<%= product.images.image1 %>">
+                                      <img src="/public/assets/images/products/sharpened/<%= product.images.image1 %>" alt="product side">
+                                    </a>
+                                    <a class="product-gallery-item" href="#" data-image="/public/assets/images/products/sharpened/<%= product.images.image2 %>" data-zoom-image="/public/assets/images/products/original/<%= product.images.image2 %>">
+                                      <img src="/public/assets/images/products/sharpened/<%= product.images.image2 %>" alt="product cross">
+                                    </a>
+                                    <a class="product-gallery-item" href="#" data-image="/public/assets/images/products/sharpened/<%= product.images.image3 %>" data-zoom-image="/public/assets/images/products/sharpened/<%= product.images.image3 %>">
+                                        <img src="/public/assets/images/products/sharpened/<%= product.images.image3 %>" alt="product with model">
+                                    </a>
 
-                                            <a href="#" id="btn-product-gallery" class="btn-product-gallery">
-                                                <i class="icon-arrows"></i>
-                                            </a>
-                                        </figure><!-- End .product-main-image -->
-
-                                        <div id="product-zoom-gallery" class="product-image-gallery">
-                                            <a class="product-gallery-item active" href="#" data-image="public/assets/images/products/single/1.jpg" data-zoom-image="public/assets/images/products/single/1-big.jpg">
-                                                <img src="/public/assets/images/products/sharpened/<%= product.images.image1 %>" alt="product side">
-                                            </a>
-
-                                            <a class="product-gallery-item" href="#" data-image="public/assets/images/products/single/2.jpg" data-zoom-image="public/assets/images/products/single/2-big.jpg">
-                                                <img src="/public/assets/images/products/sharpened/<%= product.images.image2 %>" alt="product cross">
-                                            </a>
-
-                                            <a class="product-gallery-item" href="#" data-image="public/assets/images/products/single/3.jpg" data-zoom-image="public/assets/images/products/single/3-big.jpg">
-                                                <img src="/public/assets/images/products/sharpened/<%= product.images.image3 %>" alt="product with model">
-                                            </a>
-
-                                            <a class="product-gallery-item" href="#" data-image="public/assets/images/products/single/4.jpg" data-zoom-image="public/assets/images/products/single/4-big.jpg">
-                                                <img src="/public/assets/images/products/sharpened/<%= product.images.image4 %>" alt="product back">
-                                            </a>
-                                        </div><!-- End .product-image-gallery -->
-                                    </div><!-- End .row -->
-                                </div><!-- End .product-gallery -->
+                                    <a class="product-gallery-item" href="#" data-image="/public/assets/images/products/sharpened/<%= product.images.image4 %> " data-zoom-image="/public/assets/images/products/sharpened/<%= product.images.image4 %>">
+                                        <img src="/public/assets/images/products/sharpened/<%= product.images.image4 %>" alt="product back">
+                                    </a>
+                                    <!-- Add similar lines for other gallery items -->
+                                  </div><!-- End .product-image-gallery -->
+                                </div><!-- End .row -->
+                              </div><!-- End .product-gallery -->
                             </div><!-- End .col-md-6 -->
+                            
+                            <script>
+                            // Get all gallery items
+                            const galleryItems = document.querySelectorAll('.product-gallery-item');
+                            
+                            // Get the main image element
+                            const mainImage = document.getElementById('mainImage');
+                            
+                            // Add click event listener to each gallery item
+                            galleryItems.forEach(item => {
+                              item.addEventListener('click', function(event) {
+                                const imageURL = this.dataset.zoomImage || this.dataset.image;
+                                mainImage.src = imageURL;
+                            
+                                // Update the active class
+                                galleryItems.forEach(item => item.classList.remove('active'));
+                                this.classList.add('active');
+                            
+                                event.preventDefault(); // Prevent default click behavior
+                              });
+                            });
+                            </script>
 
+
+
+
+                            
                             <div class="col-md-6">
                                 <div class="product-details">
                                     <h1 class="product-title"><%= product.name%></h1><!-- End .product-title -->
