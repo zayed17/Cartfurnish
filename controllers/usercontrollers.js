@@ -2,6 +2,7 @@ const User = require('../models/usermodel');
 const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
 const userOtpVerification = require('../models/userotpverification');
+const Product = require('../models/productmodal')
 const dotenv = require('dotenv')
 dotenv.config()
 
@@ -322,11 +323,33 @@ const userLogout = async (req, res) => {
 
 const loadshop = async (req, res) => {
     try {
-        res.render('shop');
+      const page = parseInt(req.query.page) || 1;
+      const productsPerPage = 9; // Number of products per page
+      const startIndex = (page - 1) * productsPerPage;
+      const endIndex = startIndex + productsPerPage;
+  
+      const totalProducts = await Product.countDocuments({});
+      const totalPages = Math.ceil(totalProducts / productsPerPage);
+  
+      const productData = await Product.find({}).skip(startIndex).limit(productsPerPage);
+  
+      res.render('shop', { product: productData, currentPage: page, totalPages });
     } catch (error) {
-        console.log(error.message);
+      console.error(error.message);
+      res.status(500).send('Internal Server Error');
     }
-}
+  };
+  
+const loadeachproduct = async(req,res)=>{
+    try {
+
+        const id = req.query.id;
+        const product = await Product.findOne({_id:id})
+      res.render("product",{product})
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
 
 module.exports = {
@@ -340,5 +363,6 @@ module.exports = {
     verifyLogin,
     sentOtpbyMail,
     loademailinput,
-    userLogout
+    userLogout,
+    loadeachproduct
 }

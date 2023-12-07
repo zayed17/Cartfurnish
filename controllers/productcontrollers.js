@@ -146,5 +146,6 @@ console.log(req.body.price);
     loadaddproduct,
     addproduct,
     loadproduct,
-    loadeditproduct
+    loadeditproduct,
+    
   }

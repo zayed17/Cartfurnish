@@ -169,7 +169,7 @@ const editCategory = async (req, res) => {
         console.log(error.mesage)
     }
 }
-  
+
 module.exports = {
     loadadmin,
     verifyLogin,
@@ -181,5 +181,6 @@ module.exports = {
     blockUser,
     listcategory,
     loadeditCategory,
-    editCategory
+    editCategory,
+    
 }

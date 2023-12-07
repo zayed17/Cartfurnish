@@ -249,7 +249,7 @@
                                 <div class="product-gallery product-gallery-vertical">
                                     <div class="row">
                                         <figure class="product-main-image">
-                                            <img id="product-zoom" src="public/assets/images/products/single/1.jpg" data-zoom-image="public/assets/images/products/single/1-big.jpg" alt="product image">
+                                            <img id="product-zoom" src="/public/assets/images/products/sharpened/<%= product.images.image1 %>" data-zoom-image="/public/assets/images/products/original/<%= product.images.image1 %>" alt="product image">
 
                                             <a href="#" id="btn-product-gallery" class="btn-product-gallery">
                                                 <i class="icon-arrows"></i>
@@ -258,19 +258,19 @@
 
                                         <div id="product-zoom-gallery" class="product-image-gallery">
                                             <a class="product-gallery-item active" href="#" data-image="public/assets/images/products/single/1.jpg" data-zoom-image="public/assets/images/products/single/1-big.jpg">
-                                                <img src="public/assets/images/products/single/1-small.jpg" alt="product side">
+                                                <img src="/public/assets/images/products/sharpened/<%= product.images.image1 %>" alt="product side">
                                             </a>
 
                                             <a class="product-gallery-item" href="#" data-image="public/assets/images/products/single/2.jpg" data-zoom-image="public/assets/images/products/single/2-big.jpg">
-                                                <img src="public/assets/images/products/single/2-small.jpg" alt="product cross">
+                                                <img src="/public/assets/images/products/sharpened/<%= product.images.image2 %>" alt="product cross">
                                             </a>
 
                                             <a class="product-gallery-item" href="#" data-image="public/assets/images/products/single/3.jpg" data-zoom-image="public/assets/images/products/single/3-big.jpg">
-                                                <img src="public/assets/images/products/single/3-small.jpg" alt="product with model">
+                                                <img src="/public/assets/images/products/sharpened/<%= product.images.image3 %>" alt="product with model">
                                             </a>
 
                                             <a class="product-gallery-item" href="#" data-image="public/assets/images/products/single/4.jpg" data-zoom-image="public/assets/images/products/single/4-big.jpg">
-                                                <img src="public/assets/images/products/single/4-small.jpg" alt="product back">
+                                                <img src="/public/assets/images/products/sharpened/<%= product.images.image4 %>" alt="product back">
                                             </a>
                                         </div><!-- End .product-image-gallery -->
                                     </div><!-- End .row -->
@@ -279,7 +279,7 @@
 
                             <div class="col-md-6">
                                 <div class="product-details">
-                                    <h1 class="product-title">Dark yellow lace cut out swing dress</h1><!-- End .product-title -->
+                                    <h1 class="product-title"><%= product.name%></h1><!-- End .product-title -->
 
                                     <div class="ratings-container">
                                         <div class="ratings">
@@ -289,25 +289,14 @@
                                     </div><!-- End .rating-container -->
 
                                     <div class="product-price">
-                                        $84.00
+                                        <sup>₹</sup><%= product.price%>
                                     </div><!-- End .product-price -->
 
                                     <div class="product-content">
-                                        <p>Sed egestas, ante et vulputate volutpat, eros pede semper est, vitae luctus metus libero eu augue. Morbi purus libero, faucibus adipiscing. Sed lectus. </p>
+                                        <p><%= product.description%> </p>
                                     </div><!-- End .product-content -->
 
-                                    <div class="details-filter-row details-row-size">
-                                        <label>Color:</label>
-
-                                        <div class="product-nav product-nav-thumbs">
-                                            <a href="#" class="active">
-                                                <img src="public/assets/images/products/single/1-thumb.jpg" alt="product desc">
-                                            </a>
-                                            <a href="#">
-                                                <img src="public/assets/images/products/single/2-thumb.jpg" alt="product desc">
-                                            </a>
-                                        </div><!-- End .product-nav -->
-                                    </div><!-- End .details-filter-row -->
+                                    
 
                                     <div class="details-filter-row details-row-size">
                                         <label for="size">Size:</label>
