@@ -114,8 +114,6 @@ const listcategory = async (req, res) => {
   };
 
 
-
-
   
 const blockUser = async (req, res) => {
     try {
@@ -123,9 +121,9 @@ const blockUser = async (req, res) => {
       const userValue = await User.findOne({ _id: user });
       if (userValue.is_blocked) {
         await User.updateOne({ _id: user }, { $set: { is_blocked: false } });
-        req.session.user_id = null;
       } else {
         await User.updateOne({ _id: user }, { $set: { is_blocked: true } });
+        req.session.user_id = null;
       }
       res.json({ block: true });
     } catch (error) {
@@ -147,26 +145,41 @@ const blockUser = async (req, res) => {
 
 
 
-const editCategory = async (req, res) => {
+  const editCategory = async (req, res) => {
     try {
-        const id = req.query.id;
-        const categoryData = await Category.findOne({ _id: id });
-        const categoryName = req.body.name.trim();
-
-
-        const isExists = await Category.findOne({ name: { $regex: '.*' + categoryName + '.*', $options: 'i' } })
-        // console.log('is exists : ' + isExists)
-        if (categoryData.name === categoryName) {
-            await Category.findByIdAndUpdate({ _id: id }, { $set: { description: req.body.description.trim() } })
-            res.redirect('/admin/category')
-        } else if (isExists === null) {
-            await Category.findByIdAndUpdate({ _id: id }, { $set: { name: categoryName, description: req.body.description.trim() } })
-            res.redirect('/admin/category')
-        } else {
-            res.render('updateCategory', { category: categoryData, message: 'Category Name already exists' })
-        }
+        await Category.findByIdAndUpdate(
+            { _id: req.query.id },
+            { $set: { name: req.body.name, description: req.body.description } }
+        );
+        res.redirect(`/admin/category?message=${encodeURIComponent('Successfully updated')}`);
     } catch (error) {
-        console.log(error.mesage)
+        console.log(error.message);
+    }
+};
+
+
+
+const blockCategory=async (req, res) => {
+    try {
+      const user = req.params.id; 
+      const userValue = await Category.findOne({ _id: user });
+      if (userValue.is_list) {
+        await Category.updateOne({ _id: user }, { $set: { is_list: false } });
+      } else {
+        await Category.updateOne({ _id: user }, { $set: { is_list: true } });
+      }
+      res.json({ block: true });
+    } catch (error) {
+      console.log(error.message);
+    }
+}
+
+const adminLogout = async (req, res) => {
+    try {
+        req.session.destroy();
+        res.redirect('/admin');
+    } catch (error) {
+        console.log(error.message);
     }
 }
 
@@ -182,5 +195,6 @@ module.exports = {
     listcategory,
     loadeditCategory,
     editCategory,
-    
+    adminLogout,
+    blockCategory
 }

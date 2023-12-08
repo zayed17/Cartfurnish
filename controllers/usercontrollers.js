@@ -195,7 +195,7 @@ const sendOtpVerificationEmail = async ({ email, _id }, res) => {
             //delete the used otp of otp database 
             await userOtpVerification.deleteOne({userId})
             // req.session.user_id = userData._id;
-            return res.redirect('/home')
+            return res.redirect('/login')
         
   
     } catch (error) {
@@ -252,17 +252,21 @@ const verifyLogin = async (req, res) => {
         const userData = await User.findOne({ email });
 
         if (userData) {
-            if (userData.is_verified==true) {
-                const passwordMatch = await bcrypt.compare(password, userData.password);
-
-                if (passwordMatch) {
-                    req.session.user_id = userData._id;
-                    res.redirect('/home');
+            if (userData.is_verified === true) {
+                if (userData.is_blocked==true) {
+                    res.render('login', { message: "Your account is blocked by the admin." });
                 } else {
-                    res.render('login', { message: "Incorrect password" });
+                    const passwordMatch = await bcrypt.compare(password, userData.password);
+
+                    if (passwordMatch) {
+                        req.session.user_id = userData._id;
+                        res.redirect('/');
+                    } else {
+                        res.render('login', { message: "Incorrect password" });
+                    }
                 }
             } else {
-                sendOtpVerificationEmail(userData,res);
+                sendOtpVerificationEmail(userData, res);
             }
         } else {
             res.render('login', { message: "Email is not registered. Please register first." });
@@ -314,7 +318,7 @@ const loadlogin = async (req, res) => {
 const userLogout = async (req, res) => {
     try {
         req.session.destroy();
-        res.redirect('/home');
+        res.redirect('/');
     } catch (error) {
         console.log(error.message);
     }

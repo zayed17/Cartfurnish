@@ -20,14 +20,14 @@ userRoute.use(express.urlencoded({ extended: true }));
 // Set the view engine and views directory
 userRoute.set('views', './views/user');
 
-userRoute.get('/',auth.isLogout,usercontrollers.loadhome);
-userRoute.get('/home',auth.isLogin,usercontrollers.loadhome);
+userRoute.get('/',usercontrollers.loadhome);
+// userRoute.get('/home',auth.isLogin,usercontrollers.loadhome);
 userRoute.get('/signup',auth.isLogout,usercontrollers.loadsignup)
-userRoute.post('/signup',usercontrollers.insertuser);
+userRoute.post('/signup',auth.isLogout,usercontrollers.insertuser);
 userRoute.get('/verifyotp',usercontrollers.loadVerificationPage)
 userRoute.post('/verifyotp',usercontrollers.verifyOtp)
-userRoute.get('/login',usercontrollers.loadlogin);
-userRoute.post('/login',usercontrollers.verifyLogin)
+userRoute.get('/login',auth.isLogout,usercontrollers.loadlogin);
+userRoute.post('/login',auth.isLogout,usercontrollers.verifyLogin)
 userRoute.get('/shop',usercontrollers.loadshop);
 userRoute.get('/loginwithotp',usercontrollers.loademailinput)
 userRoute.post('/loginwithotp',usercontrollers.sentOtpbyMail)

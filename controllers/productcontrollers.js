@@ -139,13 +139,27 @@ console.log(req.body.price);
     }
   }
   
+  const blockProducts=async(req,res)=>{
+    try {
+      const user = req.params.id; 
+      const userValue = await Product.findOne({ _id: user });
+      if (userValue.is_blocked) {
+        await Product.updateOne({ _id: user }, { $set: { is_blocked: false } });
+      } else {
+        await Product.updateOne({ _id: user }, { $set: { is_blocked: true } });
+      }
+      res.json({ block: true });
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
 
-  // const editproduct = as
 
   module.exports = {
     loadaddproduct,
     addproduct,
     loadproduct,
     loadeditproduct,
+    blockProducts
     
   }

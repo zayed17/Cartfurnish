@@ -32,7 +32,7 @@
             </div>
             
             <nav>
-                <ul class="menu-aside">
+                <ul class="menu-aside ">
                     <li class="menu-item ">
                         <a class="menu-link" href="dashboard">
                             <i class="icon material-icons md-home"></i>
@@ -46,18 +46,25 @@
                             <span class="text">Products</span>
                         </a>
                     </li>
-    
+
                     <li class="menu-item active">
                         <a class="menu-link" href="category">
                             <i class="icon material-icons md-shopping_cart"></i>
                             <span class="text">Categories</span>
                         </a>
                     </li>
-    
+
                     <li class="menu-item">
                         <a class="menu-link" href="users">
                             <i class="icon material-icons md-perm_identity"></i>
                             <span class="text">Users</span>
+                        </a>
+                    </li>
+
+                    <li class="menu-item mt-auto">
+                        <a class="menu-link" href="logout">
+                            <i class="icon material-icons md-exit_to_app"></i>
+                            <span class="text">Logout</span>
                         </a>
                     </li>
                 </ul>
@@ -139,6 +146,20 @@
                             <span class="text">Add New Category</span>
                         </a>
                     </div>
+                    <% if (typeof message !=='undefined' ) { %>
+                        <p id="message" style="color: rgb(255, 0, 0);">
+                            <%= message %>
+                        </p>
+                        <script>
+                            // Set a timer to remove the message after 5000 milliseconds (5 seconds)
+                            setTimeout(function () {
+                                var messageElement = document.getElementById('message');
+                                if (messageElement) {
+                                    messageElement.style.display = 'none';
+                                }
+                            }, 3500);
+                        </script>
+                        <% } %>
                     
                     <div class="card mt-4">
                         <div class="table-data">
@@ -153,7 +174,6 @@
                                                     <th scope="col"><center>Description</center></th>
                                                     <th scope="col"><center>Edit</center></th>
                                                     <th scope="col"><center>List/Unlist</center></th>
-                                                    <th scope="col"><center>Delete</center></th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -165,21 +185,13 @@
                                                         <td align="center"><a href="editcategory?id=<%= category[i]._id %>">edit</a></td>
                                                         <td align="center">
                                                             <% if (category[i].is_list) { %>
-                                                                <a class="list-category" data-category-id="<%= category[i]._id %>"><span
-                                                                        class="badge rounded-pill alert-success">List</span></a>
-
+                                                                <a class="unblock-user" data-user-id="<%= category[i]._id %>"><span
+                                                                        class="badge rounded-pill alert-success">unblock</span></a>
                                                                 <% } else { %>
-                                                                    <a class="unlist-category"
-                                                                        data-category-id="<%= category[i]._id %>"><span
-                                                                        class="badge rounded-pill alert-warning">unlist</span></a>
+                                                                    <a class="block-user"
+                                                                        data-user-id="<%= category[i]._id %>"><span
+                                                                            class="badge rounded-pill alert-warning">block</span></a>
                                                                     <% } %>
-                                                        </td>
-                                                        <td align="center">
-                                                            <% if(category[i].isBlocked === false) { %>
-                                                               <button>ok</button>
-                                                            <% } else { %>
-                                                                <button>Other</button>
-                                                            <% } %>
                                                         </td>
                                                     </tr>
                                                 <% } %>
@@ -228,15 +240,15 @@
 
 
 <script>
-    document.querySelectorAll('.unlist-category, .list-category').forEach(function (element) {
+    document.querySelectorAll('.block-user, .unblock-user').forEach(function (element) {
         console.log(element);
         element.addEventListener('click', function (event) {
             event.preventDefault();
 
-            const userId = element.getAttribute('data-category-id');
-            const action = element.classList.contains('unlist-category') ? 'unlist' : 'list';
+            const userId = element.getAttribute('data-user-id');
+            const action = element.classList.contains('block-user') ? 'block' : 'unblock';
 
-            fetch(`/admin/listcategory/${userId}`, {
+            fetch(`/admin/blockcategory/${userId}`, {
                 method: 'PATCH',
             })
                 .then(response => response.json())
@@ -245,12 +257,11 @@
                         //updating the button text and color
                         element.querySelector('span').classList.toggle('alert-success');
                         element.querySelector('span').classList.toggle('alert-warning');
-                        element.querySelector('span').innerText = action === 'list' ? 'list' : 'unlist';
-                        
-                        // Replace button class
-                        element.classList.remove(action === 'list' ? 'unlist-category' : 'list-category');
-                        element.classList.add(action === 'list' ? 'list-category' : 'unlist-category');
+                        element.querySelector('span').innerText = action === 'block' ? 'unblock' : 'block';
 
+                        // Replace button class
+                        element.classList.remove(action === 'block' ? 'block-user' : 'unblock-user');
+                        element.classList.add(action === 'block' ? 'unblock-user' : 'block-user');
                     }
                 }).catch((error) => {
                     console.log(error.message);

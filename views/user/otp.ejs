@@ -228,39 +228,65 @@
             </nav><!-- End .breadcrumb-nav -->
 
             
-    <div class="login-page bg-image pt-8 pb-8 pt-md-12 pb-md-12 pt-lg-17 pb-lg-17" style="background-image: url('public/assets/images/backgrounds/login-bg.jpg')">
-        <div class="container">
-            <div class="form-box">
-                <div class="form-tab">
-                    <div class="text-center text-dark">Verify OTP</div>
-
-                    <div class="tab-content">
-                        <div class="tab-pane fade show active" id="register-2" role="tabpanel" aria-labelledby="register-tab-2">
-                            <% if (typeof message !== 'undefined') { %>
-                                <p style="color: blue;"><%= message %></p>
-                            <% } %>
-                            <form action="/verifyotp" method="post">
-                                <div class="mb-3">
-                                    <input type="hidden" name="email">
+            <div class="login-page bg-image pt-8 pb-8 pt-md-12 pb-md-12 pt-lg-17 pb-lg-17" style="background-image: url('public/assets/images/backgrounds/login-bg.jpg')">
+                <div class="container">
+                    <div class="form-box">
+                        <div class="form-tab">
+                            <div class="text-center text-dark">Verify OTP</div>
+            
+                            <div class="tab-content">
+                                <div class="tab-pane fade show active" id="register-2" role="tabpanel" aria-labelledby="register-tab-2">
+                                    <% if (typeof message !== 'undefined') { %>
+                                        <p style="color: blue;"><%= message %></p>
+                                    <% } %>
+                                    <form id="otpForm" action="/verifyotp" method="post">
+                                        <div class="mb-3">
+                                            <input type="hidden" name="email">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="otp" class="form-label">OTP:</label>
+                                            <input type="text" id="otp" name="otp" class="form-control" required>
+                                        </div>
+                                        <div class="d-grid">
+                                            <button type="submit" class="btn btn-outline-primary-2" onclick="startResendTimer()">
+                                                <span id="timer">Resend OTP</span>
+                                                <i class="icon-long-arrow-right"></i>
+                                            </button>
+                                        </div>
+                                    </form>
                                 </div>
-                                <div class="mb-3">
-                                    <label for="otp" class="form-label">OTP:</label>
-                                    <input type="text" id="otp" name="otp" class="form-control" required>
-                                </div>
-                                <div class="d-grid">
-                                    <button type="submit" class="btn btn-outline-primary-2" onclick="startTimer()">
-                                        <span id="timer">Resend OTP</span>
-                                        <i class="icon-long-arrow-right"></i>
-                                    </button>
-                                </div>
-                            </form>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-
+            
+            <script>
+                // Function to start the resend timer
+                function startResendTimer() {
+                    let seconds = 60;
+                    const timerElement = document.getElementById('timer');
+                    const resendButton = document.getElementById('timer');
+            
+                    // Disable the resend button during the countdown
+                    resendButton.disabled = true;
+            
+                    // Update the timer every second
+                    const timerInterval = setInterval(() => {
+                        timerElement.textContent = `Resend OTP in ${seconds} seconds`;
+            
+                        if (seconds <= 0) {
+                            // Enable the resend button when the countdown reaches zero
+                            resendButton.disabled = false;
+                            timerElement.textContent = 'Resend OTP';
+                            clearInterval(timerInterval); // Stop the timer
+                        }
+            
+                        seconds--;
+                    }, 1000);
+                }
+            </script>
+            
     
         
         </main><!-- End .main -->
