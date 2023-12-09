@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+<!-- molla/elements-tabs  22 Nov 2019 10:05:18 GMT -->
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Molla - Bootstrap eCommerce Template</title>
+    <meta name="keywords" content="HTML5 Template">
+    <meta name="description" content="Molla - Bootstrap eCommerce Template">
+    <meta name="author" content="p-themes">
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="public/assets/images/icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="public/assets/images/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="public/assets/images/icons/favicon-16x16.png">
+    <link rel="manifest" href="public/assets/images/icons/site">
+    <link rel="mask-icon" href="public/assets/images/icons/safari-pinned-tab.svg" color="#666666">
+    <link rel="shortcut icon" href="public/assets/images/icons/favicon.ico">
+    <meta name="apple-mobile-web-app-title" content="Molla">
+    <meta name="application-name" content="Molla">
+    <meta name="msapplication-TileColor" content="#cc9966">
+    <meta name="msapplication-config" content="public/assets/images/icons/browserconfig.xml">
+    <meta name="theme-color" content="#ffffff">
+    <!-- Plugins CSS File -->
+    <link rel="stylesheet" href="public/assets/css/bootstrap.min.css">
+    <!-- Main CSS File -->
+    <link rel="stylesheet" href="public/assets/css/style.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</head>
+<style>
+    /* Override Bootstrap active tab color */
+    .nav-pills .nav-link.active {
+        background-color: transparent !important;
+        color: #000 !important; /* Set your desired text color for the active link */
+    }
+
+    /* Override Bootstrap hover color */
+    .nav-pills .nav-link:hover {
+        background-color: transparent !important;
+        color: #555 !important; /* Set your desired text color for the hover state */
+    }
+</style>
+
+
+<body>
+
+    <div class="page-wrapper">
+        <header class="header">
+            <div class="header-middle sticky-header">
+                <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-6 col-md-3">
+                            <a href="index" class="logo">
+                                <img src="public/assets/images/logo.png" alt="Molla Logo" class="img-fluid" width="105" height="25">
+                            </a>
+                        </div><!-- End .col-md-3 -->
+        
+                        <div class="col-6 col-md-9">
+                            <nav class="main-nav">
+                                <button class="mobile-menu-toggler">
+                                    <span class="sr-only">Toggle mobile menu</span>
+                                    <i class="icon-bars"></i>
+                                </button>
+        
+                                <ul class="menu sf-arrows">
+                                    <li class="megamenu-container active">
+                                        <a href="/">Home</a>
+                                    </li>
+                                    <li>
+                                        <a href="shop">Shop</a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="sf-with-ul">Pages</a>
+                                        <ul>
+                                            <li>
+                                                <a href="about">About</a>
+                                            </li>
+                                            <li>
+                                                <a href="contact">Contact</a>
+                                            </li>
+                                            <li><a href="login">Login</a></li>
+                                            <li><a href="faq">FAQs</a></li>
+                                        </ul>
+                                    </li>
+                                </ul><!-- End .menu -->
+                            </nav><!-- End .main-nav -->
+                        </div><!-- End .col-md-9 -->
+                    </div><!-- End .row -->
+                </div><!-- End .container -->
+            </div><!-- End .header-middle -->
+        </header><!-- End .header -->
+                
+    
+      
+
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-lg-12">
+                <!-- Added buttons here -->
+                <div class="d-flex justify-content-between mb-3">
+                    <button type="button" class="btn btn-danger">Logout</button>
+                    <button type="button" class="btn btn-secondary">Back</button>
+                </div>
+    
+                <h2 class="title mb-3 text-center">Profile</h2>
+                <ul class="nav nav-pills justify-content-center" id="tabs-6" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link " id="tab-21-tab" data-toggle="tab" href="#tab-21" role="tab"
+                            aria-controls="tab-21" aria-selected="true">My profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="tab-22-tab" data-toggle="tab" href="#tab-22" role="tab"
+                            aria-controls="tab-22" aria-selected="false">Orders</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="tab-23-tab" data-toggle="tab" href="#tab-23" role="tab"
+                            aria-controls="tab-23" aria-selected="false">Address</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="tab-24-tab" data-toggle="tab" href="#tab-24" role="tab"
+                            aria-controls="tab-24" aria-selected="false">Tab 4</a>
+                    </li>
+                </ul>
+                <div class="tab-content d-flex justify-content-center align-items-center" id="tab-content-6">
+                    <div class="tab-pane fade show active" id="tab-21" role="tabpanel" aria-labelledby="tab-21-tab">
+                        <div class="user-profile text-center">
+                            <h3><strong>User Name 1</strong></h3>
+                            <p>
+                                Mobile Number: <span id="mobileNumber">Your Mobile Number</span><br>
+                                Gmail: <span id="gmail">your.email@gmail.com</span>
+                            </p>
+                            <button type="button" class="btn btn-primary">Edit Profile</button>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="tab-22" role="tabpanel" aria-labelledby="tab-22-tab">
+                        <div class="user-profile text-center">
+                            <img src="profile-picture-2.jpg" alt="User Profile Picture 2" class="img-fluid">
+                            <h3>User Name 2</h3>
+                            <p>Nobis perspiciatis natus cum, sint dolore earum rerum tempora aspernatur
+                                numquam velit tempore omnis, delectus repellat facere voluptatibus nemo non
+                                fugiat consequatur repellendus! Enim, commodi, veniam ipsa voluptates quis
+                                amet.</p>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="tab-23" role="tabpanel" aria-labelledby="tab-23-tab">
+                        <div class="user-profile text-center">
+                            <img src="profile-picture-3.jpg" alt="User Profile Picture 3" class="img-fluid">
+                            <h3>User Name 3</h3>
+                            <p>Perspiciatis quis nobis, adipisci quae aspernatur, nulla suscipit eum.
+                                Dolorum, earum. Consectetur pariatur repellat distinctio atque alias
+                                excepturi aspernatur nisi accusamus sed molestias ipsa numquam eius, iusto,
+                                aliquid, quis aut.</p>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="tab-24" role="tabpanel" aria-labelledby="tab-24-tab">
+                        <div class="user-profile text-center">
+                            <img src="profile-picture-4.jpg" alt="User Profile Picture 4" class="img-fluid">
+                            <h3>User Name 4</h3>
+                            <p>Quis nobis, adipisci quae aspernatur, nulla suscipit eum. Dolorum, earum.
+                                Consectetur pariatur repellat distinctio atque alias excepturi aspernatur
+                                nisi accusamus sed molestias ipsa numquam eius, iusto, aliquid, quis aut.
+                            </p>
+                        </div>
+                    </div>
+                </div>                    
+            </div>
+        </div>
+    </div>
+    
+
+
+
+    <!-- Plugins and Main JS Files -->
+    <script src="public/assets/js/jquery.min.js"></script>
+    <script src="public/assets/js/bootstrap.bundle.min.js"></script>
+    <script src="public/assets/js/jquery.hoverIntent.min.js"></script>
+    <script src="public/assets/js/jquery.waypoints.min.js"></script>
+    <script src="public/assets/js/superfish.min.js"></script>
+    <script src="public/assets/js/owl.carousel.min.js"></script>
+    <script src="public/assets/js/main.js"></script>
+
+</body>
+
+<!-- molla/elements-tabs  22 Nov 2019 10:05:18 GMT -->
+
+</html>

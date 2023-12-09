@@ -70,22 +70,16 @@
 
                     <div class="header-right">
                         <% if (locals.user) { %>
-                            <!-- Show the Account section if the user is authenticated -->
-                            <div class="dropdown account">
-                                <a href="#" class="dropdown-toggle"  data-bs-toggle="dropdown" aria-expanded="false">
-                                    <div class="icon">
-                                        <i class="icon-user"></i>
-                                    </div>
-                                    <p><%= user.name %></p>
-                                </a>
-                                <ul class="dropdown-menu" aria-labelledby="accountDropdown">
-                                    <li><a class="dropdown-item" href="dashboard" title="My account">My Account</a></li>
-                                    <li><a class="dropdown-item" href="/logout">Logout</a></li>
-                                </ul>
+                            <div class="login-signup ">
+                                <a href="/login" class="btn btn-primary">Register</a>
                             </div>
                         <% } else { %>
-                            <div class="login-signup ">
-                                <a href="/signup" class="btn btn-primary">Register</a>
+                            <div>
+                                <a href="/account">
+                                    <div class="icon">
+                                        <i class="icon-user" style="font-size: 30px;"></i>
+                                    </div>
+                                </a>
                             </div>
                         <% } %>
                         

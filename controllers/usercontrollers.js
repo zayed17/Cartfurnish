@@ -355,6 +355,14 @@ const loadeachproduct = async(req,res)=>{
     }
   }
 
+  const loadaccount = async(req,res)=>{
+    try {
+        res.render('account')
+    } catch (error) {
+        console.log(error);
+    }
+  }
+
 
 module.exports = {
     loadhome,
@@ -368,5 +376,6 @@ module.exports = {
     sentOtpbyMail,
     loademailinput,
     userLogout,
-    loadeachproduct
+    loadeachproduct,
+    loadaccount
 }

@@ -33,5 +33,5 @@ userRoute.get('/loginwithotp',usercontrollers.loademailinput)
 userRoute.post('/loginwithotp',usercontrollers.sentOtpbyMail)
 userRoute.get('/product',usercontrollers.loadeachproduct)
 userRoute.get('/logout', usercontrollers.userLogout);
-
+userRoute.get('/account',usercontrollers.loadaccount)
 module.exports = userRoute;

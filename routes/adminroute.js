@@ -39,7 +39,7 @@ adminRoute.get("/product",auth.isLogin, productcontrollers.loadproduct);
 adminRoute.get("/product",auth.isLogin, productcontrollers.loadproduct);
 adminRoute.patch('/blockproducts/:id',productcontrollers.blockProducts)
 adminRoute.get('/addproduct',auth.isLogin, productcontrollers.loadaddproduct);
-adminRoute.post('/addproduct',auth.isLogin, multer.uploadproduct, productcontrollers.addproduct);
+// adminRoute.post('/addproduct',auth.isLogin, multer.uploadproduct, productcontrollers.addproduct);
 adminRoute.get('/editproduct',auth.isLogin, productcontrollers.loadeditproduct);
 
 adminRoute.get('/logout',admincontrollers.adminLogout)
