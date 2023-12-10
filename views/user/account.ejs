@@ -63,11 +63,7 @@
         
                         <div class="col-6 col-md-9">
                             <nav class="main-nav">
-                                <button class="mobile-menu-toggler">
-                                    <span class="sr-only">Toggle mobile menu</span>
-                                    <i class="icon-bars"></i>
-                                </button>
-        
+                               
                                 <ul class="menu sf-arrows">
                                     <li class="megamenu-container active">
                                         <a href="/">Home</a>
@@ -105,10 +101,9 @@
             <div class="col-md-6 col-lg-12">
                 <!-- Added buttons here -->
                 <div class="d-flex justify-content-between mb-3">
-                    <button type="button" class="btn btn-danger">Logout</button>
-                    <button type="button" class="btn btn-secondary">Back</button>
+                   <a href="/logout"> <button type="button" class="btn btn-danger btn-sm">Logout</button></a>
+                    <button type="button" class="btn btn-secondary btn-sm">Back</button>
                 </div>
-    
                 <h2 class="title mb-3 text-center">Profile</h2>
                 <ul class="nav nav-pills justify-content-center" id="tabs-6" role="tablist">
                     <li class="nav-item">
@@ -130,14 +125,15 @@
                 </ul>
                 <div class="tab-content d-flex justify-content-center align-items-center" id="tab-content-6">
                     <div class="tab-pane fade show active" id="tab-21" role="tabpanel" aria-labelledby="tab-21-tab">
-                        <div class="user-profile text-center">
-                            <h3><strong>User Name 1</strong></h3>
-                            <p>
-                                Mobile Number: <span id="mobileNumber">Your Mobile Number</span><br>
-                                Gmail: <span id="gmail">your.email@gmail.com</span>
+                        <div class="user-profile text-center bg-light p-4 rounded">
+                            <h3 class="mb-3"><strong><%= userData.name %></strong></h3>
+                            <p class="mb-3">
+                                Mobile Number: <span id="mobileNumber" class="text-info"><%= userData.mobile %></span><br>
+                                Gmail: <span id="gmail" class="text-info"><%= userData.email %></span>
                             </p>
                             <button type="button" class="btn btn-primary">Edit Profile</button>
                         </div>
+                        
                     </div>
                     <div class="tab-pane fade" id="tab-22" role="tabpanel" aria-labelledby="tab-22-tab">
                         <div class="user-profile text-center">

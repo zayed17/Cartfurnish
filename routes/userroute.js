@@ -4,7 +4,7 @@ const session = require('express-session');
 const usercontrollers = require('../controllers/usercontrollers');
 const config = require('../config/config');
 const auth = require('../middleware/auth');
-
+const cartcontrollers = require('../controllers/cartcontrollers')
 
 // Configure session middleware
 userRoute.use(session({
@@ -34,4 +34,5 @@ userRoute.post('/loginwithotp',usercontrollers.sentOtpbyMail)
 userRoute.get('/product',usercontrollers.loadeachproduct)
 userRoute.get('/logout', usercontrollers.userLogout);
 userRoute.get('/account',usercontrollers.loadaccount)
+userRoute.get('/cart',cartcontrollers.loadcart)
 module.exports = userRoute;

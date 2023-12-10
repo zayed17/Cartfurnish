@@ -331,13 +331,14 @@ const loadshop = async (req, res) => {
       const productsPerPage = 9; // Number of products per page
       const startIndex = (page - 1) * productsPerPage;
       const endIndex = startIndex + productsPerPage;
-  
+      const userData = await User.findOne({_id:req.session.user_id})
+
       const totalProducts = await Product.countDocuments({});
       const totalPages = Math.ceil(totalProducts / productsPerPage);
   
       const productData = await Product.find({}).skip(startIndex).limit(productsPerPage);
   
-      res.render('shop', { product: productData, currentPage: page, totalPages });
+      res.render('shop', { product: productData, currentPage: page, totalPages,user:userData });
     } catch (error) {
       console.error(error.message);
       res.status(500).send('Internal Server Error');
@@ -346,10 +347,10 @@ const loadshop = async (req, res) => {
   
 const loadeachproduct = async(req,res)=>{
     try {
-
+        const userData = await User.findOne({_id:req.session.user_id})
         const id = req.query.id;
         const product = await Product.findOne({_id:id})
-      res.render("product",{product})
+      res.render("product",{product,user:userData})
     } catch (error) {
       console.log(error);
     }
@@ -357,11 +358,13 @@ const loadeachproduct = async(req,res)=>{
 
   const loadaccount = async(req,res)=>{
     try {
-        res.render('account')
+        const userData = await User.findOne({_id:req.session.user_id})
+        res.render('account',{userData})
     } catch (error) {
         console.log(error);
     }
   }
+
 
 
 module.exports = {
@@ -377,5 +380,5 @@ module.exports = {
     loademailinput,
     userLogout,
     loadeachproduct,
-    loadaccount
+    loadaccount,
 }
