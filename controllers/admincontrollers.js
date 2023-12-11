@@ -1,4 +1,3 @@
-const Admin = require('../models/adminmodel');
 const User = require('../models/usermodel');
 const bcrypt = require('bcrypt');
 const Category = require('../models/categorymodal')

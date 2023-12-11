@@ -10,8 +10,10 @@ const cartcontrollers = require('../controllers/cartcontrollers')
 userRoute.use(session({
     secret: config.sessionSecret,
     resave: false,
-    saveUninitialized: true
+    saveUninitialized: true,
+    // cookie: { maxAge: 30 * 24 * 60 * 60 * 1000 } 
 }));
+
 
 // Parse JSON and URL-encoded data
 userRoute.use(express.json());
@@ -35,6 +37,6 @@ userRoute.get('/product',usercontrollers.loadeachproduct)
 userRoute.get('/logout', usercontrollers.userLogout);
 userRoute.get('/account',usercontrollers.loadaccount)
 userRoute.get('/cart',cartcontrollers.loadcart)
-userRoute.post('/addtocart',cartcontrollers.addtocart)
+userRoute.patch('/addtocart',cartcontrollers.addtocart)
 
 module.exports = userRoute;
