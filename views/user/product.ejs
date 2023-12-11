@@ -30,6 +30,8 @@
     <!-- Main CSS File -->
     <link rel="stylesheet" href="public/assets/css/style.css">
     <link rel="stylesheet" href="public/assets/css/plugins/nouislider/nouislider.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10">
+
 </head>
 
 <body>
@@ -271,7 +273,7 @@
                                     </div><!-- End .details-filter-row -->
 
                                     <div class="product-details-action">
-                                        <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
+                                        <a href="#" class="btn-product btn-cart" onclick="addToCart('<%= product._id %>');"><span>add to cart</span></a>
 
                                         <div class="details-action-wrapper">
                                             <a href="#" class="btn-product btn-wishlist" title="Wishlist"><span>Add to Wishlist</span></a>
@@ -1015,7 +1017,80 @@
         </div><!-- End .modal-dialog -->
     </div><!-- End .modal -->
 
+    <script>
+        function addToCart(productId) {
+            const data = {productId:productId}
+    
+            console.log(data);
+            $.ajax({
+                method: 'POST',
+                url: '/addtocart', 
+                data: JSON.stringify(data),
+                contentType: 'application/json',
+                success: function (response) {
+                    if(response.stock===true){
+                        swal("Success", "Item added to cart!", "success")
+                    }else{
+                        
+                        Swal.fire({
+                      icon: "warning",
+                      title: "Please Login",
+                      confirmButtonColor: "#3085d6",
+                      confirmButtonText: "Login",
+                      showCancelButton: true,
+                      cancelButtonColor: "#d33",
+              
+                    })
+                    .then((result) => {
+                      if (result.isConfirmed) {
+                        window.location.href = "/login";
+                      }
+                    });
+                    }
+    
+                },
+                error: function (error) {
+                    console.error(error);
+                }
+            });
+        }
+
+</script>
+
+
+    <!-- <script>
+        function addToCart(productId) {
+    const data = { productId };
+
+    console.log(data);
+    $.post('/addtocart', JSON.stringify(data), 'json')
+        .done(response => {
+            if (response.stock) {
+                swal("Success", "Item added to cart!", "success");
+            } else {
+                Swal.fire({
+                    icon: "warning",
+                    title: "Please Login",
+                    confirmButtonColor: "#3085d6",
+                    confirmButtonText: "Login",
+                    showCancelButton: true,
+                    cancelButtonColor: "#d33",
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = "/login";
+                    }
+                });
+            }
+        })
+        .fail(error => {
+            console.error(error);
+        });
+}
+
+    </script> -->
     <!-- Plugins JS File -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
     <script src="public/assets/js/jquery.min.js"></script>
     <script src="public/assets/js/bootstrap.bundle.min.js"></script>
     <script src="public/assets/js/jquery.hoverIntent.min.js"></script>

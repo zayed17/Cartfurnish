@@ -35,4 +35,6 @@ userRoute.get('/product',usercontrollers.loadeachproduct)
 userRoute.get('/logout', usercontrollers.userLogout);
 userRoute.get('/account',usercontrollers.loadaccount)
 userRoute.get('/cart',cartcontrollers.loadcart)
+userRoute.post('/addtocart',cartcontrollers.addtocart)
+
 module.exports = userRoute;
