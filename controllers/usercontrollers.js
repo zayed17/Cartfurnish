@@ -1,5 +1,6 @@
 const User = require('../models/usermodel');
 const bcrypt = require('bcrypt');
+const Cart = require('../models/cartmodels');
 const nodemailer = require('nodemailer');
 const userOtpVerification = require('../models/userotpverification');
 const Product = require('../models/productmodal')
@@ -19,8 +20,10 @@ const securePassword = async (password) => {
 
 const loadhome = async (req, res) => {
     try {
-        const userData = await User.findOne({_id:req.session.user_id})
-        res.render('home',{user:userData});
+        const user_id = req.session.user_id; 
+        const cartData =  await Cart.findOne({user:user_id}).populate("product.productId")
+        const userData = await User.findOne({_id:user_id})
+        res.render('home',{user:userData,cart:cartData});
     } catch (error) {
         console.log(error.message);
     }
