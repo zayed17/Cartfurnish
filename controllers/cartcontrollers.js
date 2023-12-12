@@ -64,7 +64,43 @@ const loadcart = async(req,res)=>{
 };
 
 
+
+
+const updatecart = async (req, res) => {
+  const productId = req.body.productId;
+  const quantity = req.body.quantity;
+console.log(productId,quantity);
+  try {
+      // Find the cart entry with the given product ID
+      const cartEntry = await Cart.findOne({ 'products.productId': productId });
+
+      if (cartEntry) {
+          // Update the quantity and recalculate the total price
+          const updatedProduct = cartEntry.products.find(prod => prod.productId.equals(productId));
+          updatedProduct.quantity = quantity;
+          updatedProduct.totalPrice = quantity * updatedProduct.price;
+
+          // Update the cart in the database
+          await cartEntry.save();
+
+          // Send a success response
+          res.json({ success: true, message: 'Cart updated successfully' });
+      } else {
+          // Handle the case where the product is not found in the cart
+          res.status(404).json({ success: false, message: 'Product not found in the cart' });
+      }
+  } catch (error) {
+      // Handle errors
+      console.error(error);
+      res.status(500).json({ success: false, message: 'Internal Server Error' });
+  }
+}
+
+
+
+
   module.exports = {
     loadcart,
-    addtocart
+    addtocart,
+    updatecart
   }

@@ -38,5 +38,9 @@ userRoute.get('/logout', usercontrollers.userLogout);
 userRoute.get('/account',usercontrollers.loadaccount)
 userRoute.get('/cart',cartcontrollers.loadcart)
 userRoute.patch('/addtocart',cartcontrollers.addtocart)
+userRoute.post('/updateCart',cartcontrollers.updatecart)
+
+
+
 
 module.exports = userRoute;
