@@ -10,8 +10,9 @@ const loadcart = async(req,res)=>{
     try { 
       const user_id = req.session.user_id; 
       const cartData =  await Cart.findOne({user:user_id}).populate("product.productId")
+      const subtotal = cartData.product.reduce((acc,val)=> acc+val.totalPrice,0)
       // console.log(cartData);
-        res.render('cart',{cart:cartData})
+        res.render('cart',{cart:cartData,subtotal})
     } catch (error) {
         console.log(error);
     }
@@ -67,34 +68,52 @@ const loadcart = async(req,res)=>{
 
 
 const updatecart = async (req, res) => {
-  const productId = req.body.productId;
-  const quantity = req.body.quantity;
-console.log(productId,quantity);
-  try {
-      // Find the cart entry with the given product ID
-      const cartEntry = await Cart.findOne({ 'products.productId': productId });
+    try {
+    const product_id = req.body.productId
+    const user_id = req.session.user_id
+    const count = req.body.count
+    const cartD = await Cart.findOne({ user: user_id })
+    const product = cartD.product.filter((obj)=>obj.productId==product_id)
+    const productData = await Product.findById(product_id)
+    const cartData = await Cart.findOneAndUpdate({user:user_id,'product.productId':product_id},{$inc:{'product.$.quantity':count, 'product.$.totalPrice': count * cartD.product.find(p => p.productId.equals(product_id)).price,
+}})
+    res.json({ success: true });
 
-      if (cartEntry) {
-          // Update the quantity and recalculate the total price
-          const updatedProduct = cartEntry.products.find(prod => prod.productId.equals(productId));
-          updatedProduct.quantity = quantity;
-          updatedProduct.totalPrice = quantity * updatedProduct.price;
+    } catch (error) {
+        console.log(error);
+    }
+    
+};
 
-          // Update the cart in the database
-          await cartEntry.save();
 
-          // Send a success response
-          res.json({ success: true, message: 'Cart updated successfully' });
-      } else {
-          // Handle the case where the product is not found in the cart
-          res.status(404).json({ success: false, message: 'Product not found in the cart' });
-      }
-  } catch (error) {
-      // Handle errors
-      console.error(error);
-      res.status(500).json({ success: false, message: 'Internal Server Error' });
-  }
+const removecartitem = async (req, res) => {
+    const productId = req.body.productId;
+    const userId = req.session.user_id;
+
+    try {
+        await Cart.findOneAndUpdate(
+            { user: userId }, // Change from userId to user
+            {
+                $pull: { product: { productId: productId } }, // Change from product to products
+            }
+        );
+
+        res.json({ success: true });
+    } catch (error) {
+        console.error("Error removing cart item:", error);
+        res.status(500).json({ success: false, error: "Internal Server Error" });
+    }
+};
+
+
+const loadcheckoutpage = async(req,res)=>{
+    try {
+        res.render('checkout')
+    } catch (error) {
+        console.log(error);
+    }
 }
+
 
 
 
@@ -102,5 +121,7 @@ console.log(productId,quantity);
   module.exports = {
     loadcart,
     addtocart,
-    updatecart
+    updatecart,
+    loadcheckoutpage,
+    removecartitem
   }

@@ -16,7 +16,6 @@
     flex: 1;
     margin: 0 6px;
     appearance: none; /* Remove default appearance */
-    text-align: center; /* Center the text in the input */
     border: 1px solid #ccc;
     padding: 6px;
 	/* padding: 0.85rem 2.6rem; */
@@ -27,4 +26,19 @@
 .form-control::-webkit-outer-spin-button {
     -webkit-appearance: none;
     margin: 0;
+}
+.cart-container {
+    position: relative;
+    display: inline-block;
+}
+
+.cart-count {
+    position: absolute;
+    top: -10px; /* Adjust the top position based on your design */
+    right: -10px; /* Adjust the right position based on your design */
+    background-color: #ff0000; /* Set the background color */
+    color: #ffffff; /* Set the text color */
+    border-radius: 50%; /* Make it a circle */
+    padding: 5px 8px; /* Adjust padding as needed */
+    font-size: 12px; /* Adjust font size as needed */
 }
