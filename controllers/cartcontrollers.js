@@ -92,7 +92,7 @@ const removecartitem = async (req, res) => {
 
     try {
         await Cart.findOneAndUpdate(
-            { user: userId }, // Change from userId to user
+            { user: userId },
             {
                 $pull: { product: { productId: productId } }, // Change from product to products
             }

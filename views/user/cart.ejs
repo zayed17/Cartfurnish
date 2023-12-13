@@ -194,18 +194,24 @@
                                                 <td class="price-col" data-product-price="<%= product.price %>">
                                                     <%= product.price %>
                                                 </td>
-                                                <td class="quantity-col" >
+                                                <td class="quantity-col">
                                                     <div class="cart-product-quantity">
-                                                        <button class="quantity-control" type="button" onclick="updateQuantity('<%= product.productId._id %>', -1)">-</button>
-                                                        <input type="number" class="form-control" value="<%= product.quantity %>" min="1" max="10" step="1" data-decimals="0" required>
-                                                        <button class="quantity-control" type="button" onclick="updateQuantity('<%= product.productId._id %>', 1)">+</button>
+                                                        <button class="quantity-control" type="button"
+                                                            onclick="updateQuantity('<%= product.productId._id %>', -1)">-</button>
+                                                        <input type="number" class="form-control"
+                                                            value="<%= product.quantity %>" min="1" max="10" step="1"
+                                                            data-decimals="0" required>
+                                                        <button class="quantity-control" type="button"
+                                                            onclick="updateQuantity('<%= product.productId._id %>', 1)">+</button>
                                                     </div>
                                                 </td>
                                                 <td class="total-col">
                                                     <%= product.totalPrice %>
-                                                </td>     
+                                                </td>
                                                 <td class="remove-col">
-                                                    <button class="btn-remove" onclick="removecartitem('<%= product.productId._id %>')"><i class="icon-close"></i></button>
+                                                    <button class="btn-remove"
+                                                        onclick="removecartitem('<%= product.productId._id %>')"><i
+                                                            class="icon-close"></i></button>
                                                 </td>
                                             </tr>
                                             <% }); %>
@@ -242,36 +248,36 @@
                                             .catch(error => console.error('Error updating cart:', error));
                                     }
 
-function removecartitem(productId) {
-  fetch('/removecartitem', {
-    method: "POST",
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ productId }),
-  })
-    .then(response => response.json())
-    .then(response => {
-      if (response.success) {
-        Swal.fire({  // Change "swal" to "Swal"
-          title: "Item Removed!",
-          text: "The item has been successfully removed from your cart.",
-          icon: "success",
-          showConfirmButton: false,
-          timer: 5000,
-        });
-        setTimeout(() => {
-  location.reload(); // Reload the page
-}, 1500);
-      } else {
-        // Handle error
-        console.error('Error removing item:', response.error);
-      }
-    })
-    .catch(error => {
-      console.error('Error removing item:', error);
-    });
-}
+                                    function removecartitem(productId) {
+                                        fetch('/removecartitem', {
+                                            method: "POST",
+                                            headers: {
+                                                'Content-Type': 'application/json',
+                                            },
+                                            body: JSON.stringify({ productId }),
+                                        })
+                                            .then(response => response.json())
+                                            .then(response => {
+                                                if (response.success) {
+                                                    Swal.fire({  // Change "swal" to "Swal"
+                                                        title: "Item Removed!",
+                                                        text: "The item has been successfully removed from your cart.",
+                                                        icon: "success",
+                                                        showConfirmButton: false,
+                                                        timer: 5000,
+                                                    });
+                                                    setTimeout(() => {
+                                                        location.reload(); // Reload the page
+                                                    }, 1500);
+                                                } else {
+                                                    // Handle error
+                                                    console.error('Error removing item:', response.error);
+                                                }
+                                            })
+                                            .catch(error => {
+                                                console.error('Error removing item:', error);
+                                            });
+                                    }
 
 
                                 </script>
@@ -284,7 +290,8 @@ function removecartitem(productId) {
                                                 <input type="text" class="form-control" required
                                                     placeholder="coupon code">
                                                 <div class="input-group-append">
-                                                    <button class="btn btn-outline-primary-2" type="submit"><i class="icon-long-arrow-right"></i></button>
+                                                    <button class="btn btn-outline-primary-2" type="submit"><i
+                                                            class="icon-long-arrow-right"></i></button>
                                                 </div><!-- .End .input-group-append -->
                                             </div><!-- End .input-group -->
                                         </form>
@@ -302,7 +309,9 @@ function removecartitem(productId) {
                                         <tbody>
                                             <tr class="summary-subtotal">
                                                 <td>Subtotal:</td>
-                                                <td><%= subtotal %></td>
+                                                <td>
+                                                    <%= subtotal %>
+                                                </td>
                                             </tr><!-- End .summary-subtotal -->
                                             <tr class="summary-shipping">
                                                 <td>Shipping:</td>
@@ -353,7 +362,9 @@ function removecartitem(productId) {
 
                                             <tr class="summary-total">
                                                 <td>Total:</td>
-                                                <td><%= subtotal %></td>
+                                                <td>
+                                                    <%= subtotal %>
+                                                </td>
                                             </tr><!-- End .summary-total -->
                                         </tbody>
                                     </table><!-- End .table table-summary -->

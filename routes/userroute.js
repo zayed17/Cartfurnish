@@ -5,7 +5,7 @@ const usercontrollers = require('../controllers/usercontrollers');
 const config = require('../config/config');
 const auth = require('../middleware/auth');
 const cartcontrollers = require('../controllers/cartcontrollers')
-
+const addresscontrollers = require('../controllers/addresscontrollers')
 // Configure session middleware
 userRoute.use(session({
     secret: config.sessionSecret,
@@ -41,6 +41,6 @@ userRoute.patch('/addtocart',cartcontrollers.addtocart)
 userRoute.post('/updatecart',cartcontrollers.updatecart)
 userRoute.get('/checkout',cartcontrollers.loadcheckoutpage)
 userRoute.post('/removecartitem',cartcontrollers.removecartitem)
-
+userRoute.post('/addaddress',addresscontrollers.addaddress)
 
 module.exports = userRoute;

@@ -148,7 +148,7 @@
             					<label for="checkout-discount-input" class="text-truncate">Have a coupon? <span>Click here to enter your code</span></label>
             				</form>
             			</div><!-- End .checkout-discount -->
-            			<form action="#">
+            			<form action="/addaddress" method="post">
 		                	<div class="row">
 		                		<div class="col-lg-9 billing-details">
                                     <h2 class="checkout-title">Billing Details</h2><!-- End .checkout-title -->
@@ -164,22 +164,22 @@
                                     </div>
                                 
                                     <div class="form-group">
-                                        <label for="streetAddress">Street Address *</label>
-                                        <input type="text" class="form-control" id="streetAddress" name="streetAddress" placeholder="House number and Street name">
+                                        <label for="streetAddress">House name *</label>
+                                        <input type="text" class="form-control" id="streetAddress" name="housename" placeholder="House number and Street name">
                                     </div>
                                 
                                     <div class="row">
                                         <div class="col-sm-6">
                                             <div class="form-group">
                                                 <label for="stateCounty">State *</label>
-                                                <input type="text" class="form-control" id="stateCounty" name="stateCounty">
+                                                <input type="text" class="form-control" id="stateCounty" name="state">
                                             </div>
                                         </div><!-- End .col-sm-6 -->
                                 
                                         <div class="col-sm-6">
                                             <div class="form-group">
                                                 <label for="townCity"> City *</label>
-                                                <input type="text" class="form-control" id="townCity" name="townCity">
+                                                <input type="text" class="form-control" id="townCity" name="city">
                                             </div>
                                         </div><!-- End .col-sm-6 -->
                                     </div><!-- End .row -->
@@ -187,8 +187,8 @@
                                     <div class="row">
                                         <div class="col-sm-6">
                                             <div class="form-group">
-                                                <label for="postcode">Postcode *</label>
-                                                <input type="text" class="form-control" id="postcode" name="postcode">
+                                                <label for="postcode">Pincod *</label>
+                                                <input type="text" class="form-control" id="postcode" name="pincode">
                                             </div>
                                         </div><!-- End .col-sm-6 -->
                                 
@@ -208,7 +208,7 @@
                                     <!-- Add more styling and design elements as needed -->
                                 
                                 </div><!-- End .col-lg-9 -->
-                                
+                        </form>        
                                 <aside class="col-lg-3">
 		                			<div class="summary">
 		                				<h3 class="summary-title">Your Order</h3><!-- End .summary-title -->
@@ -329,7 +329,7 @@
 		                			</div><!-- End .summary -->
 		                		</aside><!-- End .col-lg-3 -->
 		                	</div><!-- End .row -->
-            			</form>
+            			<!-- </form> -->
 	                </div><!-- End .container -->
                 </div><!-- End .checkout -->
             </div><!-- End .page-content -->
