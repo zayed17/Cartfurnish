@@ -100,7 +100,7 @@
                                 <a href="/cart" class="dropdown-toggle" >
                                     <div class="icon">
                                         <i class="icon-shopping-cart"></i>
-                                        <span class="cart-count"><%= cart.product.length %></span>
+                                        <span class="cart-count"><%= cart?.product?.length || 0 %></span>
                                     </div>
                                     <p>Cart</p>
                                 </a>

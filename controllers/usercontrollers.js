@@ -4,6 +4,7 @@ const Cart = require('../models/cartmodels');
 const nodemailer = require('nodemailer');
 const userOtpVerification = require('../models/userotpverification');
 const Product = require('../models/productmodal')
+const Address = require('../models/addressmodels')
 const dotenv = require('dotenv')
 dotenv.config()
 
@@ -122,55 +123,107 @@ const loadVerificationPage = async(req,res)=>{
     }
 }
 
-const sendOtpVerificationEmail = async ({ email, _id }, res) => {
+// const sendOtpVerificationEmail = async ({ email, _id }, res) => {
+//     try {
+//       const transporter = nodemailer.createTransport({
+//         service: 'gmail',
+//         host: 'smtp.gmail.com',
+//         port: 587,
+//         secure: true,
+//         auth: {
+//           user: process.env.email_user, // Your Gmail email address
+//           pass: process.env.password_user
+//         }
+//       });
+  
+//       const otp = `${Math.floor(1000 + Math.random() * 9000)}`;
+  
+//       const hashedOtp = await bcrypt.hash(otp, 10);
+  
+//       const mailOptions = {
+//         from: process.env.email_user,
+//         to: email,
+//         subject: "Verify Your Email",
+//         html: `
+//           <p> Enter <b>${otp}</b> in the app to verify your email address and complete</p>
+//           <p> This code will expire soon </p>`
+//       };
+  
+//       // Hash the OTP before storing it in the database
+//       const newOtpVerification = new userOtpVerification({
+//         userId: _id,
+//         otp: hashedOtp,
+//         createAt: Date.now(),
+//         // expiresAt: Date.now() + 60000
+//       });
+  
+//       await newOtpVerification.save();
+  
+//       await transporter.sendMail(mailOptions);
+  
+//       res.redirect(`/verifyotp?id=${_id}`);
+//     } catch (error) {
+//       console.error(error);
+//     }
+//   };
+  
+
+
+const sendOtpVerificationEmail = async ({ email, _id }, res, isResend = false) => {
     try {
-      const transporter = nodemailer.createTransport({
-        service: 'gmail',
-        host: 'smtp.gmail.com',
-        port: 587,
-        secure: true,
-        auth: {
-          user: process.env.email_user, // Your Gmail email address
-          pass: process.env.password_user
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            host: 'smtp.gmail.com',
+            port: 587,
+            secure: true,
+            auth: {
+                user: process.env.email_user, // Your Gmail email address
+                pass: process.env.password_user
+            }
+        });
+
+        const otp = `${Math.floor(1000 + Math.random() * 9000)}`;
+
+        const hashedOtp = await bcrypt.hash(otp, 10);
+
+        const mailOptions = {
+            from: process.env.email_user,
+            to: email,
+            subject: "Verify Your Email",
+            html: `
+                <p> Enter <b>${otp}</b> in the app to verify your email address and complete</p>
+                <p> This code will expire soon </p>`
+        };
+
+        // Hash the OTP before storing it in the database
+        const newOtpVerification = new userOtpVerification({
+            userId: _id,
+            otp: hashedOtp,
+            createAt: Date.now(),
+            // expiresAt: Date.now() + 60000
+        });
+
+        await newOtpVerification.save();
+
+        // If it's a resend, send a different response
+        if (isResend) {
+            res.status(200).json({ message: 'OTP resent successfully' });
+        } else {
+            // If it's not a resend, redirect to the verification page
+            await transporter.sendMail(mailOptions);
+            res.redirect(`/verifyotp?id=${_id}`);
         }
-      });
-  
-      const otp = `${Math.floor(1000 + Math.random() * 9000)}`;
-  
-      const hashedOtp = await bcrypt.hash(otp, 10);
-  
-      const mailOptions = {
-        from: process.env.email_user,
-        to: email,
-        subject: "Verify Your Email",
-        html: `
-          <p> Enter <b>${otp}</b> in the app to verify your email address and complete</p>
-          <p> This code will expire soon </p>`
-      };
-  
-      // Hash the OTP before storing it in the database
-      const newOtpVerification = new userOtpVerification({
-        userId: _id,
-        otp: hashedOtp,
-        createAt: Date.now(),
-        // expiresAt: Date.now() + 60000
-      });
-  
-      await newOtpVerification.save();
-  
-      await transporter.sendMail(mailOptions);
-  
-      res.redirect(`/verifyotp?id=${_id}`);
     } catch (error) {
-      console.error(error);
+        console.error('Error in sendOtpVerificationEmail:', error);
+        res.status(500).json({ error: 'Internal server error' });
     }
-  };
-  
+};
+
   const verifyOtp=async(req,res)=>{
     try {
       const Otp= req.body.otp
       const userId=req.session.userId
-       
+     
        
           console.log(userId);
           const userOtpVerificationRecords= await userOtpVerification.find({userId})
@@ -192,13 +245,17 @@ const sendOtpVerificationEmail = async ({ email, _id }, res) => {
               //case otp invalid
              return res.render('otp',{message:'Invalid Otp Please try again'})
              }
-           
+
            //update user to mask is verified true
             await User.updateOne({_id:userId},{$set:{is_verified:true }})
+
+
             //delete the used otp of otp database 
             await userOtpVerification.deleteOne({userId})
+            req.session.user_id = userId;
+
             // req.session.user_id = userData._id;
-            return res.redirect('/login')
+            return res.redirect('/')
         
   
     } catch (error) {
@@ -362,11 +419,37 @@ const loadeachproduct = async(req,res)=>{
   const loadaccount = async(req,res)=>{
     try {
         const userData = await User.findOne({_id:req.session.user_id})
-        res.render('account',{userData})
+        const addresss = await Address.findById(req.session.user_id)
+        console.log(req.session.user_id);
+        res.render('account',{userData,addresss})
     } catch (error) {
         console.log(error);
     }
   }
+
+
+
+  const resendotp = async (req, res) => {
+    try {
+      const { email } = req.body;
+  
+      // Find user by email
+      const user = await User.findOne({ email });
+  
+      if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+  
+      // Resend OTP
+      await sendOtpVerificationEmail(user, res, true); // Set the isResend flag to true
+  
+      res.status(200).json({ message: 'OTP resent successfully' });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  };
+
 
 
 
@@ -384,4 +467,5 @@ module.exports = {
     userLogout,
     loadeachproduct,
     loadaccount,
+    resendotp
 }

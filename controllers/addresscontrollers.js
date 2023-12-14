@@ -4,7 +4,7 @@ const User = require('../models/usermodel')
 const addaddress = async(req,res)=>{
     try {
         const userId = req.session.user_id;
-        console.log(userId);
+        // console.log(userId);
         const data = {
             fullname:req.body.name,
             country:req.body.country,

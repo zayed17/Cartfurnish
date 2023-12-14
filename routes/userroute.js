@@ -33,6 +33,7 @@ userRoute.post('/login',auth.isLogout,usercontrollers.verifyLogin)
 userRoute.get('/shop',usercontrollers.loadshop);
 userRoute.get('/loginwithotp',usercontrollers.loademailinput)
 userRoute.post('/loginwithotp',usercontrollers.sentOtpbyMail)
+userRoute.post('/resendotp',usercontrollers.resendotp)
 userRoute.get('/product',usercontrollers.loadeachproduct)
 userRoute.get('/logout', usercontrollers.userLogout);
 userRoute.get('/account',usercontrollers.loadaccount)
