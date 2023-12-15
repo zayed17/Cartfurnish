@@ -9,7 +9,7 @@ const addressSchema = new mongoose.Schema({
         required:true,
     },
     address:[{
-        fullname:{
+        fullName:{
             type: String,
             required: true
         },
@@ -45,4 +45,4 @@ const addressSchema = new mongoose.Schema({
     
 })
 
-module.exports = mongoose.model('address',addressSchema) 
+module.exports = mongoose.model('addresses',addressSchema) 

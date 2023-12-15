@@ -6,7 +6,7 @@ const addaddress = async(req,res)=>{
         const userId = req.session.user_id;
         // console.log(userId);
         const data = {
-            fullname:req.body.name,
+            fullName:req.body.fullName,
             country:req.body.country,
             housename:req.body.housename,
             state:req.body.state,
@@ -23,11 +23,21 @@ const addaddress = async(req,res)=>{
             },
             {upsert:true,new:true}
             );
+            res.redirect('/success')
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+const success = async(req,res)=>{
+    try {
+        res.render('success')
     } catch (error) {
         console.log(error);
     }
 }
 
 module.exports = {
-    addaddress
+    addaddress,
+    success
 }

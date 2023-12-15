@@ -3,7 +3,7 @@ const Product = require('../models/productmodal')
 const mongoose = require('mongoose');
 const { userLogout } = require('./usercontrollers');
 const cartmodels = require('../models/cartmodels');
-
+const addressmodels = require('../models/addressmodels');
 
 
 const loadcart = async(req,res)=>{
@@ -69,21 +69,48 @@ const loadcart = async(req,res)=>{
 
 const updatecart = async (req, res) => {
     try {
-    const product_id = req.body.productId
-    const user_id = req.session.user_id
-    const count = req.body.count
-    const cartD = await Cart.findOne({ user: user_id })
-    const product = cartD.product.filter((obj)=>obj.productId==product_id)
-    const productData = await Product.findById(product_id)
-    const cartData = await Cart.findOneAndUpdate({user:user_id,'product.productId':product_id},{$inc:{'product.$.quantity':count, 'product.$.totalPrice': count * cartD.product.find(p => p.productId.equals(product_id)).price,
-}})
-    res.json({ success: true });
+        const product_id = req.body.productId;
+        const user_id = req.session.user_id;
+        const count = req.body.count;
 
+        const cartD = await Cart.findOne({ user: user_id });
+        const product = cartD.product.filter((obj) => obj.productId == product_id);
+        const productData = await Product.findById(product_id);
+
+        // Check if the change will make the quantity less than 1
+        if (count === -1) {
+            const currentQuantity = cartD.product.find((p) => p.productId == product_id).quantity;
+            if (currentQuantity <= 1) {
+                // If current quantity is already 1 or less, don't allow further decrease
+                return res.json({ success: false, message: 'Quantity cannot be decreased further.' });
+            }
+        }
+
+        // Check if the change will make the quantity more than 5
+        if (count === 1) {
+            const currentQuantity = cartD.product.find((p) => p.productId == product_id).quantity;
+            if (currentQuantity + count > 5) {
+                return res.json({ success: false, message: 'Cannot add more than 5 items.' });
+            }
+        }
+
+        const cartData = await Cart.findOneAndUpdate(
+            { user: user_id, 'product.productId': product_id },
+            {
+                $inc: {
+                    'product.$.quantity': count,
+                    'product.$.totalPrice': count * cartD.product.find((p) => p.productId.equals(product_id)).price,
+                },
+            }
+        );
+
+        res.json({ success: true });
     } catch (error) {
         console.log(error);
+        res.status(500).json({ success: false, message: 'Internal Server Error' });
     }
-    
 };
+
 
 
 const removecartitem = async (req, res) => {
@@ -106,9 +133,12 @@ const removecartitem = async (req, res) => {
 };
 
 
-const loadcheckoutpage = async(req,res)=>{
+const loadcheckoutpage = async(req,res)=>{ 
     try {
-        res.render('checkout')
+        const userId = req.session.user_id;
+        const  addresses = await addressmodels.findOne({user:userId})
+
+        res.render('checkout',{addresses})
     } catch (error) {
         console.log(error);
     }

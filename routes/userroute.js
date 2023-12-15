@@ -43,5 +43,5 @@ userRoute.post('/updatecart',cartcontrollers.updatecart)
 userRoute.get('/checkout',cartcontrollers.loadcheckoutpage)
 userRoute.post('/removecartitem',cartcontrollers.removecartitem)
 userRoute.post('/addaddress',addresscontrollers.addaddress)
-
+userRoute.get('/success',addresscontrollers.success)
 module.exports = userRoute;
