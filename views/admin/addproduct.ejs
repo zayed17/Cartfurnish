@@ -307,59 +307,7 @@
                 </div>
             </div>
             
-            <script>
-                $(function () {
-                    // Initialize Cropper for each image input
-                    $('.imageInput').change(function () {
-                        var input = this;
-                        var reader = new FileReader();
-                        var targetImage = $(this).siblings('.rounded-image-preview').find('img')[0];
-            
-                        reader.onload = function (e) {
-                            // Set the source of the image to the uploaded file
-                            targetImage.src = e.target.result;
-            
-                            // Store the original source for resetting if needed
-                            var originalSrc = e.target.result;
-            
-                            // Initialize Cropper on the image
-                            var cropper = new Cropper(targetImage, {
-                                aspectRatio: 1, // Set the aspect ratio as needed
-                                viewMode: 1,    // Set the view mode as needed
-                                // Add additional options as needed
-                            });
-            
-                            // Open the modal when the button is clicked
-                            var modalId = $(input).data('target');
-                            $(modalId).on('show.bs.modal', function () {
-                                // Reset Cropper when modal is shown
-                                cropper.reset();
-                            });
-            
-                            // Crop the image when the "Crop Image" button is clicked
-                            $(modalId + ' #cropButton').on('click', function () {
-                                // Get the cropped data as a Data URL
-                                var croppedDataUrl = cropper.getCroppedCanvas().toDataURL();
-                                // Set the cropped data as the new source for the preview image
-                                targetImage.src = croppedDataUrl;
-            
-                                // Close the modal
-                                $(modalId).modal('hide');
-                            });
-            
-                            // Reset the image source if the modal is closed without cropping
-                            $(modalId).on('hidden.bs.modal', function () {
-                                targetImage.src = originalSrc;
-                                // Destroy the Cropper instance
-                                cropper.destroy();
-                            });
-                        };
-            
-                        // Read the selected file as Data URL
-                        reader.readAsDataURL(input.files[0]);
-                    });
-                });
-            </script>
+
             
 
 
@@ -380,51 +328,6 @@
             </footer>
         </main>
 
-<script>
-const imageInputs = document.querySelectorAll('.imageInput');
-const imagePreviews = document.querySelectorAll('.rounded-image-preview img');
-
-imageInputs.forEach(imageInput => {
-  imageInput.addEventListener('change', (event) => {
-    const file = event.target.files[0];
-    const imagePreview = document.getElementById(`imagePreview${imageInput.id.slice(-1)}`);
-
-    if (file) {
-      const reader = new FileReader();
-
-      reader.onload = (event) => {
-        const image = new Image();
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
-
-        image.onload = () => {
-          const maxWidth = imagePreview.width;
-          const maxHeight = imagePreview.height;
-          const ratio = Math.min(maxWidth / image.width, maxHeight / image.height);
-
-          const resizedWidth = image.width * ratio;
-          const resizedHeight = image.height * ratio;
-
-          canvas.width = resizedWidth;
-          canvas.height = resizedHeight;
-
-          ctx.drawImage(image, 0, 0, resizedWidth, resizedHeight);
-
-          const dataURL = canvas.toDataURL('image/jpeg');
-
-          imagePreview.src = dataURL;
-        };
-
-        image.src = event.target.result;
-      };
-
-      reader.readAsDataURL(file);
-    } else {
-      imagePreview.src = '';
-    }
-  });
-});
-</script>
 
 
 

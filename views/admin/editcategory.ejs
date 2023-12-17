@@ -136,9 +136,25 @@
                         <div class="card-header">
                             <h3>Edit Category</h3>
                         </div>
+                        <% if (typeof message !=='undefined' ) { %>
+                            <p id="message" style="color: rgb(255, 0, 0);">
+                                <%= message %>
+                            </p>
+                            <script>
+                                // Set a timer to remove the message after 5000 milliseconds (5 seconds)
+                                setTimeout(function () {
+                                    var messageElement = document.getElementById('message');
+                                    if (messageElement) {
+                                        messageElement.style.display = 'none';
+                                    }
+                                }, 3500);
+                            </script>
+                            <% } %>
                         <div class="card-body">
                             <!-- Category Form -->
-                            <form action="/admin/editcategory?id=<%= categoryData._id%>" method="post">
+                            <form action="/admin/editcategory" method="post">
+                                <input type="hidden" name="id" value="<%=categoryData._id %>">
+
                                 <!-- Category Name -->
                                 <div class="form-group">
                                     <label for="name">Name:</label>
@@ -148,7 +164,8 @@
                                 <!-- Category Description -->
                                 <div class="form-group">
                                     <label for="description">Description:</label>
-                                    <input type="text" class="form-control" value="<%=categoryData.description%>" name="description" required>    
+                                    <input type="text" class="form-control" value="<%=categoryData.description%>" name="description" required>  
+  
                                 </div>
                                 <div  style="margin-top: 1.2rem;">
                                     <button type="submit" class="btn btn-primary">Update Cate</button>

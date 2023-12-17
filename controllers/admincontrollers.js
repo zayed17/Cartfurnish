@@ -102,7 +102,7 @@ const listcategory = async (req, res) => {
       const userValue = await Category.findOne({ _id: category });
       if (userValue.is_listed) {
         await Category.updateOne({ _id: category }, { $set: { is_listed: false } });
-        // req.session.user_id = null;
+        req.session.user_id = null;
       } else {
         await Category.updateOne({ _id: category }, { $set: { is_listed: true } });
       }
@@ -131,28 +131,108 @@ const blockUser = async (req, res) => {
   };
   
   
-  const loadeditCategory = async(req,res)=>{
+//   const loadeditCategory = async (req, res) => {
+//     try {
+//         const categoryData = await Category.findById(req.query.id);
 
+//         // if (!categoryData) {
+//         //     return res.render('editcategory', { error: 'Category not found' });
+//         // }
+
+//         res.render('editcategory', { categoryData });
+//     } catch (error) {
+//         console.error(error);
+//         res.render('errorView', { error: 'Error loading category data' });
+//     }
+// };
+const loadeditCategory=async(req,res)=>{
     try {
-        const categoryId = req.query.id;
-        const categoryData = await Category.findOne({_id:categoryId})
-        res.render('editcategory',{categoryData})
+  
+      const id = req.query.id;
+      const categoryData = await Category.findById({ _id: id });
+          if (categoryData) {
+              res.render('editcategory', { categoryData: categoryData });
+          }
     } catch (error) {
-        console.log(error);
+      console.log(error.message);
     }
   }
 
 
 
-  const editCategory = async (req, res) => {
+//   const editCategory = async (req, res) => {
+//     try {
+//         await Category.findByIdAndUpdate(
+//             { _id: req.query.id },
+//             { $set: { name: req.body.name, description: req.body.description } }
+//         );
+//         res.redirect(`/admin/category?message=${encodeURIComponent('Successfully updated')}`);
+//     } catch (error) {
+//         console.log(error.message);
+//     }
+// };
+
+// const editCategory = async (req, res) => {
+//     try {
+//         const existingCategory = await Category.findOne({ name: req.body.name });
+
+//         if (existingCategory && existingCategory._id.toString() !== req.query.id) {
+//             return res.render('editcategory', { message: 'Category with the same name already exists' });
+//         }
+
+//         await Category.findByIdAndUpdate(
+//             { _id: req.query.id },
+//             { $set: { name: req.body.name, description: req.body.description } }
+//         );
+
+//         res.redirect(`/admin/category?message=${encodeURIComponent('Successfully updated')}`);
+//     } catch (error) {
+//         console.error(error.message);
+//         res.render('editcategory', { message: 'Error updating category' });
+//     }
+// };
+
+
+
+// const editCategory = async (req, res) => {
+//     try {
+//         const categoryName = req.body.name; // Corrected to match the form input name
+
+//         const existingCategory = await Category.findOne({ name: categoryName });
+//         if (existingCategory && existingCategory._id.toString() !== category_id) {
+//             return res.render('editcategory', { message: "Already Exists" });
+//         }
+
+//         // Corrected the argument structure for findByIdAndUpdate
+//         await Category.findByIdAndUpdate(        { _id: req.body.id },
+            
+//             { $set: { name: categoryName, description: req.body.description } });
+
+//         res.redirect('/admin/category');
+
+//     } catch (error) {
+//         console.log(error.message);
+//         res.render('500Error');
+//     }
+// };
+
+
+const editCategory = async (req, res) => {
     try {
         await Category.findByIdAndUpdate(
-            { _id: req.query.id },
+            { _id: req.body.id },
             { $set: { name: req.body.name, description: req.body.description } }
         );
-        res.redirect(`/admin/category?message=${encodeURIComponent('Successfully updated')}`);
+        res.redirect(`/admin/category?message=${'successfully added'}`);
     } catch (error) {
+        if (error.code === 11000) {
+            // Duplicate key error (E11000)
+            return res.render('editCategory', { message: 'Category name already exists' });
+            // or you can redirect with a query parameter
+            // return res.redirect(`/admin/category?error=${'Category name already exists'}`);
+        }
         console.log(error.message);
+        res.render('500Error');
     }
 };
 

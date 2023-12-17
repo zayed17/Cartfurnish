@@ -183,7 +183,7 @@ const sendOtpVerificationEmail = async ({ email, _id }, res, isResend = false) =
         });
 
         const otp = `${Math.floor(1000 + Math.random() * 9000)}`;
-
+console.log(otp);
         const hashedOtp = await bcrypt.hash(otp, 10);
 
         const mailOptions = {
