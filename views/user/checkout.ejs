@@ -159,26 +159,24 @@
 									<div class="col-lg-6">
 										<div class="card card-dashboard">
 											<div class="card-body">
-												<input type="radio" name="address" value="<%= index %>" <%=index===0
-													? 'checked' : '' %> >
-												<h3 class="card-title">Address <%= index + 1 %>
-												</h3>
-												<p>Name: <%= address.fullName %><br>
-														Email: <%= address.email %><br>
-															Mobile: <%= address.mobile %><br>
-																State: <%= address.state %><br>
-																	City: <%= address.city %><br>
-																		House Name: <%= address.houseName %><br>
-																			Pincode: <%= address.pin %><br>
-																				<a href="/editAddress?ind=<%= index %>">Edit
-																					<i class="icon-edit"></i></a>
+												<input type="radio" name="address" value="<%= index %>" <%= index === 0 ? 'checked' : '' %> >
+												<h3 class="card-title">Address <%= index + 1 %></h3>
+												<p>
+													Name: <%= address.fullName %><br>
+													Email: <%= address.email %><br>
+													Mobile: <%= address.mobile %><br>
+													State: <%= address.state %><br>
+													City: <%= address.city %><br>
+													House Name: <%= address.houseName %><br>
+													Pincode: <%= address.pin %><br>
+													<a href="/editAddress?ind=<%= index %>">Edit <i class="icon-edit"></i></a>
+												</p>
 											</div>
 										</div>
 									</div>
-									<% }); %>
+								<% }); %>
 							</div>
-							<% } else { %>
-
+						<% } else { %>
 								<form action="/addaddress" method="post">
 									<div class="row">
 										<div class="col-lg-9 billing-details">
@@ -257,20 +255,18 @@
 														<th>Total</th>
 													</tr>
 												</thead>
+                                                <% cartData.product.forEach(product=> { %>
 
 												<tbody>
 													<tr>
-														<td><a href="#">Beige knitted elastic runner shoes</a></td>
-														<td>$84.00</td>
+														<td><%= product.productId.name%>(Set of <%= product.quantity %>)</td>
+														<td>₹<%= product.productId.price%></td>
 													</tr>
+                                                    <% }); %>
 
-													<tr>
-														<td><a href="#">Blue utility pinafore denimdress</a></td>
-														<td>$76,00</td>
-													</tr>
 													<tr class="summary-subtotal">
 														<td>Subtotal:</td>
-														<td>$160.00</td>
+														<td>₹<%= subtotal %></td>
 													</tr><!-- End .summary-subtotal -->
 													<tr>
 														<td>Shipping:</td>
@@ -278,7 +274,7 @@
 													</tr>
 													<tr class="summary-total">
 														<td>Total:</td>
-														<td>$160.00</td>
+														<td>₹<%= subtotal %></td>
 													</tr><!-- End .summary-total -->
 												</tbody>
 											</table><!-- End .table table-summary -->

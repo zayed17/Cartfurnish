@@ -74,9 +74,6 @@ const updatecart = async (req, res) => {
         const count = req.body.count;
 
         const cartD = await Cart.findOne({ user: user_id });
-        const product = cartD.product.filter((obj) => obj.productId == product_id);
-        const productData = await Product.findById(product_id);
-
         // Check if the change will make the quantity less than 1
         if (count === -1) {
             const currentQuantity = cartD.product.find((p) => p.productId == product_id).quantity;
@@ -137,8 +134,11 @@ const loadcheckoutpage = async(req,res)=>{
     try {
         const userId = req.session.user_id;
         const  addresses = await addressmodels.findOne({user:userId})
+        const cartData = await Cart.findOne({user:userId}).populate('product.productId')
+        const subtotal = cartData.product.reduce((acc,val)=> acc+val.totalPrice,0)
 
-        res.render('checkout',{addresses})
+
+        res.render('checkout',{addresses,subtotal,cartData})
     } catch (error) {
         console.log(error);
     }
