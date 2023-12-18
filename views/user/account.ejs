@@ -37,13 +37,15 @@
     /* Override Bootstrap active tab color */
     .nav-pills .nav-link.active {
         background-color: transparent !important;
-        color: #000 !important; /* Set your desired text color for the active link */
+        color: #000 !important;
+        /* Set your desired text color for the active link */
     }
 
     /* Override Bootstrap hover color */
     .nav-pills .nav-link:hover {
         background-color: transparent !important;
-        color: #555 !important; /* Set your desired text color for the hover state */
+        color: #555 !important;
+        /* Set your desired text color for the hover state */
     }
 </style>
 
@@ -57,13 +59,14 @@
                     <div class="row align-items-center">
                         <div class="col-6 col-md-3">
                             <a href="index" class="logo">
-                                <img src="public/assets/images/logo.png" alt="Molla Logo" class="img-fluid" width="105" height="25">
+                                <img src="public/assets/images/logo.png" alt="Molla Logo" class="img-fluid" width="105"
+                                    height="25">
                             </a>
                         </div><!-- End .col-md-3 -->
-        
+
                         <div class="col-6 col-md-9">
                             <nav class="main-nav">
-                               
+
                                 <ul class="menu sf-arrows">
                                     <li class="megamenu-container active">
                                         <a href="/">Home</a>
@@ -91,98 +94,188 @@
                 </div><!-- End .container -->
             </div><!-- End .header-middle -->
         </header><!-- End .header -->
-                
-    
-      
 
 
-    <div class="container">
-        <div class="row">
-            <div class="col-md-6 col-lg-12">
-                <!-- Added buttons here -->
-                <div class="d-flex justify-content-between mb-3">
-                   <a href="/logout"> <button type="button" class="btn btn-danger btn-sm">Logout</button></a>
-                    <button type="button" class="btn btn-secondary btn-sm">Back</button>
+
+
+
+        <div class="container">
+            <div class="row" id="#reloadDiv">
+                <div class="col-md-6 col-lg-12">
+                    <!-- Added buttons here -->
+                    <div class="d-flex justify-content-between mb-3">
+                        <a href="/logout"> <button type="button" class="btn btn-danger btn-sm">Logout</button></a>
+                        <button type="button" class="btn btn-secondary btn-sm">Back</button>
+                    </div>
+                    <h2 class="title mb-3 text-center">Profile</h2>
+                    <ul class="nav nav-pills justify-content-center" id="tabs-6" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link " id="tab-21-tab" data-toggle="tab" href="#tab-21" role="tab"
+                                aria-controls="tab-21" aria-selected="true">My profile</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="tab-22-tab" data-toggle="tab" href="#tab-22" role="tab"
+                                aria-controls="tab-22" aria-selected="false">Orders</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="tab-23-tab" data-toggle="tab" href="#tab-23" role="tab"
+                                aria-controls="tab-23" aria-selected="false">Address</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="tab-24-tab" data-toggle="tab" href="#tab-24" role="tab"
+                                aria-controls="tab-24" aria-selected="false">Tab 4</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content d-flex justify-content-center align-items-center" id="tab-content-6">
+                        <div class="tab-pane fade show active" id="tab-21" role="tabpanel" aria-labelledby="tab-21-tab">
+                            <div class="user-profile text-center bg-light p-4 rounded">
+                                <h3 class="mb-3"><strong>
+                                        <%= userData.name %>
+                                    </strong></h3>
+                                <p class="mb-3">
+                                    Mobile Number: <span id="mobileNumber" class="text-info">
+                                        <%= userData.mobile %>
+                                    </span><br>
+                                    Gmail: <span id="gmail" class="text-info">
+                                        <%= userData.email %>
+                                    </span>
+                                </p>
+                                <button type="button" class="btn btn-primary">Edit Profile</button>
+                            </div>
+
+                        </div>
+                        <div class="tab-pane fade" id="tab-22" role="tabpanel" aria-labelledby="tab-22-tab">
+                            <div class="user-profile text-center">
+                                <img src="profile-picture-2.jpg" alt="User Profile Picture 2" class="img-fluid">
+                                <h3>User Name 2</h3>
+                                <p>Nobis perspiciatis natus cum, sint dolore earum rerum tempora aspernatur
+                                    numquam velit tempore omnis, delectus repellat facere voluptatibus nemo non
+                                    fugiat consequatur repellendus! Enim, commodi, veniam ipsa voluptates quis
+                                    amet.</p>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="tab-23" role="tabpanel" aria-labelledby="tab-23-tab">
+                            <div id="addrassArea">
+                                <% if (addresses && addresses.address && addresses.address.length> 0) { %>
+                                    <div class="row">
+                                        <% addresses.address.forEach(function(address, index) { %>
+                                            <div class="col-lg-6">
+                                                <div class="card card-dashboard">
+                                                    <div class="card-body">
+                                                        <h3 class="card-title">Address <%= index + 1 %>
+                                                        </h3>
+                                                        <p>
+                                                            Name: <%= address.fullName %><br>
+                                                                Email: <%= address.email %><br>
+                                                                    Mobile: <%= address.mobile %><br>
+                                                                        State: <%= address.state %><br>
+                                                                            City: <%= address.city %><br>
+                                                                                House Name: <%= address.houseName %><br>
+                                                                                    Pincode: <%= address.pin %><br>
+                                                                                        <a
+                                                                                            href="/editAddress?ind=<%= index %>">Edit
+                                                                                            <i
+                                                                                                class="icon-edit"></i></a>
+                                                                                        <button
+                                                                                            style="margin-left: 15px; cursor: pointer; background: none; border: none;"
+                                                                                            onclick="deleteAddress('<%= address._id %>')">Delete
+                                                                                            <i
+                                                                                                class="icon-delete"></i></button>
+
+                                                        </p>
+                                                    </div>
+                                                    <a class="btn btn-primary" href="/addAddress" data-toggle="modal"
+                                                        data-target="#addAddressModal">Add Address</a>
+
+                                                </div>
+                                            </div>
+                                            <% }); %>
+                                    </div>
+                                    <% }; %>
+
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="tab-24" role="tabpanel" aria-labelledby="tab-24-tab">
+                            <div class="user-profile text-center">
+                                <img src="profile-picture-4.jpg" alt="User Profile Picture 4" class="img-fluid">
+                                <h3>User Name 4</h3>
+                                <p>Quis nobis, adipisci quae aspernatur, nulla suscipit eum. Dolorum, earum.
+                                    Consectetur pariatur repellat distinctio atque alias excepturi aspernatur
+                                    nisi accusamus sed molestias ipsa numquam eius, iusto, aliquid, quis aut.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <h2 class="title mb-3 text-center">Profile</h2>
-                <ul class="nav nav-pills justify-content-center" id="tabs-6" role="tablist">
-                    <li class="nav-item">
-                        <a class="nav-link " id="tab-21-tab" data-toggle="tab" href="#tab-21" role="tab"
-                            aria-controls="tab-21" aria-selected="true">My profile</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" id="tab-22-tab" data-toggle="tab" href="#tab-22" role="tab"
-                            aria-controls="tab-22" aria-selected="false">Orders</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" id="tab-23-tab" data-toggle="tab" href="#tab-23" role="tab"
-                            aria-controls="tab-23" aria-selected="false">Address</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" id="tab-24-tab" data-toggle="tab" href="#tab-24" role="tab"
-                            aria-controls="tab-24" aria-selected="false">Tab 4</a>
-                    </li>
-                </ul>
-                <div class="tab-content d-flex justify-content-center align-items-center" id="tab-content-6">
-                    <div class="tab-pane fade show active" id="tab-21" role="tabpanel" aria-labelledby="tab-21-tab">
-                        <div class="user-profile text-center bg-light p-4 rounded">
-                            <h3 class="mb-3"><strong><%= userData.name %></strong></h3>
-                            <p class="mb-3">
-                                Mobile Number: <span id="mobileNumber" class="text-info"><%= userData.mobile %></span><br>
-                                Gmail: <span id="gmail" class="text-info"><%= userData.email %></span>
-                            </p>
-                            <button type="button" class="btn btn-primary">Edit Profile</button>
-                        </div>
-                        
-                    </div>
-                    <div class="tab-pane fade" id="tab-22" role="tabpanel" aria-labelledby="tab-22-tab">
-                        <div class="user-profile text-center">
-                            <img src="profile-picture-2.jpg" alt="User Profile Picture 2" class="img-fluid">
-                            <h3>User Name 2</h3>
-                            <p>Nobis perspiciatis natus cum, sint dolore earum rerum tempora aspernatur
-                                numquam velit tempore omnis, delectus repellat facere voluptatibus nemo non
-                                fugiat consequatur repellendus! Enim, commodi, veniam ipsa voluptates quis
-                                amet.</p>
-                        </div>
-                    </div>
-                    <div class="tab-pane fade" id="tab-23" role="tabpanel" aria-labelledby="tab-23-tab">
-                        <div class="user-profile text-center">
-                            <img src="profile-picture-3.jpg" alt="User Profile Picture 3" class="img-fluid">
-                            <h3>address field</h3>
-                                <p>Perspiciatis quis nobis, adipisci quae aspernatur, nulla suscipit eum.
-                                Dolorum, earum. Consectetur pariatur repellat distinctio atque alias
-                                excepturi aspernatur nisi accusamus sed molestias ipsa numquam eius, iusto,
-                                aliquid, quis aut.</p>
-                        </div>
-                       
-
-                    </div>
-                    <div class="tab-pane fade" id="tab-24" role="tabpanel" aria-labelledby="tab-24-tab">
-                        <div class="user-profile text-center">
-                            <img src="profile-picture-4.jpg" alt="User Profile Picture 4" class="img-fluid">
-                            <h3>User Name 4</h3>
-                            <p>Quis nobis, adipisci quae aspernatur, nulla suscipit eum. Dolorum, earum.
-                                Consectetur pariatur repellat distinctio atque alias excepturi aspernatur
-                                nisi accusamus sed molestias ipsa numquam eius, iusto, aliquid, quis aut.
-                            </p>
-                        </div>
-                    </div>
-                </div>                    
             </div>
         </div>
-    </div>
-    
+
+        <script>
+            function deleteAddress(addressId) {
+                // Show a confirmation dialog before proceeding
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: 'You are about to delete this address.',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!',
+                    cancelButtonText: 'Cancel',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        const data = { id: addressId };
+
+                        fetch('/deleteaddress', {
+                            method: 'DELETE',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(data),
+                        })
+                            .then(response => response.json())
+                            .then((response) => {
+                                if (response.deleted) {
+                                    // Reload the specified div after successful deletion
+                                    $('#addrassArea').load('/profile #addrassArea');
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Address Deleted!',
+                                        text: 'The address has been successfully deleted.',
+                                    });
+                                } else {
+                                    // Handle other cases or errors here
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Oops...',
+                                        text: response.message,
+                                    });
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error deleting address:', error);
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Oops...',
+                                    text: 'Failed to delete the address. Please try again.',
+                                });
+                            });
+                    }
+                });
+            }
+        </script>
 
 
-
-    <!-- Plugins and Main JS Files -->
-    <script src="public/assets/js/jquery.min.js"></script>
-    <script src="public/assets/js/bootstrap.bundle.min.js"></script>
-    <script src="public/assets/js/jquery.hoverIntent.min.js"></script>
-    <script src="public/assets/js/jquery.waypoints.min.js"></script>
-    <script src="public/assets/js/superfish.min.js"></script>
-    <script src="public/assets/js/owl.carousel.min.js"></script>
-    <script src="public/assets/js/main.js"></script>
+        <!-- Plugins and Main JS Files -->
+        <!-- Latest version of SweetAlert2 from CDN -->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+        <script src="public/assets/js/jquery.min.js"></script>
+        <script src="public/assets/js/bootstrap.bundle.min.js"></script>
+        <script src="public/assets/js/jquery.hoverIntent.min.js"></script>
+        <script src="public/assets/js/jquery.waypoints.min.js"></script>
+        <script src="public/assets/js/superfish.min.js"></script>
+        <script src="public/assets/js/owl.carousel.min.js"></script>
+        <script src="public/assets/js/main.js"></script>
 
 </body>
 

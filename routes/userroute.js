@@ -46,4 +46,5 @@ userRoute.post('/removecartitem',auth.isLogin,cartcontrollers.removecartitem)
 userRoute.post('/addaddress',auth.isLogin,addresscontrollers.addaddress)
 userRoute.post('/placeorder',ordercontrollers.placeorder)
 userRoute.get('/success',auth.isLogin,addresscontrollers.success)
+userRoute.delete('/deleteaddress',usercontrollers.deleteaddress)
 module.exports = userRoute;

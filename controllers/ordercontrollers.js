@@ -4,7 +4,7 @@ const placeorder = async(req,res)=>{
         const addressIndex = !req.body.address? 0:req.body.address
 
 
-        if(!req.session.address){
+        if(!req.body.address){
             const data = {
                 fullName:req.body.fullName,
                 country:req.body.country,
@@ -23,6 +23,10 @@ const placeorder = async(req,res)=>{
                 {upsert:true,new:true}
                 );
         }
+        const addressData = await Address.findOne({user:user_id})
+        const address = addressData.address[addressIndex]
+        const cartData = await Cart.findOne({user:user_id})
+        const productData = cartData.products
     } catch (error) {
         console.log(error);
     }
