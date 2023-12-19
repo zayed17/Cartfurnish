@@ -47,4 +47,6 @@ userRoute.post('/addaddress',auth.isLogin,addresscontrollers.addaddress)
 userRoute.post('/placeorder',ordercontrollers.placeorder)
 userRoute.get('/success',auth.isLogin,addresscontrollers.success)
 userRoute.delete('/deleteaddress',usercontrollers.deleteaddress)
+// userRoute.post('/addaddresses',addresscontrollers.addaddressprofile)
+
 module.exports = userRoute;
