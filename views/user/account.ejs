@@ -205,9 +205,9 @@
 
         
 
-        <script>
+<script>
+                //delete address
             function deleteAddress(addressId) {
-                // Show a confirmation dialog before proceeding
                 Swal.fire({
                     title: 'Are you sure?',
                     text: 'You are about to delete this address.',
@@ -259,7 +259,9 @@
                 });
             }
 
-            $(document).ready(function () {
+
+            //add address
+    $(document).ready(function () {
     $('#submitAddressBtn').on('click', function () {
         var formData = $('#addAddressForm').serialize();
 console.log(formData)
@@ -268,10 +270,11 @@ console.log(formData)
             url: '/addaddresses',
             data: formData,
             success: function (response) {
+                console.log(response)
                 if (response.add == true) {
                     $('#addrassArea').load('/account #addrassArea');
                     $('#addAddressModal').modal('hide');
-
+                    $('.modal-backdrop').remove();
                     // Use SweetAlert2 for a success message
                     Swal.fire({
                         icon: 'success',
@@ -299,96 +302,9 @@ console.log(formData)
 
 
             
-        </script>
-
-
-
-
-
-
-
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const form = document.getElementById('addAddressForm');
-        const submitBtn = document.getElementById('submitAddressBtn');
-
-        submitBtn.addEventListener('click', function (event) {
-            if (!validateForm()) {
-                event.preventDefault();
-            }
-        });
-
-        function validateForm() {
-            let isValid = true;
-            resetValidation();
-
-            const fullName = document.getElementById('addFullName').value.trim();
-            if (fullName === '') {
-                isValid = false;
-                setInvalid('addFullName', 'Please enter your full name.');
-            }
-
-            const email = document.getElementById('addEmail').value.trim();
-            if (!isValidEmail(email)) {
-                isValid = false;
-                setInvalid('addEmail', 'Please enter a valid email address.');
-            }
-
-            const mobile = document.getElementById('addMobile').value.trim();
-            if (!/^\d{10}$/.test(mobile)) {
-                isValid = false;
-                setInvalid('addMobile', 'Please enter a valid 10-digit mobile number.');
-            }
-
-            const state = document.getElementById('addState').value.trim();
-            if (state === '') {
-                isValid = false;
-                setInvalid('addState', 'Please enter the state.');
-            }
-
-            const city = document.getElementById('addCity').value.trim();
-            if (city === '') {
-                isValid = false;
-                setInvalid('addCity', 'Please enter the city.');
-            }
-
-            const houseName = document.getElementById('addHouseName').value.trim();
-            if (houseName === '') {
-                isValid = false;
-                setInvalid('addHouseName', 'Please enter the house name.');
-            }
-
-            const pincode = document.getElementById('addPincode').value.trim();
-            if (!/^\d{6}$/.test(pincode)) {
-                isValid = false;
-                setInvalid('addPincode', 'Please enter a valid 6-digit pincode.');
-            }
-
-            return isValid;
-        }
-
-        function setInvalid(fieldId, message) {
-            const field = document.getElementById(fieldId);
-            field.classList.add('is-invalid');
-            const feedback = field.nextElementSibling;
-            feedback.innerText = message;
-        }
-
-        function resetValidation() {
-            const invalidFields = form.querySelectorAll('.is-invalid');
-            invalidFields.forEach(function (field) {
-                field.classList.remove('is-invalid');
-                const feedback = field.nextElementSibling;
-                feedback.innerText = '';
-            });
-        }
-
-        function isValidEmail(email) {
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            return emailRegex.test(email);
-        }
-    });
 </script>
+
+
 
 
 
