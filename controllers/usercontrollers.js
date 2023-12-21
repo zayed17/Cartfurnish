@@ -420,7 +420,9 @@ const loadeachproduct = async(req,res)=>{
     try {
         const userData = await User.findOne({_id:req.session.user_id})
         const  addresses = await Address.findOne({user:req.session.user_id})
-        console.log(req.session.user_id);
+
+        // console.log(addresses);
+        // console.log(req.session.user_id);
         res.render('account',{userData,addresses})
     } catch (error) {
         console.log(error);
@@ -451,18 +453,7 @@ const loadeachproduct = async(req,res)=>{
   };
 
 
-  const deleteaddress = async (req,res)=>{
-    try {
-        const userId=req.session.user_id
-        const addressId = req.body.id
-   
-        await Address.updateOne({user:userId},{$pull:{address:{_id:addressId}}})
-   
-       res.json({deleted:true})
-    } catch (error) {
-        
-    }
-  }
+
 
 
 
@@ -481,5 +472,5 @@ module.exports = {
     loadeachproduct,
     loadaccount,
     resendotp,
-    deleteaddress
+    
 }

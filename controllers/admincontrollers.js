@@ -113,7 +113,6 @@ const listcategory = async (req, res) => {
   };
 
 
-  
 const blockUser = async (req, res) => {
     try {
       const user = req.params.id;
