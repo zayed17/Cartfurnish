@@ -5,6 +5,7 @@ const nodemailer = require('nodemailer');
 const userOtpVerification = require('../models/userotpverification');
 const Product = require('../models/productmodal')
 const Address = require('../models/addressmodels')
+const Category = require('../models/categorymodal')
 const dotenv = require('dotenv')
 dotenv.config()
 
@@ -396,8 +397,7 @@ const loadshop = async (req, res) => {
       const totalProducts = await Product.countDocuments({});
       const totalPages = Math.ceil(totalProducts / productsPerPage);
   
-      const productData = await Product.find({}).skip(startIndex).limit(productsPerPage);
-  
+      const productData = await Product.find({is_blocked:false,isCategoryBlocked:false}).skip(startIndex).limit(productsPerPage).populate('categoryId')
       res.render('shop', { product: productData, currentPage: page, totalPages,user:userData });
     } catch (error) {
       console.error(error.message);

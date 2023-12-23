@@ -3,6 +3,7 @@ const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
 const noCache = require('nocache');
+const morgan = require('morgan')
 
 // Set up Express application
 const app = express();
@@ -30,6 +31,8 @@ app.set('view engine', 'ejs');
 
 // Apply noCache middleware for disabling caching
 app.use(noCache());
+// Example with a custom log format
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms'));
 
 // User Routes
 const userRoute = require('./routes/userroute');

@@ -96,21 +96,24 @@ const loadcategory = async(req,res)=>{
 }
 
 
-const listcategory = async (req, res) => {
-    try {
-      const category = req.params.id;
-      const userValue = await Category.findOne({ _id: category });
-      if (userValue.is_listed) {
-        await Category.updateOne({ _id: category }, { $set: { is_listed: false } });
-        req.session.user_id = null;
-      } else {
-        await Category.updateOne({ _id: category }, { $set: { is_listed: true } });
-      }
-      res.json({ block: true });
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
+// const listcategory = async (req, res) => {
+//     try {
+//       const category = req.params.id;
+//       const userValue = await Category.findOne({ _id: category });
+//       const categoryProduct = await Product.find({ categoryId: category });
+//       console.log(product);
+//       if (userValue.is_listed) {
+//         await Category.updateOne({ _id: category }, { $set: { is_listed: false } });
+//         await Product.updateMany({categoryId:categoryId},{$set:{isCategoryBlocked:true}})
+//       } else {
+//         await Category.updateOne({ _id: category }, { $set: { is_listed: true } });
+//         await Product.updateMany({categoryId:categoryId},{$set:{isCategoryBlocked:false}})
+//       }
+//       res.json({ block: true });
+//     } catch (error) {
+//       console.log(error.message);
+//     }
+//   };
 
 
 const blockUser = async (req, res) => {
@@ -239,12 +242,20 @@ const editCategory = async (req, res) => {
 
 const blockCategory=async (req, res) => {
     try {
-      const user = req.params.id; 
-      const userValue = await Category.findOne({ _id: user });
+      const categoryId = req.params.id; 
+      console.log(categoryId);
+      
+      const categoryProduct = await Product.find({ categoryId: categoryId });
+console.log(categoryProduct);
+
+      const userValue = await Category.findOne({ _id: categoryId });
       if (userValue.is_list) {
-        await Category.updateOne({ _id: user }, { $set: { is_list: false } });
+        await Category.updateOne({ _id: categoryId }, { $set: { is_list: false } });
+        await Product.updateMany({categoryId:categoryId},{$set:{isCategoryBlocked:true}})
       } else {
-        await Category.updateOne({ _id: user }, { $set: { is_list: true } });
+        await Category.updateOne({ _id: categoryId }, { $set: { is_list: true } });
+        await Product.updateMany({categoryId:categoryId},{$set:{isCategoryBlocked:false}})
+
       }
       res.json({ block: true });
     } catch (error) {
@@ -270,7 +281,7 @@ module.exports = {
     addcategory,
     loadcategory,
     blockUser,
-    listcategory,
+    // listcategory,
     loadeditCategory,
     editCategory,
     adminLogout,
