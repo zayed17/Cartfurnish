@@ -50,6 +50,8 @@ userRoute.delete('/deleteaddress',addresscontrollers.deleteaddress)
 userRoute.post('/addaddresses',addresscontrollers.addaddressprofile)
 // userRoute.get('/editAddress',addresscontrollers.loadeditaddress)
 userRoute.post('/editaddresses',addresscontrollers.editaddress)
+userRoute.post('/edituser',usercontrollers.edituser)
+userRoute.post('/passwordchange',usercontrollers.passwordchange)
 
 
 

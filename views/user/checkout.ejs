@@ -498,7 +498,7 @@
 
 
 <!-- modal for edit address -->
-<!-- <div class="modal fade" id="addAddressModals" tabindex="-1" role="dialog" aria-labelledby="addAddressModalLabel"
+ <div class="modal fade" id="addAddressModals" tabindex="-1" role="dialog" aria-labelledby="addAddressModalLabel"
 aria-hidden="true">
 <div class="modal-dialog modal-dialog-centered" role="document">
 	<div class="modal-content">
@@ -559,7 +559,7 @@ aria-hidden="true">
 		</div>
 	</div>
 </div>
-</div> -->
+</div>
 
 
 <!-- modal for adding address -->
@@ -630,38 +630,51 @@ aria-hidden="true">
 
 
 
+
+
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        const addAddressForm = document.getElementById('addAddressForms');  // Update the form ID
-        const submitAddressBtn = document.getElementById('submitAddressBtns');  // Update the button ID
+        // Edit Address form
+        const editAddressForm = document.getElementById('addAddressForms');
+        const editAddressBtn = document.getElementById('submitAddressBtns');
 
-        submitAddressBtn.addEventListener('click', function (event) {
-            if (!validateForm()) {
+        editAddressBtn.addEventListener('click', function (event) {
+            if (!validateForm(editAddressForm)) {
                 event.preventDefault();
             }
         });
 
-        function validateForm() {
+        // Add Address form
+        const addAddressForm = document.getElementById('addAddressForm');
+        const addAddressBtn = document.getElementById('submitAddressBtn');
+
+        addAddressBtn.addEventListener('click', function (event) {
+            if (!validateForm(addAddressForm)) {
+                event.preventDefault();
+            }
+        });
+
+        function validateForm(form) {
             let isValid = true;
 
             // Reset validation styles and messages
-            resetValidation();
+            resetValidation(form);
 
             // Validate each input
-            isValid = isValid && validateInput('fullNames', 'Please enter your full name.');  // Update the input ID
-            isValid = isValid && validateInput('countrys', 'Please enter the country.');  // Update the input ID
-            isValid = isValid && validateInput('housenames', 'Please enter the house name.');  // Update the input ID
-            isValid = isValid && validateInput('states', 'Please enter the state.');  // Update the input ID
-            isValid = isValid && validateInput('citys', 'Please enter the city.');  // Update the input ID
-            isValid = isValid && validatePattern('pincodes', /^\d{6}$/, 'Please enter a valid 6-digit pincode.');  // Update the input ID
-            isValid = isValid && validatePattern('phones', /^\d{10}$/, 'Please enter a valid 10-digit phone number.');  // Update the input ID
-            isValid = isValid && validateInput('emails', 'Please enter a valid email address.');  // Update the input ID
+            isValid = isValid && validateInput(form, 'fullNames', 'Please enter your full name.');
+            isValid = isValid && validateInput(form, 'countrys', 'Please enter the country.');
+            isValid = isValid && validateInput(form, 'housenames', 'Please enter the house name.');
+            isValid = isValid && validateInput(form, 'states', 'Please enter the state.');
+            isValid = isValid && validateInput(form, 'citys', 'Please enter the city.');
+            isValid = isValid && validatePattern(form, 'pincodes', /^\d{6}$/, 'Please enter a valid 6-digit pincode.');
+            isValid = isValid && validatePattern(form, 'phones', /^\d{10}$/, 'Please enter a valid 10-digit phone number.');
+            isValid = isValid && validateInput(form, 'emails', 'Please enter a valid email address.');
 
             return isValid;
         }
 
-        function validateInput(id, errorMessage) {
-            const input = document.getElementById(id);
+        function validateInput(form, id, errorMessage) {
+            const input = form.querySelector(`#${id}`);
             const value = input.value.trim();
 
             if (value === '') {
@@ -672,8 +685,8 @@ aria-hidden="true">
             return true;
         }
 
-        function validatePattern(id, pattern, errorMessage) {
-            const input = document.getElementById(id);
+        function validatePattern(form, id, pattern, errorMessage) {
+            const input = form.querySelector(`#${id}`);
             const value = input.value.trim();
 
             if (!pattern.test(value)) {
@@ -684,8 +697,8 @@ aria-hidden="true">
             return true;
         }
 
-        function resetValidation() {
-            const formInputs = addAddressForm.querySelectorAll('.form-control');
+        function resetValidation(form) {
+            const formInputs = form.querySelectorAll('.form-control');
             formInputs.forEach(function (input) {
                 input.classList.remove('is-invalid');
                 const feedback = input.nextElementSibling;
@@ -704,8 +717,6 @@ aria-hidden="true">
         }
     });
 </script>
-
-
 
 
 

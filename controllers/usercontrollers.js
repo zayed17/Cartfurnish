@@ -453,8 +453,74 @@ const loadeachproduct = async(req,res)=>{
   };
 
 
+const edituser = async (req, res) => {
+    try {
+            const userData = await User.findById(req.session.user_id)
+
+       await User.findOneAndUpdate(
+            { email: userData.email,  },
+            {
+                $set: {
+                    name:req.body.editname,
+                    mobile:req.body.editmobile,
+                    email:req.body.editemail,
+                },
+            },
+            { new: true }
+        );
+        res.redirect('/account')
+    } catch (error) {
+        console.log(error);
+    }
+}
 
 
+const passwordchange = async(req,res)=>{
+    try {
+        const userData = await User.findById(req.session.user_id)
+
+            if (req.body.currentpassword  || (req.body.newpassword && req.body.newpassword2)) {
+                // Check if at least one of the new passwords is provided
+                if (!req.body.newpassword || req.body.newpassword.trim() === "" || !req.body.newpassword2 || req.body.newpassword2.trim() === "") {
+                    return res.render('account', { message: 'New passwords cannot be empty.'});
+                }
+            
+                // Check if both new passwords are the same
+                if (req.body.newpassword !== req.body.newpassword2) {
+                    return res.render('account', { message: 'New passwords do not match.'});
+                }
+            
+                // Check if new password is at least 8 characters long
+                if (req.body.newpassword.length < 8) {
+                    return res.render('account', { message: 'New password must be at least 8 characters long.'});
+                } else {
+                    const matchPassword = await bcrypt.compare(req.body.currentpassword, userData.password);
+            
+                    if (matchPassword) {
+                        sPassword = await securePassword(req.body.newpassword);
+                    } else {
+                        return res.render('account', { message: 'Current password is incorrect. Please try again.'});
+                    }
+                }
+            } else {
+                sPassword = userData.password;
+                return res.render('account', { message: 'Please enter either a current password or new passwords.'});
+            }
+            await User.findOneAndUpdate(
+                { email: userData.email,  },
+                {
+                    $set: {
+                        password:sPassword
+                    },
+                },
+                { new: true }
+            );
+            res.redirect('/account')
+
+    } catch (error) {
+        console.log(error);
+    }
+}
 
 
 module.exports = {
@@ -472,5 +538,7 @@ module.exports = {
     loadeachproduct,
     loadaccount,
     resendotp,
+    edituser,
+    passwordchange
     
 }
