@@ -82,6 +82,8 @@ const insertuser = async (req, res) => {
 
         const userData = await user.save();
         await sendOtpVerificationEmail(userData, res);
+        req.session.user_email = req.body.email
+        console.log( req.session.user_email,"vvero");
       } catch (error) {
         console.error(error.message);
       }
@@ -213,6 +215,7 @@ console.log(otp);
             // If it's not a resend, redirect to the verification page
             await transporter.sendMail(mailOptions);
             res.redirect(`/verifyotp?id=${_id}`);
+            
         }
     } catch (error) {
         console.error('Error in sendOtpVerificationEmail:', error);
@@ -398,7 +401,9 @@ const loadshop = async (req, res) => {
       const totalPages = Math.ceil(totalProducts / productsPerPage);
   
       const productData = await Product.find({is_blocked:false,isCategoryBlocked:false}).skip(startIndex).limit(productsPerPage).populate('categoryId')
-      res.render('shop', { product: productData, currentPage: page, totalPages,user:userData });
+      const category = await Category.find({})
+      
+      res.render('shop', { product: productData, currentPage: page, totalPages,user:userData , category });
     } catch (error) {
       console.error(error.message);
       res.status(500).send('Internal Server Error');
@@ -431,26 +436,20 @@ const loadeachproduct = async(req,res)=>{
 
 
 
-  const resendotp = async (req, res) => {
+const resendotp = async (req, res) => {
     try {
-      const { email } = req.body;
-  
-      // Find user by email
-      const user = await User.findOne({ email });
-  
-      if (!user) {
-        return res.status(404).json({ error: 'User not found' });
-      }
-  
-      // Resend OTP
-      await sendOtpVerificationEmail(user, res, true); // Set the isResend flag to true
-  
-      res.status(200).json({ message: 'OTP resent successfully' });
+        const userData = await User.findOne({ _id: req.session.userId });
+        console.log(userData.email,"ethano nnull");
+        
+        // Modify the next line to pass the correct parameters
+        await sendOtpVerificationEmail({ email: userData.email, _id: userData._id }, res, true);
+        
+        res.render("loginwithotp", { email: userData.email });
     } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Internal server error' });
+        console.log(error.message);
+        res.render('500Error');
     }
-  };
+};
 
 
 const edituser = async (req, res) => {

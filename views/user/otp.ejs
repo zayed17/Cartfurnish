@@ -263,7 +263,7 @@
                                             </div>
                                             <div class="mb-3">
                                                 <label for="otp" class="form-label">OTP:</label>
-                                                <input type="text" id="otp" name="otp" class="form-control" required>
+                                                <input type="text" id="otp" name="otp" class="form-control" >
                                             </div>
                                             
                                             <div class="row g-2">
@@ -276,9 +276,9 @@
                                             
                                                 <!-- Resend Button -->
                                                 <div class="col">
-                                                    <button type="button" class="btn btn-outline-primary-2" id="resendOtpButton" onclick="startResendTimer()">
-                                                        <span id="timer">Resend OTP</span>
-                                                    </button>
+                                                   <a href="/resendotp"> <button type="button" class="btn btn-outline-primary-2" id="resendOtpButton" onclick="startResendTimer()">
+                                                    <span id="timer">Resend OTP</span>
+                                                </button></a>
                                                 </div>
                                             </div>
                                             </div>
