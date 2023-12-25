@@ -4,6 +4,7 @@ const session = require('express-session');
 const config = require('../config/config');
 const admincontrollers = require('../controllers/admincontrollers');
 const productcontrollers = require('../controllers/productcontrollers');
+const couponcontrollers = require('../controllers/couponcontrollers')
 const multer = require('../middleware/multer');
 const auth = require('../middleware/adminAuth')
 // Configure session
@@ -40,6 +41,10 @@ adminRoute.patch('/blockproducts/:id',productcontrollers.blockProducts)
 adminRoute.get('/addproduct',auth.isLogin, productcontrollers.loadaddproduct);
 adminRoute.post('/addproduct',auth.isLogin, multer.uploadproduct, productcontrollers.addproduct);
 adminRoute.get('/editproduct',auth.isLogin, productcontrollers.loadeditproduct);
+
+adminRoute.get('/coupon',auth.isLogin,couponcontrollers.loadcoupon);
+adminRoute.get('/addcoupon',auth.isLogin,couponcontrollers.loadaddcoupon);
+
 
 adminRoute.get('/logout',admincontrollers.adminLogout)
 

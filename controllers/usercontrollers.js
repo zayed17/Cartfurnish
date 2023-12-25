@@ -215,7 +215,7 @@ console.log(otp);
             // If it's not a resend, redirect to the verification page
             await transporter.sendMail(mailOptions);
             res.redirect(`/verifyotp?id=${_id}`);
-            
+
         }
     } catch (error) {
         console.error('Error in sendOtpVerificationEmail:', error);
@@ -435,21 +435,27 @@ const loadeachproduct = async(req,res)=>{
   }
 
 
-
 const resendotp = async (req, res) => {
     try {
         const userData = await User.findOne({ _id: req.session.userId });
-        console.log(userData.email,"ethano nnull");
-        
+
+        if (!userData) {
+            console.log("User data not found");
+            return res.render('500Error');
+        }
+
+        console.log(userData.email, "ethano nnull");
+
         // Modify the next line to pass the correct parameters
         await sendOtpVerificationEmail({ email: userData.email, _id: userData._id }, res, true);
-        
+
         res.render("loginwithotp", { email: userData.email });
     } catch (error) {
         console.log(error.message);
         res.render('500Error');
     }
 };
+
 
 
 const edituser = async (req, res) => {
