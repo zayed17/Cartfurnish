@@ -44,7 +44,9 @@ adminRoute.get('/editproduct',auth.isLogin, productcontrollers.loadeditproduct);
 
 adminRoute.get('/coupon',auth.isLogin,couponcontrollers.loadcoupon);
 adminRoute.get('/addcoupon',auth.isLogin,couponcontrollers.loadaddcoupon);
-
+adminRoute.post('/addcoupon',auth.isLogin,couponcontrollers.addcoupon);
+adminRoute.get('/editcoupon',auth.isLogin,couponcontrollers.loadeditcoupon);
+adminRoute.post('/editcoupon',auth.isLogin,couponcontrollers.editcoupon);
 
 adminRoute.get('/logout',admincontrollers.adminLogout)
 

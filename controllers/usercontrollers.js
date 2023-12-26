@@ -119,7 +119,7 @@ const insertuser = async (req, res) => {
 
 const loadVerificationPage = async(req,res)=>{
     try {
-        req.session.userId = req.query.id;    
+        req.session.user_id = req.query.id;    
         res.render('otp');
     } catch (error) {
         console.log(error.message);
@@ -226,7 +226,7 @@ console.log(otp);
   const verifyOtp=async(req,res)=>{
     try {
       const Otp= req.body.otp
-      const userId=req.session.userId
+      const userId=req.session.user_id
      
        
           console.log(userId);
@@ -269,42 +269,6 @@ console.log(otp);
   
   
 
-// const verifyOtp=async(req,res)=>{
-//     try {
-//       const Otp= req.body.Otp
-//       const userId=req.session.userId
-       
-       
-//           console.log(userId);
-//           const userOtpVerificationRecords= await userOtpVerification.find({userId})
-       
-//           if(!userOtpVerificationRecords.length){
-//             return res.render('user/otp',{ message:  `Otp expired <a href="/emailVerifyAfter" style="color:#dbcc8f;">verifyOtp</a> `  })
-//           }
-        
-//             //user otp record exists
-//            const {otp:hashedOtp}=userOtpVerificationRecords[0];
-        
-//             const enteredOtp=Otp
-//             //compare the entered otp
-//             console.log(enteredOtp);
-//             console.log(hashedOtp);
-//              const validOtp = await bcrypt.compare(enteredOtp, hashedOtp);
-  
-//              if(!validOtp){
-//               //case otp invalid
-//              return res.render('user/otp',{message:'Invalid Otp Please try again'})
-//              }
-//            //update user to mask is verified true
-//             await User.updateOne({_id:userId},{$set:{is_Verified:true }})
-//             //delete the used otp of otp database 
-//             await userOtpVerification.deleteOne({userId})
-//             return res.redirect('/home')
-//     } catch (error) {
-//       console.log(error.message);
-//     }
-//   }
-  
   
 
 
@@ -343,7 +307,7 @@ const verifyLogin = async (req, res) => {
 
 const loademailinput = async (req,res)=>{
     try {
-        req.session.userId = req.query.id;    
+        req.session.user_id = req.query.id;    
         res.render('loginwithotp');
 
     } catch (error) {
@@ -437,7 +401,7 @@ const loadeachproduct = async(req,res)=>{
 
 const resendotp = async (req, res) => {
     try {
-        const userData = await User.findOne({ _id: req.session.userId });
+        const userData = await User.findOne({ _id: req.session.user_id });
 
         if (!userData) {
             console.log("User data not found");

@@ -23,7 +23,7 @@ userRoute.use(express.urlencoded({ extended: true }));
 // Set the view engine and views directory
 userRoute.set('views', './views/user');
 
-userRoute.get('/',usercontrollers.loadhome);
+userRoute.get('/', usercontrollers.loadhome);
 // userRoute.get('/home',usercontrollers.loadhome);
 userRoute.get('/signup',usercontrollers.loadsignup)
 userRoute.post('/signup',usercontrollers.insertuser);
