@@ -26,62 +26,13 @@ const loadaddproduct = async (req, res) => {
 
 
 
-// const addproduct = async (req, res) => {
-//     try {
-//       const { name, quantity, category, price, description } = req.body;
-      
-//       // Check if required fields are present
-  
-//       // Get file information
-//       const files = req.files;
-//       const imagePaths = [];
-  
-//       // Process and save each image using Sharp
-//       for (const key in files) {
-//         if (Object.prototype.hasOwnProperty.call(files, key)) {
-//           const image = files[key][0];
-//           const imagePath = `public/assets/images/products/original/${image.filename}`;
-//           const sharpPath = `public/assets/images/products/sharpened/${image.filename}`;
-  
-//           await Sharp(image.path).resize(500, 500).toFile(sharpPath);
-  
-//           imagePaths.push({
-//             fieldName: key,
-//             originalPath: imagePath,
-//             sharpPath: sharpPath,
-//           });
-//         }
-//       }
-  
-//       // Create a product instance
-//       const product = new Product({
-//         name,
-//         quantity,
-//         category: category,
-//         price,
-//         offer: null,
-//         description,
-//         images: imagePaths,
-//         is_blocked: false,
-//       });
-  
-//       // Save the product to the database
-//       await product.save();
-  
-//       res.redirect('/addproduct');
-//     } catch (error) {
-//       console.error(error.message);
-//       res.status(500).send("Internal Server Error");
-//     }
-//   };
-
-
 
 const addproduct = async (req, res) => {
     try {
       const details = req.body;
       // console.log(details);
       const files = await req.files;
+      console.log(files, "kitto");
       const img = [
         files.image1[0].filename,
         files.image2[0].filename,
