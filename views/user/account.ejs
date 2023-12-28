@@ -47,6 +47,10 @@
         color: #555 !important;
         /* Set your desired text color for the hover state */
     }
+
+    .tab-content #tab-content-6 .tab-pane.fade.show.active .user-profile .custom-width-table {
+        width: 100%;
+    }
 </style>
 
 
@@ -132,67 +136,103 @@
                         <div class="tab-pane fade show active" id="tab-21" role="tabpanel" aria-labelledby="tab-21-tab">
                             <div class="user-profile text-center bg-light p-4 rounded">
                                 <h3 class="mb-3">
-                                    <strong><%= userData.name %></strong>
+                                    <strong>
+                                        <%= userData.name %>
+                                    </strong>
                                 </h3>
                                 <p class="mb-3">
-                                    Mobile Number: <span id="mobileNumber" class="text-info"><%= userData.mobile %></span><br>
-                                    Gmail: <span id="gmail" class="text-info"><%= userData.email %></span>
+                                    Mobile Number: <span id="mobileNumber" class="text-info">
+                                        <%= userData.mobile %>
+                                    </span><br>
+                                    Gmail: <span id="gmail" class="text-info">
+                                        <%= userData.email %>
+                                    </span>
                                 </p>
                                 <div class="mb-3">
-                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editProfileModal">
+                                    <button type="button" class="btn btn-primary" data-toggle="modal"
+                                        data-target="#editProfileModal">
                                         Edit Profile
                                     </button>
-                                    <button type="button" class="btn btn-secondary ml-2" data-toggle="modal" data-target="#changePasswordModal">
+                                    <button type="button" class="btn btn-secondary ml-2" data-toggle="modal"
+                                        data-target="#changePasswordModal">
                                         Change Password
                                     </button>
                                 </div>
                             </div>
-                    </div>
+                        </div>
                         <div class="tab-pane fade" id="tab-22" role="tabpanel" aria-labelledby="tab-22-tab">
                             <div class="user-profile text-center">
-                                <img src="profile-picture-2.jpg" alt="User Profile Picture 2" class="img-fluid">
-                                <h3>User Name 2</h3>
-                                <p>Nobis perspiciatis natus cum, sint dolore earum rerum tempora aspernatur
-                                    numquam velit tempore omnis, delectus repellat facere voluptatibus nemo non
-                                    fugiat consequatur repellendus! Enim, commodi, veniam ipsa voluptates quis
-                                    amet.</p>
+                                <table class="table custom-width-table">
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Date</th>
+                                            <th>Amount</th>
+                                            <th>Payment Method</th>
+                                            <th>Status</th>
+                                            <th>Details</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% orders.forEach(function(order,index) { %>
+                                            <tr>
+                                                <td><%= index + 1 %></td>
+                                                <td>2023-01-01</td>
+                                                <td><%= order.totalAmount %></td>
+                                                <td><%= order.paymentMethod %></td>
+                                                <td><%= order.status %></td>
+                                                <td><a href="/orderDetails?_id=<%= order._id %>">Details</a></td>
+                                            </tr>
+                                            <% }); %>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
+
                         <div class="tab-pane fade" id="tab-23" role="tabpanel" aria-labelledby="tab-23-tab">
-                            <a class="btn btn-primary" href="#" data-toggle="modal" data-target="#addAddressModal">Add Address</a>
-                        
-                            <% if (addresses && addresses.address && addresses.address.length > 0) { %>
+                            <a class="btn btn-primary" href="#" data-toggle="modal" data-target="#addAddressModal">Add
+                                Address</a>
+
+                            <% if (addresses && addresses.address && addresses.address.length> 0) { %>
                                 <div class="row" id="addrassArea">
                                     <% addresses.address.forEach(function (address, loopIndex) { %>
                                         <div class="col-lg-<%= Math.ceil(12 / addresses.address.length) %>">
                                             <div class="card card-dashboard">
                                                 <div class="card-body">
-                                                    <h3 class="card-title">Address <%= loopIndex + 1 %></h3>
+                                                    <h3 class="card-title">Address <%= loopIndex + 1 %>
+                                                    </h3>
                                                     <p>
                                                         Name: <%= address.fullName %><br>
-                                                        Country: <%= address.country %><br>
-                                                        House Name: <%= address.housename %><br>
-                                                        State: <%= address.state %><br>
-                                                        City: <%= address.city %><br>
-                                                        Pincode: <%= address.pincode %><br>
-                                                        Phone: <%= address.phone %><br>
-                                                        Email: <%= address.email %><br>
-                                                        <a href="#" data-toggle="modal" data-target="#addAddressModals" onclick="showEditAddressModal('<%= address.fullName %>','<%= address.country %>', '<%= address.housename %>', '<%= address.state %>', '<%= address.city %>', '<%= address.pincode %>',  '<%= address.phone %>', '<%= address.email %>','<%= address._id %>')">Edit <i class="icon-edit"></i></a>
+                                                            Country: <%= address.country %><br>
+                                                                House Name: <%= address.housename %><br>
+                                                                    State: <%= address.state %><br>
+                                                                        City: <%= address.city %><br>
+                                                                            Pincode: <%= address.pincode %><br>
+                                                                                Phone: <%= address.phone %><br>
+                                                                                    Email: <%= address.email %><br>
+                                                                                        <a href="#" data-toggle="modal"
+                                                                                            data-target="#addAddressModals"
+                                                                                            onclick="showEditAddressModal('<%= address.fullName %>','<%= address.country %>', '<%= address.housename %>', '<%= address.state %>', '<%= address.city %>', '<%= address.pincode %>',  '<%= address.phone %>', '<%= address.email %>','<%= address._id %>')">Edit
+                                                                                            <i
+                                                                                                class="icon-edit"></i></a>
 
 
 
-                                                        <button style="margin-left: 15px; cursor: pointer; background: none; border: none;"
-                                                            onclick="deleteAddress('<%= address._id %>')">Delete <i class="icon-delete"></i></button>
+                                                                                        <button
+                                                                                            style="margin-left: 15px; cursor: pointer; background: none; border: none;"
+                                                                                            onclick="deleteAddress('<%= address._id %>')">Delete
+                                                                                            <i
+                                                                                                class="icon-delete"></i></button>
                                                     </p>
                                                 </div>
                                             </div>
                                         </div>
-                                    <% }); %>
-                                    
+                                        <% }); %>
+
                                 </div>
-                            <% }; %>
+                                <% }; %>
                         </div>
-                        
+
                         <div class="tab-pane fade" id="tab-24" role="tabpanel" aria-labelledby="tab-24-tab">
                             <div class="user-profile text-center">
                                 <img src="profile-picture-4.jpg" alt="User Profile Picture 4" class="img-fluid">
@@ -207,16 +247,6 @@
                 </div>
             </div>
         </div>
-        
-
-
-       
-        
-
-
-        
-
-<script>
 
 
 
@@ -224,7 +254,17 @@
 
 
 
-                //delete address
+
+
+        <script>
+
+
+
+
+
+
+
+            //delete address
             function deleteAddress(addressId) {
                 Swal.fire({
                     title: 'Are you sure?',
@@ -279,48 +319,48 @@
 
 
             //add address
-    $(document).ready(function () {
-    $('#submitAddressBtn').on('click', function () {
-        var formData = $('#addAddressForm').serialize();
-console.log(formData)
-        $.ajax({
-            type: 'POST',
-            url: '/addaddresses',
-            data: formData,
-            success: function (response) {
-                console.log(response)
-                if (response.add == true) {
-                    $('#addrassArea').load('/account #addrassArea');
-                    $('#addAddressModal').modal('hide');
-                    $('.modal-backdrop').remove();
-                    // Use SweetAlert2 for a success message
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Address Added Successfully',
-                        text: 'Your address has been added successfully.',
+            $(document).ready(function () {
+                $('#submitAddressBtn').on('click', function () {
+                    var formData = $('#addAddressForm').serialize();
+                    console.log(formData)
+                    $.ajax({
+                        type: 'POST',
+                        url: '/addaddresses',
+                        data: formData,
+                        success: function (response) {
+                            console.log(response)
+                            if (response.add == true) {
+                                $('#addrassArea').load('/account #addrassArea');
+                                $('#addAddressModal').modal('hide');
+                                $('.modal-backdrop').remove();
+                                // Use SweetAlert2 for a success message
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Address Added Successfully',
+                                    text: 'Your address has been added successfully.',
+                                });
+                            } else {
+                                // Use SweetAlert2 for an error message
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Oops...',
+                                    text: 'There was a problem adding your address!',
+                                });
+                            }
+                        },
+                        error: function (error) {
+                            console.error('Error:', error);
+                        }
                     });
-                } else {
-                    // Use SweetAlert2 for an error message
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: 'There was a problem adding your address!',
-                    });
-                }
-            },
-            error: function (error) {
-                console.error('Error:', error);
-            }
-        });
-    });
-});
+                });
+            });
 
 
 
 
 
-            
-</script>
+
+        </script>
 
 
 
@@ -342,261 +382,274 @@ console.log(formData)
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
-<!-- modal for change password  -->
-<div class="modal fade" id="changePasswordModal" tabindex="-1" role="dialog" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="changePasswordModalLabel">Change Password</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form id="changePasswordForm" action="/passwordchange" method="post">
-                    <% if (typeof message !=='undefined' ) { %>
-                        <p id="message" style="color: rgb(255, 0, 0);">
-                            <%= message %>
-                        </p>
-                        <script>
-                            // Set a timer to remove the message after 5000 milliseconds (5 seconds)
-                            setTimeout(function () {
-                                var messageElement = document.getElementById('message');
-                                if (messageElement) {
-                                    messageElement.style.display = 'none';
-                                }
-                            }, 3500);
-                        </script>
-                        <% } %> 
-                    <div class="form-group">
-                        <label for="currentPassword">Current Password:</label>
-                        <input type="password" class="form-control" id="currentPassword" name="currentpassword" placeholder="Enter current password" >
+        <!-- modal for change password  -->
+        <div class="modal fade" id="changePasswordModal" tabindex="-1" role="dialog"
+            aria-labelledby="changePasswordModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="changePasswordModalLabel">Change Password</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                     </div>
-                    <div class="form-group">
-                        <label for="newPassword">New Password:</label>
-                        <input type="password" class="form-control" id="newPassword" name="newpassword" placeholder="Enter new password" >
+                    <div class="modal-body">
+                        <form id="changePasswordForm" action="/passwordchange" method="post">
+                            <% if (typeof message !=='undefined' ) { %>
+                                <p id="message" style="color: rgb(255, 0, 0);">
+                                    <%= message %>
+                                </p>
+                                <script>
+                                    // Set a timer to remove the message after 5000 milliseconds (5 seconds)
+                                    setTimeout(function () {
+                                        var messageElement = document.getElementById('message');
+                                        if (messageElement) {
+                                            messageElement.style.display = 'none';
+                                        }
+                                    }, 3500);
+                                </script>
+                                <% } %>
+                                    <div class="form-group">
+                                        <label for="currentPassword">Current Password:</label>
+                                        <input type="password" class="form-control" id="currentPassword"
+                                            name="currentpassword" placeholder="Enter current password">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="newPassword">New Password:</label>
+                                        <input type="password" class="form-control" id="newPassword" name="newpassword"
+                                            placeholder="Enter new password">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="confirmNewPassword">Confirm New Password:</label>
+                                        <input type="password" class="form-control" id="confirmNewPassword"
+                                            name="newpassword2" placeholder="Confirm new password">
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Change Password</button>
+                        </form>
                     </div>
-                    <div class="form-group">
-                        <label for="confirmNewPassword">Confirm New Password:</label>
-                        <input type="password" class="form-control" id="confirmNewPassword" name="newpassword2" placeholder="Confirm new password" >
-                    </div>
-                    <button type="submit" class="btn btn-primary">Change Password</button>
-                </form>
+                </div>
             </div>
         </div>
-    </div>
-</div>
 
 
 
 
         <!-- modal for edit user details  -->
-        <div class="modal fade" id="editProfileModal" tabindex="-1" role="dialog" aria-labelledby="editProfileModalLabel" aria-hidden="true">
+        <div class="modal fade" id="editProfileModal" tabindex="-1" role="dialog"
+            aria-labelledby="editProfileModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="editProfileModalLabel">Edit Profile</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editProfileModalLabel">Edit Profile</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="/edituser" method="post" id="editProfileForm">
+                            <div class="form-group">
+                                <label for="editName">Name:</label>
+                                <input type="text" class="form-control" value="<%= userData.name %>" id="editName"
+                                    name="editname" placeholder="Enter your name">
+                            </div>
+                            <div class="form-group">
+                                <label for="editPhone">Phone:</label>
+                                <input type="tel" class="form-control" value="<%= userData.mobile %>" id="editPhone"
+                                    name="editmobile" placeholder="Enter your phone number">
+                            </div>
+                            <div class="form-group">
+                                <label for="editEmail">Email:</label>
+                                <input type="email" class="form-control" value="<%= userData.email %>" id="editEmail"
+                                    name="editemail" placeholder="Enter your email">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                        </form>
+                    </div>
                 </div>
-                <div class="modal-body">
-                  <form action="/edituser" method="post" id="editProfileForm">
-                    <div class="form-group">
-                      <label for="editName">Name:</label>
-                      <input type="text" class="form-control" value="<%= userData.name %>" id="editName" name="editname" placeholder="Enter your name">
-                    </div>
-                    <div class="form-group">
-                      <label for="editPhone">Phone:</label>
-                      <input type="tel" class="form-control" value="<%= userData.mobile %>" id="editPhone" name="editmobile" placeholder="Enter your phone number">
-                    </div>
-                    <div class="form-group">
-                      <label for="editEmail">Email:</label>
-                      <input type="email" class="form-control" value="<%= userData.email %>" id="editEmail" name="editemail" placeholder="Enter your email">
-                    </div>
-                    <button type="submit" class="btn btn-primary">Save Changes</button>
-                  </form>
-                </div>
-              </div>
-            </div>
-          </div>
-
-
-
-<!-- Modal for Add Address -->
-<div class="modal fade" id="addAddressModal" tabindex="-1" role="dialog" aria-labelledby="addAddressModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="addAddressModalLabel">Add Address</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form id="addAddressForm" action="/addaddresses" method="post" novalidate>
-                    <div class="form-group">
-                        <label for="fullName">Full Name:</label>
-                        <input type="text" class="form-control" id="fullName" name="fullName" required>
-                        <div class="invalid-feedback">Please enter your full name.</div>
-                    </div>
-                    <div class="form-group">
-                        <label for="country">Country:</label>
-                        <input type="text" class="form-control" id="country" name="country" required>
-                        <div class="invalid-feedback">Please enter the country.</div>
-                    </div>
-                    <div class="form-group">
-                        <label for="housename">House Name:</label>
-                        <input type="text" class="form-control" id="housename" name="housename" required>
-                        <div class="invalid-feedback">Please enter the house name.</div>
-                    </div>
-                    <div class="form-group">
-                        <label for="state">State:</label>
-                        <input type="text" class="form-control" id="state" name="state" required>
-                        <div class="invalid-feedback">Please enter the state.</div>
-                    </div>
-                    <div class="form-group">
-                        <label for="city">City:</label>
-                        <input type="text" class="form-control" id="city" name="city" required>
-                        <div class="invalid-feedback">Please enter the city.</div>
-                    </div>
-                    <div class="form-group">
-                        <label for="pincode">Pincode (6 digits):</label>
-                        <input type="text" class="form-control" id="pincode" name="pincode" pattern="\d{6}" required>
-                        <div class="invalid-feedback">Please enter a valid 6-digit pincode.</div>
-                    </div>
-                    <div class="form-group">
-                        <label for="phone">Phone (10 digits):</label>
-                        <input type="tel" class="form-control" id="phone" name="phone" pattern="\d{10}" required>
-                        <div class="invalid-feedback">Please enter a valid 10-digit phone number.</div>
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Email:</label>
-                        <input type="email" class="form-control" id="email" name="email" required>
-                        <div class="invalid-feedback">Please enter a valid email address.</div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="submitAddressBtn">Add Address</button>
             </div>
         </div>
-    </div>
-</div>
 
 
 
-<!-- modal for edit address -->
-<div class="modal fade" id="addAddressModals" tabindex="-1" role="dialog" aria-labelledby="addAddressModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="addAddressModalLabel">Edit Address</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form id="addAddressForms" >
-                    <div class="form-group">
-                        <label for="fullName">Full Name:</label>
-                        <input type="text" class="form-control" id="fullNames"  name="fullName" required>
-                        <div class="invalid-feedback">Please enter your full name.</div>
+        <!-- Modal for Add Address -->
+        <div class="modal fade" id="addAddressModal" tabindex="-1" role="dialog" aria-labelledby="addAddressModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addAddressModalLabel">Add Address</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                     </div>
-                    <div class="form-group">
-                        <label for="country">Country:</label>
-                        <input type="text" class="form-control" id="countrys" name="country" required>
-                        <div class="invalid-feedback">Please enter the country.</div>
+                    <div class="modal-body">
+                        <form id="addAddressForm" action="/addaddresses" method="post" novalidate>
+                            <div class="form-group">
+                                <label for="fullName">Full Name:</label>
+                                <input type="text" class="form-control" id="fullName" name="fullName" required>
+                                <div class="invalid-feedback">Please enter your full name.</div>
+                            </div>
+                            <div class="form-group">
+                                <label for="country">Country:</label>
+                                <input type="text" class="form-control" id="country" name="country" required>
+                                <div class="invalid-feedback">Please enter the country.</div>
+                            </div>
+                            <div class="form-group">
+                                <label for="housename">House Name:</label>
+                                <input type="text" class="form-control" id="housename" name="housename" required>
+                                <div class="invalid-feedback">Please enter the house name.</div>
+                            </div>
+                            <div class="form-group">
+                                <label for="state">State:</label>
+                                <input type="text" class="form-control" id="state" name="state" required>
+                                <div class="invalid-feedback">Please enter the state.</div>
+                            </div>
+                            <div class="form-group">
+                                <label for="city">City:</label>
+                                <input type="text" class="form-control" id="city" name="city" required>
+                                <div class="invalid-feedback">Please enter the city.</div>
+                            </div>
+                            <div class="form-group">
+                                <label for="pincode">Pincode (6 digits):</label>
+                                <input type="text" class="form-control" id="pincode" name="pincode" pattern="\d{6}"
+                                    required>
+                                <div class="invalid-feedback">Please enter a valid 6-digit pincode.</div>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Phone (10 digits):</label>
+                                <input type="tel" class="form-control" id="phone" name="phone" pattern="\d{10}"
+                                    required>
+                                <div class="invalid-feedback">Please enter a valid 10-digit phone number.</div>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email:</label>
+                                <input type="email" class="form-control" id="email" name="email" required>
+                                <div class="invalid-feedback">Please enter a valid email address.</div>
+                            </div>
+                        </form>
                     </div>
-                    <div class="form-group">
-                        <label for="housename">House Name:</label>
-                        <input type="text" class="form-control" id="housenames" name="housename" required>
-                        <div class="invalid-feedback">Please enter the house name.</div>
-                    </div>
-                    <div class="form-group">
-                        <label for="state">State:</label>
-                        <input type="text" class="form-control" id="states" name="state" required>
-                        <div class="invalid-feedback">Please enter the state.</div>
-                    </div>
-                    <div class="form-group">
-                        <label for="city">City:</label>
-                        <input type="text" class="form-control" id="citys" name="city" required>
-                        <div class="invalid-feedback">Please enter the city.</div>
-                    </div>
-                    <div class="form-group">
-                        <label for="pincode">Pincode (6 digits):</label>
-                        <input type="text" class="form-control" id="pincodes" name="pincode" pattern="\d{6}" required>
-                        <div class="invalid-feedback">Please enter a valid 6-digit pincode.</div>
-                    </div>
-                    <div class="form-group">
-                        <label for="phone">Phone (10 digits):</label>
-                        <input type="tel" class="form-control" id="phones" name="phone" pattern="\d{10}" required>
-                        <div class="invalid-feedback">Please enter a valid 10-digit phone number.</div>
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Email:</label>
-                        <input type="email" class="form-control" id="emails" name="email" required>
-                        <div class="invalid-feedback">Please enter a valid email address.</div>
-                    </div>
-                    <input type="text" class="form-control" style="display: none;" id="addressId" name="addressId">
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary" id="submitAddressBtns">Submit</button>
+                        <button type="button" class="btn btn-primary" id="submitAddressBtn">Add Address</button>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
-    </div>
-</div>
 
 
-<script>
- function showEditAddressModal(fullName, country, housename, state, city, pincode, phone, email, addressId) {
-    document.getElementById('fullNames').value = fullName;
-    document.getElementById('countrys').value = country;
-    document.getElementById('housenames').value = housename;
-    document.getElementById('states').value = state;
-    document.getElementById('citys').value = city;
-    document.getElementById('pincodes').value = pincode;
-    document.getElementById('phones').value = phone;
-    document.getElementById('emails').value = email;
-    document.getElementById('addressId').value = addressId;
 
-    // Show the modal
-    $('#addAddressModals').modal('show');
-}
+        <!-- modal for edit address -->
+        <div class="modal fade" id="addAddressModals" tabindex="-1" role="dialog" aria-labelledby="addAddressModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addAddressModalLabel">Edit Address</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="addAddressForms">
+                            <div class="form-group">
+                                <label for="fullName">Full Name:</label>
+                                <input type="text" class="form-control" id="fullNames" name="fullName" required>
+                                <div class="invalid-feedback">Please enter your full name.</div>
+                            </div>
+                            <div class="form-group">
+                                <label for="country">Country:</label>
+                                <input type="text" class="form-control" id="countrys" name="country" required>
+                                <div class="invalid-feedback">Please enter the country.</div>
+                            </div>
+                            <div class="form-group">
+                                <label for="housename">House Name:</label>
+                                <input type="text" class="form-control" id="housenames" name="housename" required>
+                                <div class="invalid-feedback">Please enter the house name.</div>
+                            </div>
+                            <div class="form-group">
+                                <label for="state">State:</label>
+                                <input type="text" class="form-control" id="states" name="state" required>
+                                <div class="invalid-feedback">Please enter the state.</div>
+                            </div>
+                            <div class="form-group">
+                                <label for="city">City:</label>
+                                <input type="text" class="form-control" id="citys" name="city" required>
+                                <div class="invalid-feedback">Please enter the city.</div>
+                            </div>
+                            <div class="form-group">
+                                <label for="pincode">Pincode (6 digits):</label>
+                                <input type="text" class="form-control" id="pincodes" name="pincode" pattern="\d{6}"
+                                    required>
+                                <div class="invalid-feedback">Please enter a valid 6-digit pincode.</div>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Phone (10 digits):</label>
+                                <input type="tel" class="form-control" id="phones" name="phone" pattern="\d{10}"
+                                    required>
+                                <div class="invalid-feedback">Please enter a valid 10-digit phone number.</div>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email:</label>
+                                <input type="email" class="form-control" id="emails" name="email" required>
+                                <div class="invalid-feedback">Please enter a valid email address.</div>
+                            </div>
+                            <input type="text" class="form-control" style="display: none;" id="addressId"
+                                name="addressId">
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary" id="submitAddressBtns">Submit</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-$('#submitAddressBtns').on('click', function() {
-    // Get form data
-    const formData = $('#addAddressForms').serialize();
-    console.log(formData);
 
-    $.ajax({
-        type: 'POST',
-        url: '/editaddresses',
-        data: formData,
-        success: function(response) {
-            if (response.success == true) {
-                $('#addrassArea').load('/account #addrassArea');
-                $('#addAddressModals').modal('hide');
-                $('.modal-backdrop').remove();
+        <script>
+            function showEditAddressModal(fullName, country, housename, state, city, pincode, phone, email, addressId) {
+                document.getElementById('fullNames').value = fullName;
+                document.getElementById('countrys').value = country;
+                document.getElementById('housenames').value = housename;
+                document.getElementById('states').value = state;
+                document.getElementById('citys').value = city;
+                document.getElementById('pincodes').value = pincode;
+                document.getElementById('phones').value = phone;
+                document.getElementById('emails').value = email;
+                document.getElementById('addressId').value = addressId;
 
+                // Show the modal
+                $('#addAddressModals').modal('show');
             }
-        },
-        error: function(error) {
-            console.error('Error:', error);
-        }
-    });
 
-    // Prevent the default behavior of the button click
-    return false;
-});
+            $('#submitAddressBtns').on('click', function () {
+                // Get form data
+                const formData = $('#addAddressForms').serialize();
+                console.log(formData);
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/editaddresses',
+                    data: formData,
+                    success: function (response) {
+                        if (response.success == true) {
+                            $('#addrassArea').load('/account #addrassArea');
+                            $('#addAddressModals').modal('hide');
+                            $('.modal-backdrop').remove();
+
+                        }
+                    },
+                    error: function (error) {
+                        console.error('Error:', error);
+                    }
+                });
+
+                // Prevent the default behavior of the button click
+                return false;
+            });
 
 
-</script>
+        </script>
 
 
 </body>

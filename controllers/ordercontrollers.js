@@ -2,6 +2,13 @@ const Address = require('../models/addressmodels');
 const Cart = require('../models/cartmodels')
 const Order = require('../models/ordermodels')
 const Product = require('../models/productmodal')
+const Razorpay = require('razorpay');
+
+const instance = new Razorpay({
+  key_id: process.env.RAZORPAY_ID_KEY,
+  key_secret: process.env.RAZORPAY_SECRET_KEY
+});
+
 
 const placeorder = async(req,res)=>{
     try {

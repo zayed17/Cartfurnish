@@ -6,6 +6,7 @@ const userOtpVerification = require('../models/userotpverification');
 const Product = require('../models/productmodal')
 const Address = require('../models/addressmodels')
 const Category = require('../models/categorymodal')
+const Order = require('../models/ordermodels')
 const dotenv = require('dotenv')
 dotenv.config()
 
@@ -180,7 +181,7 @@ const sendOtpVerificationEmail = async ({ email, _id }, res, isResend = false) =
             port: 587,
             secure: true,
             auth: {
-                user: process.env.email_user, // Your Gmail email address
+                user: process.env.email_user, 
                 pass: process.env.password_user
             }
         });
@@ -389,10 +390,11 @@ const loadeachproduct = async(req,res)=>{
     try {
         const userData = await User.findOne({_id:req.session.user_id})
         const  addresses = await Address.findOne({user:req.session.user_id})
+        const orders = await Order.find({userId:req.session.user_id})
 
         // console.log(addresses);
         // console.log(req.session.user_id);
-        res.render('account',{userData,addresses})
+        res.render('account',{userData,addresses,orders})
     } catch (error) {
         console.log(error);
     }
