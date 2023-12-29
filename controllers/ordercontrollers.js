@@ -17,7 +17,7 @@ const placeorder = async(req,res)=>{
         const addressIndex = !req.body.address? 0:req.body.address
         const paymentMethod = req.body.payment;
         const status = paymentMethod=="COD"?"placed":'pending'
-        console.log(paymentMethod,addressIndex,userId);
+        console.log(paymentMethod,addressIndex,status,userId);
 
         if(!req.body.address){
             const data = {
@@ -60,8 +60,12 @@ const placeorder = async(req,res)=>{
         purchaseDate:new Date(),
         totalAmount:totalAmount,
         status:status,
-        paymentMethod:paymentMethod 
+        paymentMethod:"onlinePayment" 
        })
+       const orderData = await data.save()
+
+
+       if(status == "COD"){
 
        for (const item of orderItems) {
         await Product.updateOne(
@@ -70,13 +74,66 @@ const placeorder = async(req,res)=>{
         );
       }
       await Cart.deleteOne({user:userId})
-       await data.save()
+      res.json({placed:true})
+      paymentMethod = "onlinePayment"
+    }else if(paymentMethod == "onlinePayment"){
+      const options ={
+        amount: totalAmount*100,
+        currency: "INR",
+        receipt: ""+orderData._id,
+      }
+
+      instance.orders.create(options, function (err, order) {
+
+        res.json({ order });
+      });
+
+    }
        res.redirect('/success')
 
     } catch (error) {
         console.log(error);
     }
 }
+
+const verifyPayment = async(req,res)=>{
+  try {
+    
+    // const user_id = req.session.user_id
+    const paymentData = req.body
+    // const cartData = await Cart.findOne({user:user_id})
+
+    const hmac = crypto.createHmac("sha256", process.env.RAZORPAY_SECRET_KEY);
+    hmac.update( paymentData.payment.razorpay_order_id  +"|" +  paymentData.payment.razorpay_payment_id );
+    const hmacValue = hmac.digest("hex");
+
+    // if(hmacValue == paymentData.payment.razorpay_signature){
+    //   for( let i=0;i<cartData.products.length;i++){
+    //     let product = cartData.products[i].productId
+    //     let count = cartData.products[i].count
+    //     await Product.updateOne({_id:product},{$inc:{quantity:-count}})
+    //   }
+
+    //   await Order.findByIdAndUpdate(
+    //     { _id: paymentData.order.receipt },
+    //     { $set: { status: "placed", paymentId: paymentData.payment.razorpay_payment_id } }
+    //   );
+  
+    //   await Cart.deleteOne({user:user_id})
+    //   res.json({placed:true})
+    // }
+
+  } catch (error) {
+      console.log(error.message);
+      res.render('500Error')
+  }
+}
+
+
+
+
+
+
 
 const placeOrder = async (req, res) => {
     try {
@@ -193,5 +250,6 @@ const placeOrder = async (req, res) => {
   
 
 module.exports = {
-    placeorder
+    placeorder,
+    verifyPayment
 }

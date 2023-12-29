@@ -159,7 +159,7 @@
 							<span class="btn-text">
 								<a class="btn btn-primary" href="#" data-toggle="modal" data-target="#addAddressModal">Add Address</a>
 							</span>
-							<form action="/placeorder" method="post">
+							<form id="form" action="/placeorder" method="post">
 								<div class="row">
 						<% if (addresses && addresses.address && addresses.address.length > 0) { %>
 							<div class="row" id="addrassArea" >
@@ -299,16 +299,7 @@
 													</div><!-- End .card-body -->
 												</div><!-- End .card -->
 											
-												<div class="card">
-													<div class="card-body">
-														<div class="d-flex align-items-center">
-															<div class="mr-2">
-																<input required type="radio" id="codRadio" name="payment" value="COD" checked />
-															</div>
-															<label class="d-block text-dark" for="codRadio">Cash On Delivery</label>
-														</div>
-													</div><!-- End .card-body -->
-												</div><!-- End .card -->
+												
 											
 												<div class="card">
 													<div class="card-body">
@@ -317,6 +308,18 @@
 																<input required type="radio" id="onlinePaymentRadio" name="payment" value="onlinePayment"  />
 															</div>
 															<label class="d-block text-dark" for="onlinePaymentRadio">Online Payment</label>
+														</div>
+													</div><!-- End .card-body -->
+												</div><!-- End .card -->
+
+
+												<div class="card">
+													<div class="card-body">
+														<div class="d-flex align-items-center">
+															<div class="mr-2">
+																<input required type="radio" id="codRadio" name="payment" value="COD" checked />
+															</div>
+															<label class="d-block text-dark" for="codRadio">Cash On Delivery</label>
 														</div>
 													</div><!-- End .card-body -->
 												</div><!-- End .card -->
@@ -741,8 +744,90 @@ console.log(formData)
     });
 });
 
+
+$(document).ready(function () {
+  $('#form').submit(function (event) {
+    event.preventDefault();
+
+    // Proceed directly to AJAX submission
+    $.ajax({
+      type: 'POST',
+      url: '/placeorder',
+      success: function (response) {
+        if (response.placed == true) {
+          window.location.href = '/orderSuccess';
+        } else if (response.wallet == false) {
+          swal("Oops, it looks like your wallet balance is too low to place this order !!", "", "error");
+        } else {
+          razorpayPayment(response.order);
+        }
+      },
+      error: function (error) {
+        console.error('Error:', error);
+      }
+    });
+  });
+});
+
+function razorpayPayment(order){
+        console.log(order);
+        var options = {
+        "key": "rzp_test_eTuP9JfD6ugQOM",
+        "amount": 1, 
+        "currency": "INR",
+        "name": "Fashion Arclight",
+        "description": "Test Transaction",
+        "image": "/user/images/Fs Hat Logo.jpg",
+        "order_id": "23456789", 
+        handler: function (response) {
+            verifyPayment(response, order);
+        },
+        "prefill": { 
+            "name": "Fashion Arclight", 
+            "email": "fashionarclight.com",
+            "contact": "9000090000"
+        },
+        "notes": {
+            "address": "Fashion Arclight "
+        },
+        "theme": {
+            "color": "#cc9967"
+        }
+    };
+    var rzp1 = new razorpayPayment(options);
+    rzp1.open();
+    }
+	function verifyPayment(payment, order) {
+        const amount2 = document.getElementById("total1").innerHTML;
+        console.log(amount2);
+        $.ajax({
+        url: "/verify-payment",
+        method: "post",
+        data: {
+            payment: payment,
+            amount2: 1,
+            order: order,
+        },
+        success: (response) => {
+            if (response.placed == true) {
+                window.location.href = '/orderSuccess'
+            } else {
+            swal.fire({
+                positon: "center",
+                icon: "error",
+                title: "Payment failed",
+                showConfirmButton: false,
+                timer: 1500,
+            });
+            }
+        },
+        });
+    }
+
+
+
 	   
-	   </script>
+</script>
 	   
 
 	<!-- Plugins JS File -->
