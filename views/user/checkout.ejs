@@ -159,7 +159,7 @@
 							<span class="btn-text">
 								<a class="btn btn-primary" href="#" data-toggle="modal" data-target="#addAddressModal">Add Address</a>
 							</span>
-							<form id="form" action="/placeorder" method="post">
+							<form id="orderForm">
 								<div class="row">
 						<% if (addresses && addresses.address && addresses.address.length > 0) { %>
 							<div class="row" id="addrassArea" >
@@ -189,50 +189,47 @@
 
 										<div class="col-lg-9 billing-details">
 											<h2 class="checkout-title">Billing Details</h2><!-- End .checkout-title -->
-
+										
 											<div class="form-group">
 												<label for="fullName">Full Name *</label>
 												<input type="text" class="form-control" id="fullName" name="fullName">
 											</div>
-
+										
 											<div class="form-group">
 												<label for="country">Country *</label>
 												<input type="text" class="form-control" id="country" name="country">
 											</div>
-
+										
 											<div class="form-group">
 												<label for="streetAddress">House name *</label>
-												<input type="text" class="form-control" id="streetAddress"
-													name="housename" placeholder="House number and Street name">
+												<input type="text" class="form-control" id="streetAddress" name="housename"
+													placeholder="House number and Street name">
 											</div>
-
+										
 											<div class="row">
 												<div class="col-sm-6">
 													<div class="form-group">
 														<label for="stateCounty">State *</label>
-														<input type="text" class="form-control" id="stateCounty"
-															name="state">
+														<input type="text" class="form-control" id="stateCounty" name="state">
 													</div>
 												</div><!-- End .col-sm-6 -->
-
+										
 												<div class="col-sm-6">
 													<div class="form-group">
 														<label for="townCity"> City *</label>
-														<input type="text" class="form-control" id="townCity"
-															name="city">
+														<input type="text" class="form-control" id="townCity" name="city">
 													</div>
 												</div><!-- End .col-sm-6 -->
 											</div><!-- End .row -->
-
+										
 											<div class="row">
 												<div class="col-sm-6">
 													<div class="form-group">
 														<label for="postcode">Pincode *</label>
-														<input type="text" class="form-control" id="postcode"
-															name="pincode">
+														<input type="text" class="form-control" id="postcode" name="pincode">
 													</div>
 												</div><!-- End .col-sm-6 -->
-
+										
 												<div class="col-sm-6">
 													<div class="form-group">
 														<label for="phone">Phone *</label>
@@ -240,17 +237,13 @@
 													</div>
 												</div><!-- End .col-sm-6 -->
 											</div><!-- End .row -->
-
+										
 											<div class="form-group">
 												<label for="email">Email *</label>
 												<input type="email" class="form-control" id="email" name="email">
 											</div>
-
-											<!-- Add more styling and design elements as needed -->
-
+																			
 										</div><!-- End .col-lg-9 -->
-
-
 								<% } %>
 									<aside class="col-lg-3">
 										<div class="summary">
@@ -326,7 +319,7 @@
 											</div><!-- End .accordion-summary -->
 											<!-- End .accordion -->
 
-											<button type="submit" class="btn btn-outline-primary-2 btn-order btn-block">
+											<button type="button" id="placeOrderBtn" class="btn btn-outline-primary-2 btn-order btn-block">
 												<span class="btn-text">Place Order</span>
 												<span class="btn-hover-text">Proceed to Checkout</span>
 											</button>
@@ -743,92 +736,103 @@ console.log(formData)
         });
     });
 });
+</script>
+	   
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
+<script>
+    $(document).ready(function () {
+    // Handle click event on the "Place Order" button
+    $("#placeOrderBtn").on("click", function (event) {
+        var formData = $("#orderForm").serialize();
+        event.preventDefault();
 
-$(document).ready(function () {
-  $('#form').submit(function (event) {
-    event.preventDefault();
-
-    // Proceed directly to AJAX submission
-    $.ajax({
-      type: 'POST',
-      url: '/placeorder',
-      success: function (response) {
-        if (response.placed == true) {
-          window.location.href = '/orderSuccess';
-        } else if (response.wallet == false) {
-          swal("Oops, it looks like your wallet balance is too low to place this order !!", "", "error");
-        } else {
-          razorpayPayment(response.order);
-        }
-      },
-      error: function (error) {
-        console.error('Error:', error);
-      }
+        // Make an AJAX request
+        $.ajax({
+            type: "POST",
+            url: "/placeorder",
+            data: formData,
+            success: function (response) {
+                console.log(response);
+                if (response.placed == true) {
+                    alert("Order placed successfully!");
+                    window.location.href = '/success';
+                } else {
+                    razorpayPayment(response.order);
+                }
+            },
+            error: function (error) {
+                // Handle error response
+                console.error('Error:', error);
+                alert("An error occurred while processing the order.");
+            }
+        });
     });
-  });
 });
 
-function razorpayPayment(order){
-        console.log(order);
-        var options = {
-        "key": "rzp_test_eTuP9JfD6ugQOM",
-        "amount": 1, 
+function razorpayPayment(order) {
+    console.log(order,"tihiu");
+    var options = {
+        "key": "rzp_test_6nfEH21z7G2Wtu",
+        "amount": order.amount,
         "currency": "INR",
-        "name": "Fashion Arclight",
+        "name": "Furni.Ltd",
         "description": "Test Transaction",
-        "image": "/user/images/Fs Hat Logo.jpg",
-        "order_id": "23456789", 
+        "image": "",
+        "order_id": order.id,
         handler: function (response) {
             verifyPayment(response, order);
         },
-        "prefill": { 
-            "name": "Fashion Arclight", 
-            "email": "fashionarclight.com",
-            "contact": "9000090000"
+        "prefill": {
+            "name": "Furni Ltd",
+            "email": "furniworld@gmail.com",
+            "contact": "999999999"
         },
         "notes": {
-            "address": "Fashion Arclight "
+            "address": "India"
         },
         "theme": {
             "color": "#cc9967"
         }
     };
-    var rzp1 = new razorpayPayment(options);
+
+    var rzp1 = new Razorpay(options);
     rzp1.open();
-    }
-	function verifyPayment(payment, order) {
-        const amount2 = document.getElementById("total1").innerHTML;
-        console.log(amount2);
-        $.ajax({
+}
+
+function verifyPayment(payment, order) {
+    // const amount2 = document.getElementById("total1").innerHTML;
+    // console.log(amount2);
+    $.ajax({
         url: "/verify-payment",
         method: "post",
         data: {
             payment: payment,
-            amount2: 1,
+            // amount2: 1,
             order: order,
         },
         success: (response) => {
             if (response.placed == true) {
-                window.location.href = '/orderSuccess'
+                window.location.href = '/success'
             } else {
-            swal.fire({
-                positon: "center",
-                icon: "error",
-                title: "Payment failed",
-                showConfirmButton: false,
-                timer: 1500,
-            });
+                swal.fire({
+                    positon: "center",
+                    icon: "error",
+                    title: "Payment failed",
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
             }
         },
-        });
-    }
+    });
+}
+
+
+    </script>
 
 
 
-	   
 </script>
-	   
 
 	<!-- Plugins JS File -->
 	<script src="public/assets/js/jquery.min.js"></script>
