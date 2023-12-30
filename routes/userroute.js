@@ -52,6 +52,9 @@ userRoute.post('/addaddresses',addresscontrollers.addaddressprofile)
 userRoute.post('/editaddresses',addresscontrollers.editaddress)
 userRoute.post('/edituser',usercontrollers.edituser)
 userRoute.post('/passwordchange',usercontrollers.passwordchange)
+userRoute.post('/verifypayment',ordercontrollers.verifypayment)
+userRoute.get('/orderdetails',ordercontrollers.loadorderdetail)
+
 
 
 

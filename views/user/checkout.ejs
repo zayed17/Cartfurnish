@@ -786,7 +786,7 @@ function razorpayPayment(order) {
         "prefill": {
             "name": "Furni Ltd",
             "email": "furniworld@gmail.com",
-            "contact": "999999999"
+            "contact": "9999999999"
         },
         "notes": {
             "address": "India"
@@ -801,14 +801,12 @@ function razorpayPayment(order) {
 }
 
 function verifyPayment(payment, order) {
-    // const amount2 = document.getElementById("total1").innerHTML;
-    // console.log(amount2);
+
     $.ajax({
-        url: "/verify-payment",
+        url: "/verifypayment",
         method: "post",
         data: {
             payment: payment,
-            // amount2: 1,
             order: order,
         },
         success: (response) => {
