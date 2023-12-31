@@ -23,8 +23,7 @@ userRoute.use(express.urlencoded({ extended: true }));
 // Set the view engine and views directory
 userRoute.set('views', './views/user');
 
-userRoute.get('/', usercontrollers.loadhome);
-// userRoute.get('/home',usercontrollers.loadhome);
+userRoute.get('/',  usercontrollers.loadhome);
 userRoute.get('/signup',usercontrollers.loadsignup)
 userRoute.post('/signup',usercontrollers.insertuser);
 userRoute.get('/verifyotp',usercontrollers.loadVerificationPage)
@@ -54,7 +53,7 @@ userRoute.post('/edituser',usercontrollers.edituser)
 userRoute.post('/passwordchange',usercontrollers.passwordchange)
 userRoute.post('/verifypayment',ordercontrollers.verifypayment)
 userRoute.get('/orderdetails',ordercontrollers.loadorderdetail)
-
+userRoute.post('/cancelproduct',ordercontrollers.cancelproduct)
 
 
 

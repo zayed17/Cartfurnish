@@ -7,6 +7,7 @@ const Product = require('../models/productmodal')
 const Address = require('../models/addressmodels')
 const Category = require('../models/categorymodal')
 const Order = require('../models/ordermodels')
+const Coupon = require('../models/couponmodels')
 const dotenv = require('dotenv')
 dotenv.config()
 
@@ -391,10 +392,11 @@ const loadeachproduct = async(req,res)=>{
         const userData = await User.findOne({_id:req.session.user_id})
         const  addresses = await Address.findOne({user:req.session.user_id})
         const orders = await Order.find({userId:req.session.user_id})
+        const CouponData = await Coupon.find({}) 
 
         // console.log(addresses);
         // console.log(req.session.user_id);
-        res.render('account',{userData,addresses,orders})
+        res.render('account',{userData,addresses,orders,CouponData})
     } catch (error) {
         console.log(error);
     }

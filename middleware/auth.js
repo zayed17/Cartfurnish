@@ -1,57 +1,48 @@
 const User = require("../models/usermodel");
 
-const isLogin = async (req,res,next)=>{
-
-    try {
-        
-        if(req.session.user_id){
-            const userData = await User.findById(req.session.user_id)
-            if(userData.is_blocked){
-                res.redirect('/signup')
-            }else{
-                next();
-            }   
-        }else{
-            res.redirect('/')
-        }
-        
-    } catch (error) {
-        
-        console.log(error.message);
-
+const isLogin = async (req, res, next) => {
+  try {
+    if (req.session.user_id) {
+      console.log(req.session.user_id);
+      const userData = await User.findById(req.session.user_id);
+      if (userData.is_blocked) {
+        res.redirect('/signup');
+      } else {
+        next();
+      }
+    } else {
+      res.redirect('/');
     }
-}
+  } catch (error) {
+    console.error('Error in isLogin middleware:', error.message);
+    res.status(500).send('Internal Server Error');
+  }
+};
 
 const isLogout = async (req, res, next) => {
-    try {
-        
-        if (req.session.user_id) {
-            const userData = await User.findById(req.session.user_id)
-            if(userData.is_blocked){
-                next();
-            }else{
-                res.redirect('/')
-            }
-        } else {
-            next();
-        }
-        
-    } catch (error) {
-        
-        console.log(error.message);
-
+  try {
+    if (req.session.user_id) {
+      const userData = await User.findById(req.session.user_id);
+      if (userData.is_blocked) {
+        next();
+      } else {
+        res.redirect('/');
+      }
+    } else {
+      next();
     }
-}
-
-
-
+  } catch (error) {
+    console.error('Error in isLogout middleware:', error.message);
+    res.status(500).send('Internal Server Error');
+  }
+};
 
 const getUserStatus = async (userId) => {
   try {
     const user = await User.findById(userId);
     return user ? user.status : null;
   } catch (error) {
-    console.error('Error fetching user status:', error);
+    console.error('Error fetching user status:', error.message);
     return null;
   }
 };
@@ -71,10 +62,8 @@ const checkUserStatus = async (req, res, next) => {
   }
 };
 
-
 module.exports = {
-    isLogin,
-    isLogout,
-    checkUserStatus
-    
-}
+  isLogin,
+  isLogout,
+  checkUserStatus,
+};

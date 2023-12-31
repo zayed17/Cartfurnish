@@ -1,4 +1,3 @@
-
 const mongoose = require("mongoose");
 const ObjectId = mongoose.Schema.Types.ObjectId
 
@@ -30,8 +29,18 @@ const ordersSchema = new mongoose.Schema({
         totalPrice: {
         type: Number,
         default: 0
+      },
+      productstatus:{
+        type:String,
+        required:true
       }
     }],
+    cancelReason: {
+        type: String
+      },
+      returnReason: {
+        type: String
+      },
     purchaseDate: {
         type: Date,
         required: true

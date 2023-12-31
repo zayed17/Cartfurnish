@@ -29,7 +29,19 @@ const userSchema  = mongoose.Schema({
     is_admin: {
     type: Boolean,
     default: false
-  }
+  },
+  wallet:{
+    type:Number,
+    default:0
+},
+walletHistory:[{
+    date:{
+        type:Date
+    },
+    amount:{
+        type:Number,
+    },
+}]
 }); 
 
 module.exports = mongoose.model('users',userSchema); 
