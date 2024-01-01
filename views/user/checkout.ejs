@@ -30,6 +30,8 @@
 	<link rel="stylesheet" href="public/assets/css/style.css">
 	<!-- Include jQuery from a CDN -->
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
 
 </head>
@@ -151,17 +153,19 @@
 				<div class="checkout">
 					<div class="container clearfix" >
 						<div class="checkout-discount">
-							<form action="#">
-								<input type="text" class="form-control" id="checkout-discount-input">
-								<label for="checkout-discount-input" >Have a coupon? <span>Click
-										here to enter your code</span></label>
-							</form>
+							<div class="input-group">
+								<input type="text" class="form-control" id="couponinput" name="coupon" placeholder="Enter your coupon code">
+								<div class="input-group-append">
+									<button class="btn btn-primary btn-sm" type="button" id="applyCouponButton" onclick="applyCoupon()">Apply Coupon</button>
+								</div>
+							</div>
 						</div>
+						
 							<span class="btn-text">
 								<a class="btn btn-primary" href="#" data-toggle="modal" data-target="#addAddressModal">Add Address</a>
 							</span>
 							<form id="orderForm">
-								<div class="row">
+								<div class="row" style="justify-content: space-around;">
 						<% if (addresses && addresses.address && addresses.address.length > 0) { %>
 							<div class="row" id="addrassArea" >
 								<% addresses.address.forEach(function(address, index) { %>
@@ -187,7 +191,7 @@
 								<% }); %>
 							</div>
 						<% } else { %>
-
+							
 										<div class="col-lg-9 billing-details">
 											<h2 class="checkout-title">Billing Details</h2><!-- End .checkout-title -->
 										
@@ -268,15 +272,21 @@
 
 													<tr class="summary-subtotal">
 														<td>Subtotal:</td>
-														<td>₹<%= subtotal %></td>
+														<td>₹<%= total %></td>
 													</tr><!-- End .summary-subtotal -->
 													<tr>
 														<td>Shipping:</td>
 														<td>Free shipping</td>
 													</tr>
+													<% if (cartData.couponDiscount!=0 ) { %>
+														<tr>
+															<td class="text-danger">Coupon Discount:</td>
+															<td class="text-danger">-<%= cartData.couponDiscount.discountAmount %></td>
+														</tr>
+														<% } %>
 													<tr class="summary-total">
 														<td>Total:</td>
-														<td>₹<%= subtotal %></td>
+														<td>₹<%= total %></td>
 													</tr><!-- End .summary-total -->
 												</tbody>
 											</table><!-- End .table table-summary -->
@@ -825,13 +835,10 @@ function verifyPayment(payment, order) {
         },
     });
 }
-
-
     </script>
 
 
 
-</script>
 
 	<!-- Plugins JS File -->
 	<script src="public/assets/js/jquery.min.js"></script>
@@ -842,6 +849,36 @@ function verifyPayment(payment, order) {
 	<script src="public/assets/js/owl.carousel.min.js"></script>
 	<!-- Main JS File -->
 	<script src="public/assets/js/main.js"></script>
+
+	<script>
+function applyCoupon() {
+    const couponCodeInput = document.getElementById("couponinput"); // Fix typo in the element ID
+    const couponCode = couponCodeInput.value;
+
+    $.ajax({
+        type: "POST",
+        url: "/checkcoupon", 
+        data: { coupon: couponCode },
+        success: function(response) {
+            if(response.coupon == false) {
+                swal.fire("No Coupon Available", "", "error");
+            } else if(response.coupon == 'notAct') {
+                swal.fire("This Coupon is No Longer Available", "", "error");
+            } else if(response.coupon == 'used') {
+                swal.fire("This Coupon is Already Used. Try Another One", "", "error");
+            } else if(response.coupon == 'amountIssue') {
+                swal.fire("Purchase More to Use This Coupon", "", "error");
+            } else if(response.coupon) {
+                swal.fire("Success", "Coupon Added!", "success");
+                $('#reloadArea').load('/checkout #reloadArea'); 
+                $('#reloadArea2').load('/checkout #reloadArea2');
+            } else {
+                swal.fire("Something Went Wrong", "", "error");
+            }
+        }
+    });
+}
+	</script>
 </body>
 
 

@@ -1,5 +1,5 @@
 const Coupon = require('../models/couponmodels')
-
+const Cart = require('../models/cartmodels')
 
 const loadcoupon = async(req,res)=>{
     try {
@@ -76,11 +76,88 @@ const editcoupon = async (req,res)=>{
     }
 }
 
+const checkcoupon = async(req,res)=>{
+    try {
+        const userId = req.session.user_id;
+        const couponcode = req.body.coupon;
+        const currentDate = new Date()
+        const cartData = await Cart.findOne({user:userId})
+        const cartTotal = cartData.product.reduce((acc,val)=>acc+val.totalPrice,0)
+        const coupondata = await Coupon.findOne({couponCode:couponcode})
+        console.log(coupondata);
+        if(coupondata){
+            if(currentDate >= coupondata.activationDate && currentDate <= coupondata.expiryDate){
+                const exists = coupondata.usedUsers.includes(userId)
+                if(!exists){
+                    if(cartTotal>=coupondata.criteriaAmount){
+                        await Coupon.findOneAndUpdate({couponCode:couponcode},{$push:{usedUsers:userId}})
+                        await Cart.findOneAndUpdate({user:userId},{$set:{couponDiscount:coupondata._id}})
+                        res.json({coupon:true})
+                    }else{
+                        res.json({coupon:'amountIssue'})
+                    }
+                }else{
+                    res.json({coupon:'used'})
+                }
+            }else{
+                res.json({coupon:'notAct'})
+            }
+        }else{
+            res.json({coupon:false})
+        }
+        
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+
+
+const checkCoupon = async (req,res)=>{
+    try {
+
+        const couponCode = req.body.coupon
+        const user_id = req.session.user_id
+        const currentDate = new Date()
+        const couponData = await Coupon.findOne({couponCode:couponCode})
+        const cartData = await Cart.findOne({user:user_id})
+        const cartTotal = cartData.products.reduce((acc,val)=>acc+val.totalPrice,0)
+        if(couponData && couponData.is_blocked==false){
+            if(currentDate >= couponData.activationDate && currentDate <= couponData.expiryDate){
+   
+                    const exists = couponData.usedUsers.includes(user_id)
+                    if(!exists){
+                        if(cartTotal>=couponData.criteriaAmount){
+                            await Coupon.findOneAndUpdate({couponCode:couponCode},{$push:{usedUsers:user_id}})
+                            await Cart.findOneAndUpdate({user:user_id},{$set:{couponDiscount:couponData._id}})
+                            res.json({coupon:true})
+                        }else{
+                            res.json({coupon:'amountIssue'})
+                        }
+                        
+                    }else{
+                        res.json({coupon:'used'})
+                    }
+                  
+            }else{
+                res.json({coupon:'notAct'})
+            }
+        }else{
+            res.json({coupon:false})
+        }
+
+
+    } catch (error) {
+        console.log(error.message);
+        res.render('500Error')
+    }
+}
 
 module.exports = {
     loadcoupon,
     loadaddcoupon,
     addcoupon,
     loadeditcoupon,
-    editcoupon
+    editcoupon,
+    checkcoupon
 }

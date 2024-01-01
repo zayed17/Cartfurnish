@@ -11,7 +11,6 @@ const loadcart = async(req,res)=>{
       const user_id = req.session.user_id; 
       const cartData =  await Cart.findOne({user:user_id}).populate("product.productId")
       const subtotal = cartData.product.reduce((acc,val)=> acc+val.totalPrice,0)
-      // console.log(cartData);
         res.render('cart',{cart:cartData,subtotal})
     } catch (error) {
         console.log(error);
@@ -24,7 +23,6 @@ const loadcart = async(req,res)=>{
         console.log(req.session);
         const product_id = req.body.productId;
 
-        // Validate product_id as a valid ObjectId
         const isValidObjectId = mongoose.Types.ObjectId.isValid(product_id);
         if (!isValidObjectId) {
             return res.status(400).json({ error: 'Invalid product ID' });
@@ -74,16 +72,13 @@ const updatecart = async (req, res) => {
         const count = req.body.count;
 
         const cartD = await Cart.findOne({ user: user_id });
-        // Check if the change will make the quantity less than 1
         if (count === -1) {
             const currentQuantity = cartD.product.find((p) => p.productId == product_id).quantity;
             if (currentQuantity <= 1) {
-                // If current quantity is already 1 or less, don't allow further decrease
                 return res.json({ success: false, message: 'Quantity cannot be decreased further.' });
             }
         }
 
-        // Check if the change will make the quantity more than 5
         if (count === 1) {
             const currentQuantity = cartD.product.find((p) => p.productId == product_id).quantity;
             if (currentQuantity + count > 5) {
@@ -135,10 +130,14 @@ const loadcheckoutpage = async(req,res)=>{
         const userId = req.session.user_id;
         const  addresses = await addressmodels.findOne({user:userId})
         const cartData = await Cart.findOne({user:userId}).populate('product.productId')
-        const subtotal = cartData.product.reduce((acc,val)=> acc+val.totalPrice,0)
-
-
-        res.render('checkout',{addresses,subtotal,cartData})
+        console.log(cartData);
+        if(cartData){
+            cartData.couponDiscount!=0 ? await cartData.populate('couponDiscount') : 0
+            const couponDiscount = cartData.couponDiscount !=0 ? cartData.couponDiscount.discountAmount : 0
+            const subtotal = cartData.product.reduce((acc,val)=> acc+val.totalPrice,0)
+            const total = subtotal - couponDiscount
+            res.render('checkout',{addresses,total,cartData})
+        }
     } catch (error) {
         console.log(error);
     }

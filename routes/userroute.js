@@ -7,6 +7,7 @@ const auth = require('../middleware/auth');
 const cartcontrollers = require('../controllers/cartcontrollers')
 const addresscontrollers = require('../controllers/addresscontrollers')
 const ordercontrollers = require('../controllers/ordercontrollers')
+const couponcontrollers = require('../controllers/couponcontrollers')
 // Configure session middleware
 userRoute.use(session({
     secret: config.sessionSecret,
@@ -54,7 +55,7 @@ userRoute.post('/passwordchange',usercontrollers.passwordchange)
 userRoute.post('/verifypayment',ordercontrollers.verifypayment)
 userRoute.get('/orderdetails',ordercontrollers.loadorderdetail)
 userRoute.post('/cancelproduct',ordercontrollers.cancelproduct)
-
+userRoute.post('/checkcoupon',couponcontrollers.checkcoupon)
 
 
 module.exports = userRoute;

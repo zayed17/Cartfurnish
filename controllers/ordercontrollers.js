@@ -125,6 +125,7 @@ const verifypayment = async (req, res) => {
   }
 };
 
+//load order details
 const loadorderdetail = async (req, res) => {
   try {
     const id = req.query.id;
