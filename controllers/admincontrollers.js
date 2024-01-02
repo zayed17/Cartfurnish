@@ -2,7 +2,6 @@ const User = require('../models/usermodel');
 const bcrypt = require('bcrypt');
 const Category = require('../models/categorymodal')
 const Product = require('../models/productmodal')
-const Sharp = require('sharp');
 
 
 const loadadmin = async(req,res)=>{
@@ -132,21 +131,7 @@ const blockUser = async (req, res) => {
     }
   };
   
-  
-//   const loadeditCategory = async (req, res) => {
-//     try {
-//         const categoryData = await Category.findById(req.query.id);
 
-//         // if (!categoryData) {
-//         //     return res.render('editcategory', { error: 'Category not found' });
-//         // }
-
-//         res.render('editcategory', { categoryData });
-//     } catch (error) {
-//         console.error(error);
-//         res.render('errorView', { error: 'Error loading category data' });
-//     }
-// };
 const loadeditCategory=async(req,res)=>{
     try {
   
@@ -161,62 +146,6 @@ const loadeditCategory=async(req,res)=>{
   }
 
 
-
-//   const editCategory = async (req, res) => {
-//     try {
-//         await Category.findByIdAndUpdate(
-//             { _id: req.query.id },
-//             { $set: { name: req.body.name, description: req.body.description } }
-//         );
-//         res.redirect(`/admin/category?message=${encodeURIComponent('Successfully updated')}`);
-//     } catch (error) {
-//         console.log(error.message);
-//     }
-// };
-
-// const editCategory = async (req, res) => {
-//     try {
-//         const existingCategory = await Category.findOne({ name: req.body.name });
-
-//         if (existingCategory && existingCategory._id.toString() !== req.query.id) {
-//             return res.render('editcategory', { message: 'Category with the same name already exists' });
-//         }
-
-//         await Category.findByIdAndUpdate(
-//             { _id: req.query.id },
-//             { $set: { name: req.body.name, description: req.body.description } }
-//         );
-
-//         res.redirect(`/admin/category?message=${encodeURIComponent('Successfully updated')}`);
-//     } catch (error) {
-//         console.error(error.message);
-//         res.render('editcategory', { message: 'Error updating category' });
-//     }
-// };
-
-
-
-// const editCategory = async (req, res) => {
-//     try {
-//         const categoryName = req.body.name; // Corrected to match the form input name
-
-//         const existingCategory = await Category.findOne({ name: categoryName });
-//         if (existingCategory && existingCategory._id.toString() !== category_id) {
-//             return res.render('editcategory', { message: "Already Exists" });
-//         }
-
-//         // Corrected the argument structure for findByIdAndUpdate
-//         await Category.findByIdAndUpdate(        { _id: req.body.id },
-            
-//             { $set: { name: categoryName, description: req.body.description } });
-
-//         res.redirect('/admin/category');
-
-//     } catch (error) {
-//         console.log(error.message);
-//         res.render('500Error');
-//     }
-// };
 
 
 const editCategory = async (req, res) => {
@@ -234,7 +163,6 @@ const editCategory = async (req, res) => {
             // return res.redirect(`/admin/category?error=${'Category name already exists'}`);
         }
         console.log(error.message);
-        res.render('500Error');
     }
 };
 

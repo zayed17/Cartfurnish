@@ -159,7 +159,7 @@
                         <div class="card-body">
                             <!-- Category Form -->
                             <form action="/admin/editcategory" method="post">
-                                <input type="hidden" name="id" value="<%=categoryData._id %>">
+                                <input type="hidden" name="id" value="<%= categoryData ? categoryData._id : '' %>">
 
                                 <!-- Category Name -->
                                 <div class="form-group">
