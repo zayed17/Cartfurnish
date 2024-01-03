@@ -1,4 +1,4 @@
-const  multer=require('multer');
+const multer=require('multer');
 
 const productStorage = multer.diskStorage({
     destination: "public/assets/images/products/original",
@@ -9,6 +9,16 @@ const productStorage = multer.diskStorage({
     }
 })
 
+const BannerStorage = multer.diskStorage({
+    destination: "public/assets/images/banner",
+
+    filename:(req,file,cb)=>{
+        const filename = file.originalname;
+        cb(null,filename)
+    }
+})
+
+
 
 const products = multer({ storage:productStorage});
 const uploadproduct = products.fields([
@@ -17,7 +27,9 @@ const uploadproduct = products.fields([
     { name: "image3", maxCount: 1 },
     { name: "image4", maxCount: 1 },
 ])
+const uploadBanner = multer({ storage:BannerStorage})
 
 module.exports = {
-    uploadproduct
+    uploadproduct,
+    uploadBanner
 }

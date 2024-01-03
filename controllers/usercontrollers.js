@@ -8,6 +8,7 @@ const Address = require('../models/addressmodels')
 const Category = require('../models/categorymodal')
 const Order = require('../models/ordermodels')
 const Coupon = require('../models/couponmodels')
+const Banner = require('../models/bannermodels')
 const dotenv = require('dotenv')
 dotenv.config()
 
@@ -27,7 +28,8 @@ const loadhome = async (req, res) => {
         const user_id = req.session.user_id; 
         const cartData =  await Cart.findOne({user:user_id}).populate("product.productId")
         const userData = await User.findOne({_id:user_id})
-        res.render('home',{user:userData,cart:cartData});
+        const banner = await Banner.find({})
+        res.render('home',{user:userData,cart:cartData,banner});
     } catch (error) {
         console.log(error.message);
     }

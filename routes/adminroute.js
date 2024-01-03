@@ -4,7 +4,8 @@ const session = require('express-session');
 const config = require('../config/config');
 const admincontrollers = require('../controllers/admincontrollers');
 const productcontrollers = require('../controllers/productcontrollers');
-const couponcontrollers = require('../controllers/couponcontrollers')
+const couponcontrollers = require('../controllers/couponcontrollers');
+const bannercontrollers = require('../controllers/bannercontrollers');
 const multer = require('../middleware/multer');
 const auth = require('../middleware/adminAuth')
 // Configure session
@@ -41,7 +42,7 @@ adminRoute.patch('/blockproducts/:id',productcontrollers.blockProducts)
 adminRoute.get('/addproduct',auth.isLogin, productcontrollers.loadaddproduct);
 adminRoute.post('/addproduct',auth.isLogin, multer.uploadproduct, productcontrollers.addproduct);
 adminRoute.get('/editproduct',auth.isLogin,productcontrollers.loadeditproduct)
-adminRoute.post('/editproduct',multer.uploadproduct,productcontrollers.editproduct)
+adminRoute.post('/editproduct',auth.isLogin,multer.uploadproduct,productcontrollers.editproduct)
 
 adminRoute.get('/coupon',auth.isLogin,couponcontrollers.loadcoupon);
 adminRoute.get('/addcoupon',auth.isLogin,couponcontrollers.loadaddcoupon);
@@ -49,6 +50,9 @@ adminRoute.post('/addcoupon',auth.isLogin,couponcontrollers.addcoupon);
 adminRoute.get('/editcoupon',auth.isLogin,couponcontrollers.loadeditcoupon);
 adminRoute.post('/editcoupon',auth.isLogin,couponcontrollers.editcoupon);
 
+//Banner 
+adminRoute.get('/banner', auth.isLogin,bannercontrollers.loadaddbanner); 
+adminRoute.post('/addbanner', auth.isLogin,multer.uploadBanner.single('image'),bannercontrollers.addbanner)
 adminRoute.get('/logout',admincontrollers.adminLogout)
 
 
