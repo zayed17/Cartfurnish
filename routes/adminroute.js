@@ -44,6 +44,7 @@ adminRoute.post('/addproduct',auth.isLogin, multer.uploadproduct, productcontrol
 adminRoute.get('/editproduct',auth.isLogin,productcontrollers.loadeditproduct)
 adminRoute.post('/editproduct',auth.isLogin,multer.uploadproduct,productcontrollers.editproduct)
 
+//coupon
 adminRoute.get('/coupon',auth.isLogin,couponcontrollers.loadcoupon);
 adminRoute.get('/addcoupon',auth.isLogin,couponcontrollers.loadaddcoupon);
 adminRoute.post('/addcoupon',auth.isLogin,couponcontrollers.addcoupon);
@@ -54,7 +55,11 @@ adminRoute.post('/editcoupon',auth.isLogin,couponcontrollers.editcoupon);
 adminRoute.get('/banner',auth.isLogin,bannercontrollers.laodbanner)
 adminRoute.get('/addbanner', auth.isLogin,bannercontrollers.loadaddbanner); 
 adminRoute.post('/addbanner', auth.isLogin,multer.uploadBanner.single('image'),bannercontrollers.addbanner)
+adminRoute.get('/editbanner', auth.isLogin,bannercontrollers.loadeditbanner)
+adminRoute.post('/editbanner',auth.isLogin,multer.uploadBanner.single('image'),bannercontrollers.editbanner)
 adminRoute.get('/logout',admincontrollers.adminLogout)
+
+//order 
 
 
 module.exports = adminRoute;
