@@ -51,7 +51,8 @@ adminRoute.get('/editcoupon',auth.isLogin,couponcontrollers.loadeditcoupon);
 adminRoute.post('/editcoupon',auth.isLogin,couponcontrollers.editcoupon);
 
 //Banner 
-adminRoute.get('/banner', auth.isLogin,bannercontrollers.loadaddbanner); 
+adminRoute.get('/banner',auth.isLogin,bannercontrollers.laodbanner)
+adminRoute.get('/addbanner', auth.isLogin,bannercontrollers.loadaddbanner); 
 adminRoute.post('/addbanner', auth.isLogin,multer.uploadBanner.single('image'),bannercontrollers.addbanner)
 adminRoute.get('/logout',admincontrollers.adminLogout)
 

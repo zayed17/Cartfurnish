@@ -1,5 +1,14 @@
 const Banner = require('../models/bannermodels');
 
+
+const laodbanner = async(req,res)=>{
+    try {
+        const banner = await Banner.find({})
+        res.render('banner',{banner})
+    } catch (error) {
+        console.log(error);
+    }
+}
 const loadaddbanner = async(req,res)=>{
     try {
         res.render('addbanner')
@@ -23,16 +32,10 @@ const addbanner = async(req,res)=>{
     }
 }
 
-// const loadbannerinuser = async(req,res)=>{
-//     try {
-//         const banner = await Banner.find({});
-//         res.render('home',banner)
-//     } catch (error) {
-//         console.log(error);
-//     }
-// }
+ 
 
 module.exports ={
     loadaddbanner,
-    addbanner
+    addbanner,
+    laodbanner
 }

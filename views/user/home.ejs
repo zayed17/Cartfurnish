@@ -159,22 +159,48 @@
             </div><!-- End .header-bottom -->
         </header><!-- End .header -->
 
+        
         <main class="main">
-            <% banner.forEach(function(banner) { %>
-            <div class="intro-slider-container">
-                <div class="intro-slide" style="background-image:  url(/public/assets/images/banner/banner1.jpg);">
-                    <div class="container intro-content">
-                        <h3 class="intro-subtitle"><%= banner.title %></h3>
-                        <h1 class="intro-title"><%= banner.description %></h1>
-                        <a href="<%= banner.targeturl %>" class="btn btn-primary">
-                            <span>Shop Now</span>
-                            <i class="icon-long-arrow-right"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <% }); %>
+            
 
+            
+            <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" data-interval="5000">
+                <ol class="carousel-indicators">
+                    <% banner.forEach(function(banner, index) { %>
+                        <li data-target="#carouselExampleIndicators" data-slide-to="<%= index %>" <%= index === 0 ? 'class="active"' : '' %>></li>
+                    <% }); %>
+                </ol>
+            
+                <div class="carousel-inner">
+                    <% banner.forEach(function(banner, index) { %>
+                        <div class="carousel-item <%= index === 0 ? 'active' : '' %>">
+                            <div class="intro-slider-container">
+                                <div class="intro-slide" style="background-image: url(/public/assets/images/banner/<%=banner.image%>);">
+                                    <div class="container intro-content">
+                                        <h3 class="intro-subtitle text-dark"><%= banner.title %></h3>
+                                        <h1 class="intro-title text-dark"><%= banner.description %></h1>
+                                        <a href="<%= banner.targeturl %>" class="btn btn-primary">
+                                            <span>Shop Now</span>
+                                            <i class="icon-long-arrow-right"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <% }); %>
+                </div>
+            
+                <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+            
+                <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </div>
+            
 
             <div class="brands-border owl-carousel owl-simple" data-toggle="owl" 
                 data-owl-options='{
