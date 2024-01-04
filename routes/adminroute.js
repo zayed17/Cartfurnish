@@ -5,6 +5,7 @@ const config = require('../config/config');
 const admincontrollers = require('../controllers/admincontrollers');
 const productcontrollers = require('../controllers/productcontrollers');
 const couponcontrollers = require('../controllers/couponcontrollers');
+const ordercontrollers = require('../controllers/ordercontrollers')
 const bannercontrollers = require('../controllers/bannercontrollers');
 const multer = require('../middleware/multer');
 const auth = require('../middleware/adminAuth')
@@ -60,6 +61,7 @@ adminRoute.post('/editbanner',auth.isLogin,multer.uploadBanner.single('image'),b
 adminRoute.get('/logout',admincontrollers.adminLogout)
 
 //order 
-
-
+adminRoute.get('/order',auth.isLogin,ordercontrollers.loadordermanagement)
+adminRoute.get('/showorder',auth.isLogin,ordercontrollers.loadshoworder)
+adminRoute.post('/updateProductStatus',auth.isLogin,ordercontrollers.updatastatus)
 module.exports = adminRoute;

@@ -99,7 +99,7 @@
                 <div class="container">
                     <div class="head-title">
                         <div class="left">
-                            <h1>Categories</h1>
+                            <h1>Orders</h1>
                         </div>
                     </div>
             
@@ -163,60 +163,29 @@
                     
             <section class="content-main">
                 <div class="container-fluid">
-                   
-                    <div class="left">
-                        <a href="addcategory" class="btn btn-success btn-download">
-                            <i class='bx bxs-plus-circle'></i>
-                            <span class="text">Add New Category</span>
-                        </a>
-                    </div>
-                    <% if (typeof message !=='undefined' ) { %>
-                        <p id="message" style="color: rgb(255, 0, 0);">
-                            <%= message %>
-                        </p>
-                        <script>
-                            // Set a timer to remove the message after 5000 milliseconds (5 seconds)
-                            setTimeout(function () {
-                                var messageElement = document.getElementById('message');
-                                if (messageElement) {
-                                    messageElement.style.display = 'none';
-                                }
-                            }, 3500);
-                        </script>
-                        <% } %>
-                    
                     <div class="card mt-4">
                         <div class="table-data">
                             <div class="order">
-                                <% if(category.length > 0) { %>
+                                <% if(order.length > 0) { %>
                                     <div class="table-responsive">
                                         <table id="tablePagination" class="table table-bordered table-hover table-striped">
                                             <thead class="thead-dark">
                                                 <tr>
                                                     <th scope="col"><center>Sl.No.</center></th>
-                                                    <th scope="col"><center>Name</center></th>
-                                                    <th scope="col"><center>Description</center></th>
-                                                    <th scope="col"><center>Edit</center></th>
-                                                    <th scope="col"><center>List/Unlist</center></th>
+                                                    <th scope="col"><center>Order Id</center></th>
+                                                    <th scope="col"><center>Payment Method</center></th>
+                                                    <th scope="col"><center>Total</center></th>
+                                                    <th scope="col"><center>Show</center></th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <% for(let i = 0; i < category.length; i++) { %>
+                                                <% for(let i = 0; i < order.length; i++) { %>
                                                     <tr>
                                                         <td align="center"><%= i+1 %></td>
-                                                        <td align="center"><%= category[i].name %></td>
-                                                        <td align="center"><%= category[i].description %></td>
-                                                        <td align="center"><a href="editcategory?id=<%= category[i]._id %>">edit</a></td>
-                                                        <td align="center">
-                                                            <% if (category[i].is_list) { %>
-                                                                <a class="unblock-user" data-user-id="<%= category[i]._id %>"><span
-                                                                        class="badge rounded-pill alert-success">unblock</span></a>
-                                                                <% } else { %>
-                                                                    <a class="block-user"
-                                                                        data-user-id="<%= category[i]._id %>"><span
-                                                                            class="badge rounded-pill alert-warning">block</span></a>
-                                                                    <% } %>
-                                                        </td>
+                                                        <td align="center"><%= order[i]._id %></td>
+                                                        <td align="center"><%= order[i].paymentMethod %></td>
+                                                        <td align="center"><%= order[i].totalAmount %></td>
+                                                        <td align="center"><a href="/admin/showorder?id=<%= order[i]._id %>">Click</a></td>
                                                     </tr>
                                                 <% } %>
                                             </tbody>

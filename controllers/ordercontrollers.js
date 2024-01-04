@@ -171,9 +171,60 @@ const cancelproduct = async (req, res) => {
 }
 
 
+//admin side
+const loadordermanagement = async(req,res)=>{
+  try {
+    const order = await Order.find({})
+    // console.log(order);
+    res.render('order',{order})
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+const loadshoworder = async(req,res)=>{
+  try {
+    const id = req.query.id;
+    const order = await Order.findOne({_id:id}).populate('products.productId')
+    // console.log(order);
+    res.render('showorder',{order})
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+
+const updatastatus = async(req,res)=>{
+  try {
+    const productid = req.body.productId;
+    const productStatus = req.body.newStatus;
+    const updatedOrder = await Order.findOneAndUpdate(
+      { 
+          'products._id': productid
+      },
+      {
+          $set: {
+              'products.$.productstatus': productStatus
+          }
+      },
+      { new: true }
+  );
+
+  res.json({success:true})
+
+    console.log(productid,productStatus,updatedOrder)
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+
 module.exports = {
   placeorder,
   verifypayment,
   loadorderdetail,
-  cancelproduct
+  cancelproduct,
+  loadordermanagement,
+  loadshoworder,
+  updatastatus
 }
