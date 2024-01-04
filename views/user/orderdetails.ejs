@@ -32,7 +32,77 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    
+    <style>
+        .line {
+
+  width: 150px;
+  height: 3px;
+  background: #dad0d0;
+  top: 200px;
+  left: 750px;
+  &:before{
+    position:absolute;
+    width: 15px;
+    height: 15px;
+    background: green;
+    content: '';
+    top: -6px;
+    border-radius: 50%;
+  }
+  &:nth-child(3){
+   &:after{
+    position:absolute;
+    width: 15px;
+    height: 15px;
+    background: green;
+    content: '';
+    top: -6px;
+    right: -10px;
+    border-radius: 50%;
+    }
+  }
+  .status{
+    position: absolute;
+    left: -20px;
+    top: 20px;
+  }
+  &:nth-child(3){
+    .status{
+      left:-50px;
+      &:nth-child(2){
+        left:120px;
+        white-space: nowrap;
+      }
+    }
+  }
+}
+.inner-line-1,.inner-line-2,.inner-line-3 {
+  width: 0%;
+  height: 100%;
+  background: green;
+  animation: flow 4s ease-in forwards;
+}
+/*
+* delay works only on GC
+*/
+.inner-line-2{
+  -webkit-animation-delay: 3s;
+}
+.inner-line-3{
+  -webkit-animation-delay: 6s;
+}
+
+@keyframes flow {
+  from {
+    width: 10%;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+
+    </style>
 </head>
 
 
@@ -173,30 +243,42 @@
                 </div>
             </div>
             <h1 class="text-center m-5">Products</h1>
-            <div class="row mt-4">
+            <div class="container">
                 <% order.products.forEach((product, index) => { %>
-                    <div class="col-md-4 mb-4">
-                        <div class="card h-100">
-                            <img src="/public/assets/images/products/sharpened/<%= product.productId.images.image1 %>"
-                                class="card-img-top" alt="Product Image">
-                            <div class="card-body">
-                                <h5 class="card-title"><%= product.productId.name %></h5>
-                                <p class="card-text">Category: <%= product.productId.category %></p>
-                                <p class="card-text">Price: ₹<%= product.productId.price.toFixed(2) %></p>
-                                <p class="card-text">Quantity: <%= product.quantity %></p>
-                                <p class="card-text">Total Price: ₹<%= product.totalPrice.toFixed(2) %></p>
-                                <p class="card-text">Status: <%= product.productstatus %></p>
-                            </div>
-                            <div class="card-footer text-center">
-                                <% if(product.productstatus !== "cancel") { %>
-                                    <button class="btn btn-danger custom-btn" onclick="cancelProduct('<%= product._id %>')">Cancel</button>
-                                <% } %>
-                            </div>
+                    <div class="product-container d-flex mt-4">
+                        <div class="mr-5">
+                            <img style="width: 250px;" src="/public/assets/images/products/sharpened/<%= product.productId.images.image1 %>"
+                                class="img-fluid" alt="Product Image">
                         </div>
+                        <div class="product-details">
+                            <h5><%= product.productId.name %></h5>
+                            <p>Category: <%= product.productId.category %></p>
+                            <p>Price: ₹<%= product.productId.price.toFixed(2) %></p>
+                            <p>Quantity: <%= product.quantity %></p>
+                            <p>Total Price: ₹<%= product.totalPrice.toFixed(2) %></p>
+                            <p>Status: <%= product.productstatus %></p>
+                            <% if(product.productstatus !== "cancel" || product.productstatus !== "Out for Delivery") { %>
+                                <button class="btn btn-danger custom-btn" onclick="cancelProduct('<%= product._id %>')">Cancel</button>
+                            <% } %>
+                        </div>
+                 
+                            <div class="line">
+                                <div class="inner-line-1"></div>
+                               <div class ="status"> Packed</div>
+                              </div>
+                              <div class="line">
+                                <div class="inner-line-2"></div>
+                                 <div class ="status">Shipped</div>
+                              </div>
+                              <div class="line">
+                                <div class="inner-line-3"></div>
+                                  <div class ="status">Delivered</div>
+                                  <div class ="status">Out for Delivery</div>
+                              </div>
+                   
                     </div>
                 <% }) %>
             </div>
-            
             
         </div>
             

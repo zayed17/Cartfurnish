@@ -12,6 +12,17 @@ const Banner = require('../models/bannermodels')
 const dotenv = require('dotenv')
 dotenv.config()
 
+function generateUniqueId(length) {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    let uniqueId = '';
+  
+    for (let i = 0; i < length; i++) {
+      const randomIndex = Math.floor(Math.random() * characters.length);
+      uniqueId += characters.charAt(randomIndex);
+    }
+  
+    return uniqueId;
+  }
 
 const securePassword = async (password) => {
     try {
@@ -29,6 +40,7 @@ const loadhome = async (req, res) => {
         const cartData =  await Cart.findOne({user:user_id}).populate("product.productId")
         const userData = await User.findOne({_id:user_id})
         const banner = await Banner.find({})
+
         res.render('home',{user:userData,cart:cartData,banner});
     } catch (error) {
         console.log(error.message);
@@ -73,7 +85,26 @@ const insertuser = async (req, res) => {
             return;
           }
 
-        // Hash the password
+          const existrefferal = await User.findOne({refferral_code:req.body.referralCode})
+          if(!existrefferal){
+            return res.status(400).render('signup', { message: 'Refferal code is valid.' });
+          }else{
+            const data = {
+                amount: 1000,
+                date: new Date()
+            };
+            
+            await User.findOneAndUpdate(
+                { _id: existrefferal._id },
+                {
+                    $inc: { wallet: 1000 },
+                    $push: { walletHistory: data }
+                }
+            );
+          }
+          const id = generateUniqueId(7);
+          console.log(id,"id keto a");
+
         const spassword = await securePassword(req.body.password.trim());
 
         // Create a new user instance without saving it to the database yet
@@ -81,7 +112,8 @@ const insertuser = async (req, res) => {
             name: req.body.name.trim(),
             email: req.body.email.trim(),
             mobile: req.body.mobile.trim(),
-            password: spassword
+            password: spassword,
+            referral_code:id
         });
 
         const userData = await user.save();

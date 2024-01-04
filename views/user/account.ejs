@@ -84,14 +84,22 @@
         		</div><!-- End .container -->
         	</div><!-- End .page-header -->
             <nav aria-label="breadcrumb" class="breadcrumb-nav mb-3">
-                <div class="container">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-                        <li class="breadcrumb-item"><a href="#">Shop</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">My Account</li>
-                    </ol>
-                </div><!-- End .container -->
-            </nav><!-- End .breadcrumb-nav -->
+				<div class="container">
+					<div class="row">
+						<div class="col-md-6">
+							<ol class="breadcrumb">
+								<li class="breadcrumb-item"><a href="index.html">Home</a></li>
+								<li class="breadcrumb-item"><a href="#">Shop</a></li>
+								<li class="breadcrumb-item active" aria-current="page">My Account</li>
+							</ol>
+						</div>
+						<div class="col-md-6 text-end">
+							<p><STrong>REFERRAL CODE: <%= userData.referral_code %></STrong></p>
+						</div>
+					</div>
+				</div>
+			</nav><!-- End .breadcrumb-nav -->
+			
 
             <div class="page-content">
             	<div class="dashboard">
