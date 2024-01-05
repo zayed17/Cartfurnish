@@ -2,7 +2,7 @@ const User = require('../models/usermodel');
 const bcrypt = require('bcrypt');
 const Category = require('../models/categorymodal')
 const Product = require('../models/productmodal')
-
+const Order = require('../models/ordermodels')
 
 const loadadmin = async(req,res)=>{
     try {
@@ -37,7 +37,26 @@ const verifyLogin = async(req,res)=>{
 
 const loaddashboard = async(req,res)=>{
     try {
-        res.render('dashboard')
+        const ordercount = await Order.countDocuments();
+        const productcount = await Product.countDocuments();
+        const categorycount = await Category.countDocuments();  
+        const order= await Order.find().populate('userId')
+        const totalrevenue = await Order.aggregate([
+            { $match: {
+                'products.productstatus': 'Delivered'
+            }
+        },
+        {
+            $group:{
+                _id:null,
+                totalrevenue : {$sum:"$totalAmount"}
+            }
+        }
+        ])        
+        const totalRevenueNumber = totalrevenue.map(result => result.totalrevenue)[0] || 0;
+        
+
+        res.render('dashboard',{ordercount,productcount,categorycount,totalRevenueNumber,order})
     } catch (error) {
         console.log(error);
     }

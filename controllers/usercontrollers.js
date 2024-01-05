@@ -85,7 +85,7 @@ const insertuser = async (req, res) => {
             return;
           }
 
-          const existrefferal = await User.findOne({refferral_code:req.body.referralCode})
+          const existrefferal = await User.findOne({referral_code:req.body.referralCode})
           if(!existrefferal){
             return res.status(400).render('signup', { message: 'Refferal code is valid.' });
           }else{
@@ -539,7 +539,7 @@ module.exports = {
     verifyOtp,
     loadVerificationPage,
     verifyLogin,
-    sentOtpbyMail,
+    sentOtpbyMail, 
     loademailinput,
     userLogout,
     loadeachproduct,

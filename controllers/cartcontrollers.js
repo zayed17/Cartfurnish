@@ -133,9 +133,9 @@ const loadcheckoutpage = async(req,res)=>{
         console.log(cartData);
         if(cartData){
             cartData.couponDiscount!=0 ? await cartData.populate('couponDiscount') : 0
-            const couponDiscount = cartData.couponDiscount !=0 ? cartData.couponDiscount.discountAmount : 0
+            const couponDiscount = cartData.couponDiscount !=0 ? cartData.couponDiscount : 0
             const subtotal = cartData.product.reduce((acc,val)=> acc+val.totalPrice,0)
-            const total = subtotal - couponDiscount
+            const total = subtotal
             res.render('checkout',{addresses,total,cartData})
         }
     } catch (error) {
