@@ -169,20 +169,6 @@
                             <span class="text">Add New Coupon</span>
                         </a>
                     </div>
-                    <% if (typeof message !=='undefined' ) { %>
-                        <p id="message" style="color: rgb(255, 0, 0);">
-                            <%= message %>
-                        </p>
-                        <script>
-                            // Set a timer to remove the message after 5000 milliseconds (5 seconds)
-                            setTimeout(function () {
-                                var messageElement = document.getElementById('message');
-                                if (messageElement) {
-                                    messageElement.style.display = 'none';
-                                }
-                            }, 3500);
-                        </script>
-                        <% } %>
                         <div class="card mt-4">
                             <div class="table-data">
                                 <div class="order">
@@ -194,7 +180,8 @@
                                                         <th scope="col" class="text-center">Sl. No.</th>
                                                         <th scope="col" class="text-center">Coupon Name</th>
                                                         <th scope="col" class="text-center">Coupon Code</th>
-                                                        <th scope="col" class="text-center">Discount Amount</th>
+                                                        <th scope="col" class="text-center">Discount Percentage</th>
+                                                        <th scope="col" class="text-center">Max Discount Amount:</th>
                                                         <th scope="col" class="text-center">Criteria Amount</th>
                                                         <th scope="col" class="text-center">Expire Date</th>
                                                         <th scope="col" class="text-center">Edit</th>
@@ -207,9 +194,10 @@
                                                         <td class="text-center"><%= i+1 %></td>
                                                         <td class="text-center"><%= coupon[i].name %></td>
                                                         <td class="text-center"><%= coupon[i].couponCode %></td>
-                                                        <td class="text-center"><%= coupon[i].discountAmount %></td>
+                                                        <td class="text-center"><%= coupon[i].discountPercentage %>%</td>
+                                                        <td class="text-center"><%= coupon[i].maxDiscountAmount %></td>
                                                         <td class="text-center"><%= coupon[i].criteriaAmount %></td>
-                                                        <td class="text-center"><%= coupon[i].expiryDate %></td>
+                                                        <td class="text-center"><%= new Date(coupon[i].expiryDate).toLocaleDateString() %></td>
                                                         <td class="text-center"><a href="editcoupon?id=<%= coupon[i]._id %>"
                                                                 class="btn btn-sm btn-primary">Edit</a></td>
                                                         <td class="text-center">

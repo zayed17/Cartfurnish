@@ -30,7 +30,6 @@ const cartSchema = new mongoose.Schema({
     couponDiscount: {
         type: String,
         ref:'Coupon',
-    
       },
 })
 

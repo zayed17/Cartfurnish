@@ -421,35 +421,38 @@
                                             <th class="align-middle" scope="col">Payment Method</th>
                                         </tr>
                                     </thead>
-                                    <% for (let i = 0; i < order.length; i++) { %>
-                                        <tbody>
-                                            <tr>
-                                                <td class="text-center">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" id="transactionCheck02" />
-                                                        <label class="form-check-label" for="transactionCheck02"></label>
-                                                    </div>
-                                                </td>
-                                                <td><a href="#" class="fw-bold"><%= order[i]._id.toString().substring(0, 6) %></a></td>
-                                                <td><%= order[i].userId.name %></td>
-                                                <td><%= new Date(order[i].purchaseDate.$date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %></td>
-                                                <% order[i].products.forEach(product => { %>
-                                                    <td><%= product.price %></td>
-                                                    <td>
-                                                        <% if (product.productstatus === "placed" && order[i].paymentMethod === "onlinePayment") { %>
-                                                            <span class="badge badge-pill badge-soft-success">Paid</span>
-                                                        <% } else { %>
-                                                            <span class="badge badge-pill badge-soft-warning">Not paid</span>
-                                                        <% } %>
-                                                    </td>
-                                                    <td><i class="material-icons md-payment font-xxl text-muted mr-5"></i> <%= order[i].paymentMethod %></td>
-                                                <% }); %>
-                                            </tr>
-                                        </tbody>
-                                    <% } %>
-                                    </table>                                    
+                                    <%order.forEach(order=>{%>
+                                    <tbody>
+                                        <tr>
+                                            <td class="text-center">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="transactionCheck02" />
+                                                    <label class="form-check-label" for="transactionCheck02"></label>
+                                                </div>
+                                            </td>
+                                            <td><a href="#" class="fw-bold"><%= order._id.toString().substring(0, 6) %></a></td>
+                                            <td><%=order.userId.name%></td>
+                                            <td><%= new Date(order.purchaseDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %></td>
+                                            <% order.products.forEach(product => { %>
+                                            <td>
+                                                <%= product.price %>
+                                            </td>
+                                            <td>
+                                                <%if(product.productstatus=="placed"&& order.paymentMethod=="onlinePayment"){%>
+                                                <span class="badge badge-pill badge-soft-success">Paid</span>
+                                                <%}else{%>
+                                                <span class="badge badge-pill badge-soft-warning">Not paid</span>
+                                                <%}%>
+                                            </td>
+                                            <td><i class="material-icons md-payment font-xxl text-muted mr-5"></i> <%=order.paymentMethod%></td>
+                                            <% }); %>
+                                        </tr>
+                                        <%})%>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
+                        <!-- table-responsive end// -->
                     </div>
                 </div>
                 

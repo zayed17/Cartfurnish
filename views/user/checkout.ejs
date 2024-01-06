@@ -152,13 +152,23 @@
 			<div class="page-content">
 				<div class="checkout">
 					<div class="container clearfix" >
-						<div class="checkout-discount">
+						<div class="checkout-discount" id="reloadArea2">
+							<%console.log(cartData.couponDiscount,"is tsi ")%>
+							<%if (cartData.couponDiscount==0) {%>
 							<div class="input-group">
 								<input type="text" class="form-control" id="couponinput" name="coupon" placeholder="Enter your coupon code">
 								<div class="input-group-append">
 									<button class="btn btn-primary btn-sm" type="button" id="applyCouponButton" onclick="applyCoupon()">Apply Coupon</button>
 								</div>
 							</div>
+							<%}else{%>
+							<div class="input-group">
+								<input type="text" class="form-control" id="couponinput" name="coupon" disabled value="<%=cartData.couponDiscount.couponCode%>">
+								<div class="input-group-append">
+									<button class="btn btn-primary btn-sm" type="button" id="applyCouponButton" onclick="removecoupon()">REmove </button>
+								</div>
+							</div>
+							<%}%>
 						</div>
 						
 							<span class="btn-text">
@@ -254,7 +264,7 @@
 										<div class="summary">
 											<h3 class="summary-title">Your Order</h3><!-- End .summary-title -->
 
-											<table class="table table-summary">
+											<table class="table table-summary"  id="reloadArea">
 												<thead>
 													<tr>
 														<th>Product</th>
@@ -272,7 +282,7 @@
 
 													<tr class="summary-subtotal">
 														<td>Subtotal:</td>
-														<td>₹<%= total %></td>
+														<td>₹<%= subtotal %></td>
 													</tr><!-- End .summary-subtotal -->
 													<tr>
 														<td>Shipping:</td>
@@ -281,12 +291,13 @@
 													<% if (cartData.couponDiscount!=0 ) { %>
 														<tr>
 															<td class="text-danger">Coupon Discount:</td>
-															<td class="text-danger">-<%= cartData.couponDiscount %></td>
+															<td class="text-danger">-<%= cartData.couponDiscount.discountPercentage %>%</td>
 														</tr>
 														<% } %>
+														<%console.log(discount,"is thsi worling")%>
 													<tr class="summary-total">
 														<td>Total:</td>
-														<td>₹<%= total %></td>
+														<td>₹<%= discount %></td>
 													</tr><!-- End .summary-total -->
 												</tbody>
 											</table><!-- End .table table-summary -->
@@ -878,6 +889,29 @@ function applyCoupon() {
         }
     });
 }
+
+
+function removecoupon(){
+        $.ajax({
+            method: 'POST',
+            url: '/removecoupon', 
+            data: JSON.stringify(),
+            contentType: 'application/json',
+            success: function (response) {
+                if(response.remove===true){
+					swal.fire("Success", "Coupon Removed!", "success");
+                    $('#reloadArea').load('/checkout #reloadArea');
+                    $('#reloadArea2').load('/checkout #reloadArea2');
+                }else{
+                 
+                }
+            },
+            error: function (error) {
+
+                console.error(error);
+            }
+        });
+    }
 	</script>
 </body>
 

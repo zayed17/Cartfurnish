@@ -27,9 +27,11 @@
     <link rel="stylesheet" href="public/assets/css/bootstrap.min.css">
     <!-- Main CSS File -->
     <link rel="stylesheet" href="public/assets/css/style.css">
-	<!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"> -->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.8/dist/clipboard.min.js"></script>
+
 </head>
 
 <body>
@@ -93,9 +95,11 @@
 								<li class="breadcrumb-item active" aria-current="page">My Account</li>
 							</ol>
 						</div>
-						<div class="col-md-6 text-end">
-							<p><STrong>REFERRAL CODE: <%= userData.referral_code %></STrong></p>
+						<div class="col-md-6 d-flex justify-content-end align-items-center">
+							<p class="mb-0"><strong>REFERRAL CODE: <span id="referralCode"><%= userData.referral_code %></span></strong></p>
+							<span id="copyButton" data-clipboard-target="#referralCode" class="btn btn-sm btn-secondary ms-2">Copy</span>
 						</div>
+						
 					</div>
 				</div>
 			</nav><!-- End .breadcrumb-nav -->
@@ -174,7 +178,7 @@
                                                     <% orders.forEach(function(order,index) { %>
                                                         <tr>
                                                             <td><%= index + 1 %></td>
-                                                            <td>2023-01-01</td>
+															<td><%= new Date(order.purchaseDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %></td>
                                                             <td><%= order.totalAmount %></td>
                                                             <td><%= order.paymentMethod %></td>
                                                             <td><a href="/orderdetails?id=<%= order._id %>">Details</a></td>
@@ -186,23 +190,32 @@
 								    </div><!-- .End .tab-pane -->
 
 									<div class="tab-pane fade" id="tab-downloads" role="tabpanel" aria-labelledby="tab-downloads-link">
-										<<div class="row">
+										<div class="row">
 											<% if (CouponData && CouponData.length > 0) { %>
 												<% CouponData.forEach(function(coupon) { %>
-													<div class="col-md-4 mb-4">
-														<div class="card border-danger">
-															<div class="card-body">
-																<h5 class="card-title text-danger"><%= coupon.name %></h5>
-																<p class="card-text"><%= coupon.description %></p>
-																<ul class="list-group list-group-flush">
-																	<li class="list-group-item text-danger">Coupon Code: <%= coupon.couponCode %></li>
-																	<li class="list-group-item text-danger">Discount Amount: <%= coupon.discountAmount %></li>
-																	<li class="list-group-item">Expire Date: <%= new Date(coupon.expireDate).toLocaleDateString() %></li>
-																	<li class="list-group-item">Criteria Amount: <%= coupon.criteriaAmount %></li>
-																</ul>
+													<% if (!coupon.usedUsers.includes(user)) { %>
+														<div class="col-md-4 mb-4">
+															<div class="card border-danger">
+																<div class="card-body">
+																	<h5 class="card-title text-danger"><%= coupon.name %></h5>
+																	<p class="card-text"><%= coupon.description %></p>
+																	<ul class="list-group list-group-flush">
+																		<li class="list-group-item text-danger">Coupon Code: <%= coupon.couponCode %></li>
+																		<li class="list-group-item text-danger">Discount Amount: <%= coupon.discountPercentage %>%</li>
+																		<li class="list-group-item">Expire Date: <%= new Date(coupon.expiryDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %></li>
+																		<li class="list-group-item">Criteria Amount: <%= coupon.criteriaAmount %></li>
+																		<li class="list-group-item">Upto to: <%= coupon.maxDiscountAmount %></li>
+																	</ul>
+																</div>
 															</div>
 														</div>
-													</div>
+													<% } else { %>
+														<div class="col-md-12">
+															<div class="alert alert-warning" role="alert">
+																No coupons available.
+															</div>
+														</div>
+													<% } %>
 												<% }); %>
 											<% } else { %>
 												<div class="col-md-12">
@@ -212,9 +225,7 @@
 												</div>
 											<% } %>
 										</div>
-										
-									</div><!-- .End .tab-pane -->
-									
+									</div>
 									
 
 								    <div class="tab-pane fade" id="tab-address" role="tabpanel" aria-labelledby="tab-address-link">
@@ -616,6 +627,12 @@
 
         <script>
 
+var clipboard = new ClipboardJS('#copyButton');
+
+clipboard.on('success', function (e) {
+    console.log('Text successfully copied to clipboard:', e.text);
+});
+
 
 
 
@@ -738,6 +755,7 @@
 	<script src="public/assets/js/main.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+	
 </body>
 
 

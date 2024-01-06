@@ -10,7 +10,10 @@ const couponSchema = new mongoose.Schema({
         required: true,
         unique: true,
     },      
-    discountAmount: {
+    discountPercentage: {
+        type: Number,
+    },
+    maxDiscountAmount: {
         type: Number,
     },
     activationDate: {

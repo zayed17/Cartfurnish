@@ -426,11 +426,12 @@ const loadeachproduct = async(req,res)=>{
         const userData = await User.findOne({_id:req.session.user_id})
         const  addresses = await Address.findOne({user:req.session.user_id})
         const orders = await Order.find({userId:req.session.user_id})
-        const CouponData = await Coupon.find({}) 
+        const CouponData = await Coupon.find({})
+       const user = req.session.user_id
 
         // console.log(addresses);
         // console.log(req.session.user_id);
-        res.render('account',{userData,addresses,orders,CouponData})
+        res.render('account',{userData,addresses,orders,CouponData,user})
     } catch (error) {
         console.log(error);
     }

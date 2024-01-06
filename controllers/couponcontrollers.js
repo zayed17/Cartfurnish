@@ -31,7 +31,8 @@ const addcoupon = async (req, res) => {
         const data = new Coupon({
             name: req.body.name,
             couponCode: req.body.couponCode,
-            discountAmount: req.body.discountAmount,
+            discountPercentage: req.body.discountPercentage,
+            maxDiscountAmount:req.body.maxDiscountAmount,
             activationDate: req.body.activationDate,
             expiryDate: req.body.expiryDate,
             criteriaAmount: req.body.criteriaAmount,
@@ -64,7 +65,8 @@ const editcoupon = async (req,res)=>{
             {
             name: req.body.name,
             couponCode: req.body.couponCode,
-            discountAmount: req.body.discountAmount,
+            discountPercentage: req.body.discountPercentage,
+            maxDiscountAmount:req.body.maxDiscountAmount,
             expiryDate: req.body.expiryDate,
             criteriaAmount: req.body.criteriaAmount,
             })
@@ -111,6 +113,19 @@ const checkcoupon = async(req,res)=>{
     }
 }
 
+const removecoupon = async (req,res)=>{
+    try {
+        const userId = req.session.user_id;
+        const cartData = await Cart.findOne({user:userId})
+        await Coupon.findOneAndUpdate({_id:cartData.couponDiscount},{$pull:{usedUsers:userId}})
+        await Cart.findOneAndUpdate({user:userId},{$set:{couponDiscount:0}})
+        res.json({remove:true})
+
+    } catch (error) {
+        console.log(error.message);
+        res.render('500Error')
+    }
+}
 
 
 module.exports = {
@@ -119,5 +134,6 @@ module.exports = {
     addcoupon,
     loadeditcoupon,
     editcoupon,
-    checkcoupon
+    checkcoupon,
+    removecoupon
 }

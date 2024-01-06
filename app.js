@@ -29,9 +29,7 @@ mongoose.connection.on('error', (err) => {
 app.use('/public', express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'ejs');
 
-// Apply noCache middleware for disabling caching
 app.use(noCache());
-// Example with a custom log format
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms'));
 
 // User Routes

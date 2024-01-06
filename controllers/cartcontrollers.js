@@ -113,7 +113,7 @@ const removecartitem = async (req, res) => {
         await Cart.findOneAndUpdate(
             { user: userId },
             {
-                $pull: { product: { productId: productId } },
+                $pull: { product: { productId: productId } }, 
             }
         );
 
@@ -132,13 +132,22 @@ const loadcheckoutpage = async(req,res)=>{
         const cartData = await Cart.findOne({user:userId}).populate('product.productId')
         console.log(cartData);
         if(cartData){
+            console.log(cartData.couponDiscount,"wh")
             cartData.couponDiscount!=0 ? await cartData.populate('couponDiscount') : 0
-            const couponDiscount = cartData.couponDiscount !=0 ? cartData.couponDiscount : 0
-            const subtotal = cartData.product.reduce((acc,val)=> acc+val.totalPrice,0)
-            const total = subtotal
-            res.render('checkout',{addresses,total,cartData})
+            const discountpercentage = cartData.couponDiscount !=0 ? cartData.couponDiscount.discountPercentage : 0;
+            const maxDiscount = cartData.couponDiscount !=0 ? cartData.couponDiscount.maxDiscountAmount : 0;
+            const subtotal = cartData.product.reduce((acc,val)=> acc+val.totalPrice,0);
+            const percentageDiscount = subtotal - (discountpercentage/100) *subtotal;
+            const discountAmount =subtotal - percentageDiscount;
+            const discount = subtotal - maxDiscount
+            if(discountAmount<=maxDiscount){
+                res.render('checkout',{addresses,discount:percentageDiscount,cartData,subtotal})
+            }else{
+                res.render('checkout',{addresses,discount,cartData,subtotal})
+            }
+            console.log(discountpercentage,percentageDiscount,"percentage");
         }
-    } catch (error) {
+    } catch (error) { 
         console.log(error);
     }
 }

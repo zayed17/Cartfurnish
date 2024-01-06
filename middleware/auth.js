@@ -37,33 +37,9 @@ const isLogout = async (req, res, next) => {
   }
 };
 
-const getUserStatus = async (userId) => {
-  try {
-    const user = await User.findById(userId);
-    return user ? user.status : null;
-  } catch (error) {
-    console.error('Error fetching user status:', error.message);
-    return null;
-  }
-};
-
-const checkUserStatus = async (req, res, next) => {
-  const userStatus = await getUserStatus(req.session.user_id);
-
-  if (userStatus === 'blocked') {
-    req.session.destroy((err) => {
-      if (err) {
-        console.error('Error destroying session:', err);
-      }
-      res.redirect('/login');
-    });
-  } else {
-    next();
-  }
-};
 
 module.exports = {
   isLogin,
   isLogout,
-  checkUserStatus,
+  
 };
