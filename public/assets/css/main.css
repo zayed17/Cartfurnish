@@ -4301,3 +4301,20 @@ body.dark .dropdown-menu .dropdown-item.text-danger {
   }
 }
 /*# sourceMappingURL=main.css.map */
+.custom-button {
+  width: 70px; /* Default width for smaller screens */
+}
+
+@media (min-width: 576px) {
+  .custom-button {
+      width: 100px; /* Adjust the width for small devices (sm) and up */
+  }
+}
+
+@media (min-width: 768px) {
+  .custom-button {
+      width: 120px; /* Adjust the width for medium devices (md) and up */
+  }
+}
+
+/* Add more media queries for larger screens if needed */

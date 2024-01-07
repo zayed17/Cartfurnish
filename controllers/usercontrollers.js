@@ -1,5 +1,8 @@
 const User = require('../models/usermodel');
 const bcrypt = require('bcrypt');
+const puppeteer = require('puppeteer');
+const path = require('path');
+const ejs = require('ejs');
 const Cart = require('../models/cartmodels');
 const nodemailer = require('nodemailer');
 const userOtpVerification = require('../models/userotpverification');
@@ -531,6 +534,55 @@ const passwordchange = async(req,res)=>{
 }
 
 
+
+const invoice = async (req, res) => {
+    try {
+      const productId = req.query.productId;
+      const orderId = req.query.orderId;
+      console.log(productId,orderId)
+      const orderData = await Order.findOne({_id:orderId}).populate('userId')
+      const productsData = await Promise.all(
+        orderData.products.map(async (product) => {
+          const productDetails = await Product.findOne({ _id: product.productId });
+          return {
+            ...product.toObject(),
+            productDetails,
+          };
+        })
+      );       
+      console.log(productsData,"details")
+      const projectRoot = path.join(__dirname, '..');
+
+      const invoiceTemplatePath = path.join(projectRoot, 'views', 'user', 'invoice.ejs');
+      const htmlContent = await ejs.renderFile(invoiceTemplatePath, { productsData ,orderData});
+  
+      const browser = await puppeteer.launch();
+      const page = await browser.newPage();
+  
+      await page.setContent(htmlContent);
+  
+      // Generate PDF
+      const pdfBuffer = await page.pdf();
+  
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Disposition', `attachment; filename=invoice.pdf`);
+      res.send(pdfBuffer);
+  
+      await browser.close();
+    } catch (error) {
+      console.error('Error generating invoice:', error.message);
+      res.status(500).send('Internal Server Error');
+    }
+  };
+  
+
+
+  
+  
+  
+
+
+
 module.exports = {
     loadhome,
     loadshop,
@@ -547,6 +599,6 @@ module.exports = {
     loadaccount,
     resendotp,
     edituser,
-    passwordchange
-    
+    passwordchange,
+    invoice
 }

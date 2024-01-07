@@ -56,6 +56,7 @@ userRoute.get('/orderdetails',auth.isLogin,ordercontrollers.loadorderdetail)
 userRoute.post('/cancelproduct',auth.isLogin,ordercontrollers.cancelproduct)
 userRoute.post('/checkcoupon',auth.isLogin,couponcontrollers.checkcoupon)
 userRoute.post('/removecoupon',auth.isLogin,couponcontrollers.removecoupon)
+userRoute.get('/invoice',auth.isLogin,usercontrollers.invoice)
 
 
 module.exports = userRoute;

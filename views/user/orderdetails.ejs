@@ -32,77 +32,7 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    <style>
-        .line {
-
-  width: 150px;
-  height: 3px;
-  background: #dad0d0;
-  top: 200px;
-  left: 750px;
-  &:before{
-    position:absolute;
-    width: 15px;
-    height: 15px;
-    background: green;
-    content: '';
-    top: -6px;
-    border-radius: 50%;
-  }
-  &:nth-child(3){
-   &:after{
-    position:absolute;
-    width: 15px;
-    height: 15px;
-    background: green;
-    content: '';
-    top: -6px;
-    right: -10px;
-    border-radius: 50%;
-    }
-  }
-  .status{
-    position: absolute;
-    left: -20px;
-    top: 20px;
-  }
-  &:nth-child(3){
-    .status{
-      left:-50px;
-      &:nth-child(2){
-        left:120px;
-        white-space: nowrap;
-      }
-    }
-  }
-}
-.inner-line-1,.inner-line-2,.inner-line-3 {
-  width: 0%;
-  height: 100%;
-  background: green;
-  animation: flow 4s ease-in forwards;
-}
-/*
-* delay works only on GC
-*/
-.inner-line-2{
-  -webkit-animation-delay: 3s;
-}
-.inner-line-3{
-  -webkit-animation-delay: 6s;
-}
-
-@keyframes flow {
-  from {
-    width: 10%;
-  }
-  to {
-    width: 100%;
-  }
-}
-
-
-    </style>
+    
 </head>
 
 
@@ -257,25 +187,15 @@
                             <p>Quantity: <%= product.quantity %></p>
                             <p>Total Price: ₹<%= product.totalPrice.toFixed(2) %></p>
                             <p>Status: <%= product.productstatus %></p>
-                            <% if(product.productstatus !== "cancel" || product.productstatus !== "Out for Delivery") { %>
+                            <% if(product.productstatus !== "cancel" ) { %>
                                 <button class="btn btn-danger custom-btn" onclick="cancelProduct('<%= product._id %>')">Cancel</button>
                             <% } %>
                         </div>
-                 
-                            <div class="line">
-                                <div class="inner-line-1"></div>
-                               <div class ="status"> Packed</div>
-                              </div>
-                              <div class="line">
-                                <div class="inner-line-2"></div>
-                                 <div class ="status">Shipped</div>
-                              </div>
-                              <div class="line">
-                                <div class="inner-line-3"></div>
-                                  <div class ="status">Delivered</div>
-                                  <div class ="status">Out for Delivery</div>
-                              </div>
-                   
+                        <%if(product.productstatus=="Delivered"){%>
+                        <div class='align-right'>
+                            <a href="/invoice?productId=<%= product._id %>&orderId=<%=order._id%>" download="invoice.pdf">Download Invoice</a>
+                        </div>
+                        <%}%>
                     </div>
                 <% }) %>
             </div>
@@ -415,7 +335,43 @@
             });
         }
     });
+}async function downloadInvoice(orderId) {
+  try {
+    // Fetch PDF from backend
+    const response = await fetch(`/invoice?orderId=${orderId}`);
+    console.log(response);
+    // Check if the response is successful
+    if (response.ok) {
+      // Read the response text
+      const pdfData = await response.text();
+      console.log("PDF Data:", pdfData);
+      console.log("PDF Data Size:", pdfData.length);
+
+      // Create a Blob with the response text
+      const blobObject = new Blob([pdfData], { type: 'application/pdf' });
+
+      // Create a download link
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blobObject);
+      link.download = 'invoice.pdf';
+
+      // Append the link to the body
+      document.body.appendChild(link);
+
+      // Trigger a click on the link
+      link.click();
+
+      // Remove the link from the body
+      document.body.removeChild(link);
+    } else {
+      console.error('Error downloading invoice:', response.statusText);
+    }
+  } catch (error) {
+    console.error('Error downloading invoice:', error.message);
+  }
 }
+
+
 
 </script>
 

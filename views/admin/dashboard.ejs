@@ -431,7 +431,7 @@
                                                 </div>
                                             </td>
                                             <td><a href="#" class="fw-bold"><%= order._id.toString().substring(0, 6) %></a></td>
-                                            <td><%=order.userId.name%></td>
+                                            <td><%=order.userId%></td>
                                             <td><%= new Date(order.purchaseDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %></td>
                                             <% order.products.forEach(product => { %>
                                             <td>

@@ -97,8 +97,9 @@
 						</div>
 						<div class="col-md-6 d-flex justify-content-end align-items-center">
 							<p class="mb-0"><strong>REFERRAL CODE: <span id="referralCode"><%= userData.referral_code %></span></strong></p>
-							<span id="copyButton" data-clipboard-target="#referralCode" class="btn btn-sm btn-secondary ms-2">Copy</span>
+							<span id="copyButton" data-clipboard-target="#referralCode" class="btn btn-sm btn-secondary ms-2 custom-button">Copy</span>
 						</div>
+						
 						
 					</div>
 				</div>
@@ -150,7 +151,7 @@
                                                 </span>
                                             </p>
                                             <div class="mb-3">
-                                                <button type="button" class="btn btn-primary" data-toggle="modal"
+                                                <button type="button" class="btn  btn-outline-warning" data-toggle="modal"
                                                     data-target="#editProfileModal">
                                                     Edit Profile
                                                 </button>
@@ -164,6 +165,7 @@
 
 								    <div class="tab-pane fade" id="tab-orders" role="tabpanel" aria-labelledby="tab-orders-link">
 								    	<div class="user-profile text-center">
+											<%if(orders&&orders.length >0){%>
                                             <table class="table custom-width-table">
                                                 <thead>
                                                     <tr>
@@ -186,6 +188,13 @@
                                                         <% }); %>
                                                 </tbody>
                                             </table>
+											<%}else{%>
+												<div class="col-md-12">
+													<div class="alert alert-warning" role="alert">
+														No Order available.
+													</div>
+												</div>
+											<% } %>
                                         </div>
 								    </div><!-- .End .tab-pane -->
 
@@ -229,14 +238,13 @@
 									
 
 								    <div class="tab-pane fade" id="tab-address" role="tabpanel" aria-labelledby="tab-address-link">
-								    	<a class="btn btn-primary" href="#" data-toggle="modal" data-target="#addAddressModal">Add
+								    	<a class="btn btn-outline-warning" href="#" data-toggle="modal" data-target="#addAddressModal">Add
 											Address</a>
 			
 										<% if (addresses && addresses.address && addresses.address.length> 0) { %>
 											<div class="row" id="addrassArea">
 												<% addresses.address.forEach(function (address, loopIndex) { %>
-													<div class="col-lg-<%= Math.ceil(12 / addresses.address.length) %>">
-														<div class="card card-dashboard">
+														<div class="card card-dashboard mx-5">
 															<div class="card-body">
 																<h3 class="card-title">Address <%= loopIndex + 1 %>
 																</h3>
@@ -264,7 +272,6 @@
 																											class="icon-delete"></i></button>
 																</p>
 															</div>
-														</div>
 													</div>
 													<% }); %>
 			
@@ -441,7 +448,7 @@
 							 <input type="password" class="form-control" id="confirmNewPassword"
 								 name="newpassword2" placeholder="Confirm new password">
 						 </div>
-						 <button type="submit" class="btn btn-primary">Change Password</button>
+						 <button type="submit" class="btn btn-outline-warning">Change Password</button>
 			 </form>
 		 </div>
 	 </div>
@@ -479,7 +486,7 @@
 					 <input type="email" class="form-control" value="<%= userData.email %>" id="editEmail"
 						 name="editemail" placeholder="Enter your email">
 				 </div>
-				 <button type="submit" class="btn btn-primary">Save Changes</button>
+				 <button type="submit" class="btn btn-outline-warning">Save Changes</button>
 			 </form>
 		 </div>
 	 </div>
@@ -547,7 +554,7 @@
 		 </div>
 		 <div class="modal-footer">
 			 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-			 <button type="button" class="btn btn-primary" id="submitAddressBtn">Add Address</button>
+			 <button type="button" class="btn btn-outline-warning" id="submitAddressBtn">Add Address</button>
 		 </div>
 	 </div>
  </div>
@@ -557,71 +564,67 @@
 
 <!-- modal for edit address -->
 <div class="modal fade" id="addAddressModals" tabindex="-1" role="dialog" aria-labelledby="addAddressModalLabel"
- aria-hidden="true">
- <div class="modal-dialog modal-dialog-centered" role="document">
-	 <div class="modal-content">
-		 <div class="modal-header">
-			 <h5 class="modal-title" id="addAddressModalLabel">Edit Address</h5>
-			 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-				 <span aria-hidden="true">&times;</span>
-			 </button>
-		 </div>
-		 <div class="modal-body">
-			 <form id="addAddressForms">
-				 <div class="form-group">
-					 <label for="fullName">Full Name:</label>
-					 <input type="text" class="form-control" id="fullNames" name="fullName" required>
-					 <div class="invalid-feedback">Please enter your full name.</div>
-				 </div>
-				 <div class="form-group">
-					 <label for="country">Country:</label>
-					 <input type="text" class="form-control" id="countrys" name="country" required>
-					 <div class="invalid-feedback">Please enter the country.</div>
-				 </div>
-				 <div class="form-group">
-					 <label for="housename">House Name:</label>
-					 <input type="text" class="form-control" id="housenames" name="housename" required>
-					 <div class="invalid-feedback">Please enter the house name.</div>
-				 </div>
-				 <div class="form-group">
-					 <label for="state">State:</label>
-					 <input type="text" class="form-control" id="states" name="state" required>
-					 <div class="invalid-feedback">Please enter the state.</div>
-				 </div>
-				 <div class="form-group">
-					 <label for="city">City:</label>
-					 <input type="text" class="form-control" id="citys" name="city" required>
-					 <div class="invalid-feedback">Please enter the city.</div>
-				 </div>
-				 <div class="form-group">
-					 <label for="pincode">Pincode (6 digits):</label>
-					 <input type="text" class="form-control" id="pincodes" name="pincode" pattern="\d{6}"
-						 required>
-					 <div class="invalid-feedback">Please enter a valid 6-digit pincode.</div>
-				 </div>
-				 <div class="form-group">
-					 <label for="phone">Phone (10 digits):</label>
-					 <input type="tel" class="form-control" id="phones" name="phone" pattern="\d{10}"
-						 required>
-					 <div class="invalid-feedback">Please enter a valid 10-digit phone number.</div>
-				 </div>
-				 <div class="form-group">
-					 <label for="email">Email:</label>
-					 <input type="email" class="form-control" id="emails" name="email" required>
-					 <div class="invalid-feedback">Please enter a valid email address.</div>
-				 </div>
-				 <input type="text" class="form-control" style="display: none;" id="addressId"
-					 name="addressId">
-				 <div class="modal-footer">
-					 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-					 <button type="submit" class="btn btn-primary" id="submitAddressBtns">Submit</button>
-				 </div>
-			 </form>
-		 </div>
-	 </div>
- </div>
+aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered" role="document">
+	<div class="modal-content">
+		<div class="modal-header">
+			<h5 class="modal-title" id="addAddressModalLabel">Edit Address</h5>
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+		<div class="modal-body">
+			<form id="addAddressForms" >
+				<div class="form-group">
+					<label for="fullName">Full Name:</label>
+					<input type="text" class="form-control" id="fullNames"  name="fullName" required>
+					<div class="invalid-feedback">Please enter your full name.</div>
+				</div>
+				<div class="form-group">
+					<label for="country">Country:</label>
+					<input type="text" class="form-control" id="countrys" name="country" required>
+					<div class="invalid-feedback">Please enter the country.</div>
+				</div>
+				<div class="form-group">
+					<label for="housename">House Name:</label>
+					<input type="text" class="form-control" id="housenames" name="housename" required>
+					<div class="invalid-feedback">Please enter the house name.</div>
+				</div>
+				<div class="form-group">
+					<label for="state">State:</label>
+					<input type="text" class="form-control" id="states" name="state" required>
+					<div class="invalid-feedback">Please enter the state.</div>
+				</div>
+				<div class="form-group">
+					<label for="city">City:</label>
+					<input type="text" class="form-control" id="citys" name="city" required>
+					<div class="invalid-feedback">Please enter the city.</div>
+				</div>
+				<div class="form-group">
+					<label for="pincode">Pincode (6 digits):</label>
+					<input type="text" class="form-control" id="pincodes" name="pincode" pattern="\d{6}" required>
+					<div class="invalid-feedback">Please enter a valid 6-digit pincode.</div>
+				</div>
+				<div class="form-group">
+					<label for="phone">Phone (10 digits):</label>
+					<input type="tel" class="form-control" id="phones" name="phone" pattern="\d{10}" required>
+					<div class="invalid-feedback">Please enter a valid 10-digit phone number.</div>
+				</div>
+				<div class="form-group">
+					<label for="email">Email:</label>
+					<input type="email" class="form-control" id="emails" name="email" required>
+					<div class="invalid-feedback">Please enter a valid email address.</div>
+				</div>
+				<input type="text" class="form-control" style="display: none;" id="addressId" name="addressId">
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+					<button type="submit" class="btn btn-primary" id="submitAddressBtns">Submit</button>
+				</div>
+			</form>
+		</div>
+	</div>
 </div>
-
+</div>
 
 
 
@@ -731,6 +734,50 @@ clipboard.on('success', function (e) {
             });
 
 
+
+
+//edit address
+function showEditAddressModal(fullName, country, housename, state, city, pincode, phone, email, addressId) {
+		   document.getElementById('fullNames').value = fullName;
+		   document.getElementById('countrys').value = country;
+		   document.getElementById('housenames').value = housename;
+		   document.getElementById('states').value = state;
+		   document.getElementById('citys').value = city;
+		   document.getElementById('pincodes').value = pincode;
+		   document.getElementById('phones').value = phone;
+		   document.getElementById('emails').value = email;
+		   document.getElementById('addressId').value = addressId;
+	   
+		   // Show the modal
+		   $('#addAddressModals').modal('show');
+	   }
+	   
+	   $('#submitAddressBtns').on('click', function() {
+		   // Get form data
+		   const formData = $('#addAddressForms').serialize();
+		   console.log(formData);
+	   
+		   $.ajax({
+			   type: 'POST',
+			   url: '/editaddresses',
+			   data: formData,
+			   success: function(response) {
+				   if (response.success == true) {
+					   $('#addrassArea').load('/checkout #addrassArea');
+					   $('#addAddressModals').modal('hide');
+					   $('.modal-backdrop').remove();
+	   
+				   }
+			   },
+			   error: function(error) {
+				   console.error('Error:', error);
+			   }
+		   });
+	   
+		   // Prevent the default behavior of the button click
+		   return false;
+	   });
+	   
 
 
 

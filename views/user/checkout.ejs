@@ -28,6 +28,8 @@
 	<link rel="stylesheet" href="public/assets/css/bootstrap.min.css">
 	<!-- Main CSS File -->
 	<link rel="stylesheet" href="public/assets/css/style.css">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
 	<!-- Include jQuery from a CDN -->
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -158,21 +160,21 @@
 							<div class="input-group">
 								<input type="text" class="form-control" id="couponinput" name="coupon" placeholder="Enter your coupon code">
 								<div class="input-group-append">
-									<button class="btn btn-primary btn-sm" type="button" id="applyCouponButton" onclick="applyCoupon()">Apply Coupon</button>
+									<button class="btn btn-outline-warning btn-sm" type="button" id="applyCouponButton" onclick="applyCoupon()">Apply Coupon</button>
 								</div>
 							</div>
 							<%}else{%>
 							<div class="input-group">
 								<input type="text" class="form-control" id="couponinput" name="coupon" disabled value="<%=cartData.couponDiscount.couponCode%>">
 								<div class="input-group-append">
-									<button class="btn btn-primary btn-sm" type="button" id="applyCouponButton" onclick="removecoupon()">REmove </button>
+									<button class="btn btn-outline-warning btn-sm" type="button" id="applyCouponButton" onclick="removecoupon()">REmove </button>
 								</div>
 							</div>
 							<%}%>
 						</div>
 						
 							<span class="btn-text">
-								<a class="btn btn-primary" href="#" data-toggle="modal" data-target="#addAddressModal">Add Address</a>
+								<a class="btn btn-outline-warning" href="#" data-toggle="modal" data-target="#addAddressModal">Add Address</a>
 							</span>
 							<form id="orderForm">
 								<div class="row" style="justify-content: space-around;">
@@ -504,7 +506,7 @@ aria-hidden="true">
 				<input type="text" class="form-control" style="display: none;" id="addressId" name="addressId">
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-					<button type="submit" class="btn btn-primary" id="submitAddressBtns">Submit</button>
+					<button type="submit" class="btn btn-outline-warning" id="submitAddressBtns">Submit</button>
 				</div>
 			</form>
 		</div>
@@ -570,7 +572,7 @@ aria-hidden="true">
 		</div>
 		<div class="modal-footer">
 			<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-			<button type="button" class="btn btn-primary" id="submitAddressBtn">Add Address</button>
+			<button type="button" class="btn btn-outline-warning" id="submitAddressBtn">Add Address</button>
 		</div>
 	</div>
 </div>

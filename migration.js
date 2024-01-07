@@ -1,50 +1,54 @@
-const mongoose = require('mongoose');
-const Product = require('./models/productmodal');
-const Category = require('./models/categorymodal');
+// Importing the easyinvoice library
+const easyinvoice = require('easyinvoice');
 
-async function updateProductCategoryIds() {
-    try {
-        // Connect to the database
-        await mongoose.connect('mongodb://127.0.0.1:27017/furni', {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-        });
+// Sample data for the invoice
+const data = {
+  //"documentTitle": "RECEIPT", // Defaults to "INVOICE"
+  "currency": "USD",          // See ISO 4217 for currency codes
+  "taxNotation": "vat",        // VAT = value added tax
+  "marginTop": 25,
+  "marginRight": 25,
+  "marginLeft": 25,
+  "marginBottom": 25,
+  "logo": "https://www.example.com/logo.png", // or base64
+  "sender": {
+    "company": "Your Company",
+    "address": "123 Street, City",
+    "zip": "12345",
+    "city": "City",
+    "country": "Country",
+  },
+  "client": {
+    "company": "Client Company",
+    "address": "456 Street, City",
+    "zip": "67890",
+    "city": "City",
+    "country": "Country",
+  },
+  "invoiceNumber": "20220101",
+  "invoiceDate": "2024-01-07",
+  "products": [
+    {
+      "quantity": 2,
+      "description": "Product 1",
+      "tax": 0.21,
+      "price": 10,
+    },
+    {
+      "quantity": 1,
+      "description": "Product 2",
+      "tax": 0.21,
+      "price": 20,
+    },
+  ],
+  "bottomNotice": "Thank you for your business!",
+};
 
-        // Fetch all products
-        const products = await Product.find();
-
-        // Fetch all categories
-            const categories = await Category.find({}, '_id name');
-
-        // Update product categoryIds
-        for (const product of products) {
-            const category = categories.find((c) => c.name === product.category);
-
-            if (category) {
-                console.log(`Updating product ${product.name} (id: ${product._id}) with categoryId: ${category._id}`);
-                product.categoryId = category._id;
-
-                try {
-                    await product.save();
-                    console.log(`Product ${product.name} (id: ${product._id}) updated successfully.`);
-                } catch (error) {
-                    console.error(`Error updating product ${product.name} (id: ${product._id}):`, error);
-                }
-            } else {
-                console.log(`Category not found for product ${product.name} (id: ${product._id}), skipping.`);
-            }
-        }
-
-        console.log('Product categoryIds update successful.');
-
-    } catch (error) {
-        console.error('Product categoryIds update failed:', error);
-
-    } finally {
-        // Close the database connection
-        mongoose.connection.close();
-    }
-}
-
-// Run the migration
-updateProductCategoryIds();
+// Creating the invoice
+easyinvoice.createInvoice(data, function (result) {
+  // Result is a Buffer containing the PDF file
+  // Save the PDF to a file or send it as a response to the client
+  const fs = require('fs');
+  fs.writeFileSync('invoice.pdf', result.pdf, 'base64');
+  console.log('Invoice created successfully!');
+});
