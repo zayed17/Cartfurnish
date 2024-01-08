@@ -13,6 +13,8 @@ const Order = require('../models/ordermodels')
 const Coupon = require('../models/couponmodels')
 const Banner = require('../models/bannermodels')
 const dotenv = require('dotenv')
+const Razorpay = require('razorpay');
+
 dotenv.config()
 
 function generateUniqueId(length) {
@@ -574,9 +576,41 @@ const invoice = async (req, res) => {
       res.status(500).send('Internal Server Error');
     }
   };
+  const instance = new Razorpay({
+    key_id: process.env.RAZORPAY_ID_KEY,
+    key_secret: process.env.RAZORPAY_SECRET_KEY
+  });
   
-
-
+  const walletReacharge = async (req, res) => {
+    try {
+      const id = generateUniqueId(7);
+  
+      const options = {
+        amount: 1 * 100,
+        currency: "INR",
+        receipt: "" + id,
+      };
+  
+      console.log(options);
+  
+      // Wait for the asynchronous operation to complete
+      const order = await new Promise((resolve, reject) => {
+        instance.orders.create(options, function (err, order) {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(order);
+          }
+        });
+      });
+  
+      // Now, send the response after the asynchronous operation has completed
+      res.json({ success: true, order });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ success: false, error: "An error occurred" });
+    }
+  };
   
   
   
@@ -600,5 +634,6 @@ module.exports = {
     resendotp,
     edituser,
     passwordchange,
-    invoice
+    invoice,
+    walletReacharge
 }

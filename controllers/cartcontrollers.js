@@ -1,4 +1,5 @@
 const Cart = require('../models/cartmodels');
+const User = require('../models/usermodel')
 const Product = require('../models/productmodal')
 const mongoose = require('mongoose');
 const { userLogout } = require('./usercontrollers');
@@ -46,7 +47,7 @@ const loadcart = async(req,res)=>{
             await Cart.findOneAndUpdate(
                 { user: user_id },
                 {
-                    $set: { user: user_id},
+                    $set: { user: user_id,couponDiscount:0},
                     $push: { product: data },
                 },
                 { upsert: true, new: true }
@@ -129,7 +130,7 @@ const loadcheckoutpage = async(req,res)=>{
     try {
         const userId = req.session.user_id;
         const  addresses = await addressmodels.findOne({user:userId})
-        const cartData = await Cart.findOne({user:userId}).populate('product.productId')
+        const cartData = await Cart.findOne({user:userId}).populate('product.productId').populate('user')
         console.log(cartData);
         if(cartData){
             console.log(cartData.couponDiscount,"wh")

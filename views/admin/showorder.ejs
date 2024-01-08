@@ -178,7 +178,8 @@
                                         <p class="mb-1">
                                             <%= order.deliveryDetails.fullName %> <br />
                                             <%= order.deliveryDetails.email %> <br />
-                                            <%= order.deliveryDetails.phone %>                                        </p>
+                                            <%= order.deliveryDetails.phone %>
+                                        </p>
                                     </div>
                                 </article>
                             </div>
@@ -250,12 +251,12 @@
                                                             <span class="badge rounded-pill alert-success text-success">Delivered</span>
                                                         <% } else if (product.productstatus === 'cancel') { %>
                                                             <span class="badge rounded-pill alert-danger text-danger">Cancelled</span>
-                                                        <% } else if (product.productstatus === 'Returned') { %>
+                                                        <% } else if (product.productstatus === 'Return') { %>
                                                             <span class="badge rounded-pill alert-secondary text-secondary">Returned</span>
                                                         <% } %>
                                                     </td>
                                                     <td>
-                                                        <select class="form-select d-inline-block mb-lg-0 mr-5 mw-200" id="orderstatus" onchange="changeProductStatus('<%= product._id %>','<%=order._id%>')" <%= product.productstatus === 'cancel' || product.productstatus === 'Returned' ? 'disabled' : '' %>>
+                                                        <select class="form-select d-inline-block mb-lg-0 mr-5 mw-200" id="orderstatus" onchange="changeProductStatus('<%= product._id %>','<%=order._id%>')" <%= product.productstatus === 'cancel' || product.productstatus === 'Return' ? 'disabled' : '' %>>
                                                             <option value="placed" <%= product.productstatus === 'placed' ? 'selected' : '' %>>Placed</option>
                                                             <option value="Shipped" <%= product.productstatus === 'Shipped' ? 'selected' : '' %>>Shipped</option>
                                                             <option value="Out for Delivery" <%= product.productstatus === 'Out for Delivery' ? 'selected' : '' %>>Out for Delivery</option>

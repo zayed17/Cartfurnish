@@ -45,6 +45,7 @@ const placeorder = async (req, res) => {
     const address = addressData.address[addressIndex];
     console.log(address);
     const cartData = await Cart.findOne({ user: userId });
+    const userData = await User.findOne({_id:userId})
     console.log(cartData);
 
     const totalAmount = cartData.product.reduce((acc, val) => acc + val.totalPrice, 0);
@@ -87,6 +88,26 @@ const placeorder = async (req, res) => {
       instance.orders.create(options, function (err, order) {
         res.json({ order });
       });
+    }else{
+      if(userData.wallet >= totalAmount){
+        const data ={
+          amount:-totalAmount,
+          date:new Date()
+        }
+        const updateOrder = await Order.findOneAndUpdate({_id:orderData._id},{$set:{status:'placed'}})
+        const updateWallet = await User.findOneAndUpdate({_id:userId},{$inc:{wallet:-totalAmount},$push:{walletHistory:data}})
+        for (const cartProduct of cartData.product) {
+    const product = cartProduct.productId;
+    const quantity = cartProduct.quantity;
+
+    await Product.updateOne({ _id: product }, { $inc: { quantity: -quantity } });
+    await Cart.deleteOne({user:userId})
+    res.json({placed:true})
+      }
+    }else{
+      res.json({wallet:false})     
+    }
+    
     }
   } catch (error) {
     console.log(error);
@@ -147,14 +168,12 @@ const cancelproduct = async (req, res) => {
       { "products._id": productId },
       { $set: { "products.$.productstatus": 'cancel' } }
     );
-
     for (const orderProduct of orderData.products) {
       const product = orderProduct.productId;
-      const count = orderProduct.quantity;
+      const quantity = orderProduct.quantity;
 
-      await Product.updateOne({ _id: product }, { $inc: { quantity: count } });
+      await Product.updateOne({ _id: product }, { $inc: { quantity: quantity } });
     }
-
     if (orderData.paymentMethod != 'COD' && orderData.status != 'pending') {
       const data = {
         amount: orderData.totalAmount,
@@ -162,7 +181,6 @@ const cancelproduct = async (req, res) => {
       }
       await User.findOneAndUpdate({ _id: userId }, { $inc: { wallet: orderData.totalAmount }, $push: { walletHistory: data } })
     }
-
     res.json({ cancel: true })
     console.log(productId, "product Id");
   } catch (error) {
@@ -219,6 +237,33 @@ const updatastatus = async(req,res)=>{
 }
 
 
+const returnproduct = async (req, res) => {
+  try {
+    const userId = req.session.user_id;
+    const productId = req.body.productId
+    const orderData = await Order.findOneAndUpdate(
+      { "products._id": productId },
+      { $set: { "products.$.productstatus": 'Return' } }
+    );
+    for (const orderProduct of orderData.products) {
+      const product = orderProduct.productId;
+      const quantity = orderProduct.quantity;
+
+      await Product.updateOne({ _id: product }, { $inc: { quantity: quantity } });
+    }
+      const data = {
+        amount: orderData.totalAmount,
+        date: new Date()
+      }
+      await User.findOneAndUpdate({ _id: userId }, { $inc: { wallet: orderData.totalAmount }, $push: { walletHistory: data } })
+    res.json({ cancel: true })
+    console.log(productId, "product Id");
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+
 module.exports = {
   placeorder,
   verifypayment,
@@ -226,5 +271,6 @@ module.exports = {
   cancelproduct,
   loadordermanagement,
   loadshoworder,
-  updatastatus
+  updatastatus,
+  returnproduct
 }

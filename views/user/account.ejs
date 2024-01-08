@@ -286,20 +286,23 @@
 													<h3>Current Balance</h3>
 													<p class="display-4 text-success">₹<span id="wallet-balance"><%= userData.wallet %></span></p>
 												</div>
+										
+												<div class="ml-auto">
+													<button id="rechargeBtn" class="btn btn-primary">Recharge Wallet</button>
+												</div>
 											</div>
-									
+										
 											<% if (userData.walletHistory && userData.walletHistory.length > 0) { %>
 												<div class="list-group">
 													<% userData.walletHistory.forEach(function(history) { %>
 														<div class="list-group-item">
 															<div class="d-flex w-100 justify-content-between">
 																<p class="mb-1"><strong>Date:</strong> <%= history.date.toISOString().split('T')[0] %></p>
-																<% if(history.amount > 0 ) {%>
-																<p class="mb-1 text-success">Credited</p>
-																<% }else{ %>
-																<p class="mb-1 text-danger">Debited</p>
-																<%}%>
-
+																<% if(history.amount > 0 ) { %>
+																	<p class="mb-1 text-success">Credited</p>
+																<% } else { %>
+																	<p class="mb-1 text-danger">Debited</p>
+																<% } %>
 																<p class="mb-1"><strong>Amount:</strong> ₹<%= history.amount %></p>
 															</div>
 														</div>
@@ -311,6 +314,7 @@
 												</div>
 											<% } %>
 										</div>
+										
 									</div>
 								</div>
 	                		</div><!-- End .col-lg-9 -->
@@ -626,6 +630,7 @@ aria-hidden="true">
 </div>
 </div>
 
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
 
         <script>
@@ -748,12 +753,10 @@ function showEditAddressModal(fullName, country, housename, state, city, pincode
 		   document.getElementById('emails').value = email;
 		   document.getElementById('addressId').value = addressId;
 	   
-		   // Show the modal
 		   $('#addAddressModals').modal('show');
 	   }
 	   
 	   $('#submitAddressBtns').on('click', function() {
-		   // Get form data
 		   const formData = $('#addAddressForms').serialize();
 		   console.log(formData);
 	   
@@ -774,10 +777,97 @@ function showEditAddressModal(fullName, country, housename, state, city, pincode
 			   }
 		   });
 	   
-		   // Prevent the default behavior of the button click
 		   return false;
 	   });
 	   
+
+
+//add money to wallet!	   
+$(document).ready(function () {
+    $("#rechargeBtn").on("click", function (event) {
+        event.preventDefault();
+
+        $.ajax({
+            type: 'POST',
+            url: '/rechargeWallet',
+            success: function (response) {
+                if (response.success) {
+                    razorpayPayment(response.order, '');
+                } else {
+                    alert('Failed to create recharge order. Please try again.');
+                }
+            },
+            error: function (error) {
+                console.error('Error:', error);
+                alert('An error occurred while processing your request.');
+            }
+        });
+    });
+
+    function razorpayPayment(order, rechargeAmount) {
+        var options = {
+            "key": "rzp_test_6nfEH21z7G2Wtu",
+            "amount": '', 
+            "currency": "INR",
+            "name": "Furni.Ltd",
+            "description": "Wallet Recharge",
+            "image": "",
+            "order_id": order.id,
+            "prefill": {
+                "name": "Furni Ltd",
+                "email": "furniworld@gmail.com",
+                "contact": "9999999999"
+            },
+            "notes": {
+                "address": "India"
+            },
+            "theme": {
+                "color": "#cc9967"
+            }
+        };
+
+        var rzp1 = new Razorpay(options);
+
+        rzp1.open();
+
+        rzp1.on('payment.failed', function (response) {
+        });
+
+        rzp1.on('payment.success', function (response) {
+            var enteredAmount = response.razorpay_payment_amount / 100;
+            verifyPayment(response, order, enteredAmount);
+        });
+
+        rzp1.on('widget.close', function () {
+            options.amount = rechargeAmount * 100;
+            rzp1.update(options);
+        });
+    }
+
+    function verifyPayment(payment, order, rechargeAmount) {
+        $.ajax({
+            url: "/verifyRechargePayment",
+            method: "post",
+            data: {
+                payment: payment,
+                order: order,
+                rechargeAmount: rechargeAmount
+            },
+            success: function (response) {
+                if (response.success) {
+                    alert('Wallet recharge successful!');
+                } else {
+                    alert('Wallet recharge failed. Please try again.');
+                }
+            },
+            error: function (error) {
+                console.error('Error:', error);
+                alert('An error occurred while processing your request.');
+            }
+        });
+    }
+});
+
 
 
 
