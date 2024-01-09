@@ -219,6 +219,25 @@ const adminLogout = async (req, res) => {
     }
 }
 
+
+const loadreport = async(req,res)=>{
+    try {
+        const startDate = req.query.startDate;
+    const endDate = req.query.endDate;
+console.log(startDate,endDate);
+    let query = {}; 
+    if (startDate && endDate) {
+        query = { "products.purchaseDate": { $gte: startDate, $lte: endDate } };
+    }
+
+    const filteredSales = await Order.find(query);
+console.log(filteredSales.length)
+    res.render('report', { order: filteredSales });
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 module.exports = {
     loadadmin,
     verifyLogin,
@@ -232,5 +251,6 @@ module.exports = {
     loadeditCategory,
     editCategory,
     adminLogout,
-    blockCategory
+    blockCategory,
+    loadreport
 }

@@ -17,7 +17,6 @@
         categoryId: {
           type: ObjectId,
           ref: 'categories',
-          // required: true
       },
         price: {
             type: Number,

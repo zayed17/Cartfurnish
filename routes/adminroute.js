@@ -29,7 +29,7 @@ adminRoute.post('/',admincontrollers.verifyLogin);
 adminRoute.get('/dashboard',auth.isLogin, admincontrollers.loaddashboard);
 adminRoute.get('/users',auth.isLogin, admincontrollers.loaduser);
 adminRoute.patch('/blockusers/:id', admincontrollers.blockUser);
-
+adminRoute.get('/report',auth.isLogin,admincontrollers.loadreport)
 // Category Routes
 adminRoute.get('/category',auth.isLogin, admincontrollers.loadcategory);
 adminRoute.get('/editcategory',auth.isLogin, admincontrollers.loadeditCategory);
