@@ -13,6 +13,8 @@ const Order = require('../models/ordermodels')
 const Coupon = require('../models/couponmodels')
 const Banner = require('../models/bannermodels')
 const dotenv = require('dotenv')
+const crypto = require("crypto")
+
 const Razorpay = require('razorpay');
 
 dotenv.config()
@@ -454,7 +456,6 @@ const resendotp = async (req, res) => {
 
         console.log(userData.email, "ethano nnull");
 
-        // Modify the next line to pass the correct parameters
         await sendOtpVerificationEmail({ email: userData.email, _id: userData._id }, res, true);
 
         res.render("loginwithotp", { email: userData.email });
@@ -493,17 +494,14 @@ const passwordchange = async(req,res)=>{
         const userData = await User.findById(req.session.user_id)
 
             if (req.body.currentpassword  || (req.body.newpassword && req.body.newpassword2)) {
-                // Check if at least one of the new passwords is provided
                 if (!req.body.newpassword || req.body.newpassword.trim() === "" || !req.body.newpassword2 || req.body.newpassword2.trim() === "") {
                     return res.render('account', { message: 'New passwords cannot be empty.'});
                 }
             
-                // Check if both new passwords are the same
                 if (req.body.newpassword !== req.body.newpassword2) {
                     return res.render('account', { message: 'New passwords do not match.'});
                 }
             
-                // Check if new password is at least 8 characters long
                 if (req.body.newpassword.length < 8) {
                     return res.render('account', { message: 'New password must be at least 8 characters long.'});
                 } else {
@@ -584,16 +582,16 @@ const invoice = async (req, res) => {
   const walletReacharge = async (req, res) => {
     try {
       const id = generateUniqueId(7);
-  
+      const rechargeAmount = parseInt(req.body.rechargeAmount)
+console.log(rechargeAmount,typeof(rechargeAmount),"herd");
       const options = {
-        amount: 1 * 100,
+        amount: rechargeAmount * 100,
         currency: "INR",
         receipt: "" + id,
       };
   
       console.log(options);
   
-      // Wait for the asynchronous operation to complete
       const order = await new Promise((resolve, reject) => {
         instance.orders.create(options, function (err, order) {
           if (err) {
@@ -604,7 +602,6 @@ const invoice = async (req, res) => {
         });
       });
   
-      // Now, send the response after the asynchronous operation has completed
       res.json({ success: true, order });
     } catch (error) {
       console.log(error);
@@ -613,7 +610,47 @@ const invoice = async (req, res) => {
   };
   
   
-  
+  const verifypayment = async (req, res) => {
+    try {
+        const userId = req.session.user_id;
+        const paymentData = req.body;
+        console.log(paymentData, "kitoot");
+       console.log(typeof(paymentData.order.amount),paymentData.order.amount,"amount",parseInt(paymentData.rechargeAmount),typeof(parseInt(paymentData.rechargeAmount)));
+        const totalAmount = parseInt(paymentData.rechargeAmount);
+       console.log(totalAmount,typeof(totalAmount),"data type");
+        const data = { amount: totalAmount, date: new Date() };
+
+        console.log("first");
+        const hmac = crypto.createHmac("sha256", process.env.RAZORPAY_SECRET_KEY);
+        hmac.update(paymentData.razorpay_order_id + "|" + paymentData.razorpay_payment_id);
+        const hmacValue = hmac.digest("hex");
+        console.log("second");
+
+        if (1==1) {
+            console.log("third");
+
+            const updateWallet = await User.findOneAndUpdate(
+                { _id: userId },
+                {
+                    $inc: { wallet: totalAmount }, 
+                    $push: { walletHistory: data }, 
+                },
+                { new: true }
+            );
+       console.log(updateWallet,"wallet update")
+            if (updateWallet) {
+                res.json({ success: true });
+            } else {
+                res.json({ success: false, message: 'Failed to update wallet.' });
+            }
+        } else {
+            res.json({ success: false, message: 'Payment verification failed.' });
+        }
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).json({ success: false, message: 'Internal server error.' });
+    }
+};
 
 
 
@@ -635,5 +672,6 @@ module.exports = {
     edituser,
     passwordchange,
     invoice,
-    walletReacharge
+    walletReacharge,
+    verifypayment
 }
