@@ -696,11 +696,10 @@ aria-hidden="true">
 		   document.getElementById('addressId').value = addressId;
 	   
 		   // Show the modal
-		   $('#addAddressModals').modal('show');
+		$('#addAddressModals').modal('show');
 	   }
 	   
 	   $('#submitAddressBtns').on('click', function() {
-		   // Get form data
 		   const formData = $('#addAddressForms').serialize();
 		   console.log(formData);
 	   

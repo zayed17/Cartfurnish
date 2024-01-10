@@ -3,7 +3,6 @@ const User = require('../models/usermodel')
 const Product = require('../models/productmodal')
 const mongoose = require('mongoose');
 const { userLogout } = require('./usercontrollers');
-const cartmodels = require('../models/cartmodels');
 const addressmodels = require('../models/addressmodels');
 
 
@@ -18,7 +17,11 @@ const loadcart = async(req,res)=>{
     }
   }
 
-  const addtocart = async (req, res) => {
+  
+
+
+
+const addtocart = async (req, res) => {
     try {
         const user_id = req.session.user_id; 
         console.log(req.session);
@@ -32,8 +35,8 @@ const loadcart = async(req,res)=>{
         const productData = await Product.findById(product_id);
 
         if (productData.quantity > 0) {
-            const cartProduct = await Cart.findOne({ user: user_id, 'products.productId': product_id });
-
+            const cartProduct = await Cart.findOne({ user: user_id, 'product.productId': product_id });
+            
             if (cartProduct) {
                 return res.status(200).json({ success: false, error: 'Product already in cart' });
             }
@@ -47,22 +50,21 @@ const loadcart = async(req,res)=>{
             await Cart.findOneAndUpdate(
                 { user: user_id },
                 {
-                    $set: { user: user_id,couponDiscount:0},
+                    $set: { user: user_id, couponDiscount: 0 },
                     $push: { product: data },
                 },
                 { upsert: true, new: true }
             );
 
-            return res.status(200).json({ success: true, stock: true });
+            return res.json({ success: true, stock: true });
         } else {
-            return res.status(200).json({ success: true, stock: false });
+            return res.json({ success: true, stock: false });
         }
     } catch (error) {
         console.error(error);
         return res.status(500).json({ error: 'Internal Server Error' });
     }
 };
-
 
 
 

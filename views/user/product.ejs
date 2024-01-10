@@ -407,28 +407,39 @@
 
 
                 <script>
-                    function addToCart(productId) {
-                        $.ajax({
-                            url: '/addtocart',
-                            method: 'patch',
-                            data: { productId },
-                            success: function (response) {
-                                if (response.failed) {
-                                    Swal.fire(
-                                        'Out of Stock',
-                                        'This product is currently out of stock.',
-                                        'warning'
-                                    );
-                                } else {
-                                    Swal.fire(
-                                        'Saved to cart!',
-                                        'You clicked the button!',
-                                        'success'
-                                    );
-                                }
-                            }
-                        })
-                    }
+function addToCart(productId) {
+    $.ajax({
+        url: '/addtocart',
+        method: 'patch',
+        data: { productId },
+        success: function (response) {
+            console.log('Response from server:', response);
+
+            if (!response.success) {
+                Swal.fire(
+                    'Out of Stock or Already in Cart',
+                    response.error || 'This product is currently out of stock or already in your cart.',
+                    'warning'
+                );
+            } else {
+                Swal.fire(
+                    'Saved to cart!',
+                    'Product added to cart successfully!',
+                    'success'
+                );
+            }
+        },
+        error: function (error) {
+            console.error('Error:', error);
+            Swal.fire(
+                'Error',
+                'An error occurred while processing your request.',
+                'error'
+            );
+        }
+    });
+}
+
 
                 </script>
 
