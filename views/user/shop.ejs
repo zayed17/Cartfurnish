@@ -31,6 +31,9 @@
     <link rel="stylesheet" href="public/assets/css/plugins/owl-carousel/owl.carousel.css">
     <link rel="stylesheet" href="public/assets/css/plugins/magnific-popup/magnific-popup.css">
     <link rel="stylesheet" href="public/assets/css/plugins/nouislider/nouislider.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
 </head>
 
 <body>
@@ -234,17 +237,20 @@
                                     <div class="col-12 col-md-6 col-lg-4 col-xl-4">
                                       <div class="product product-7 text-center">
                                         <figure class="product-media">
-                                          <span class="product-label label-new">New</span>
+                                            <% if (product.quantity > 7) { %>
+                                                <span class="product-label label-new">New</span>
+                                            <% } else if (product.quantity > 0) { %>
+                                                <span class="product-label label-orange">Only <%= product.quantity %> left</span>
+                                            <% } else { %>
+                                                <span class="product-label label-out-of-stock">Out of Stock</span>
+                                            <% } %>
                                           <a href="/product?id=<%= product._id %>">
                                             <img src="/public/assets/images/products/sharpened/<%= product.images.image1 %>" alt="Product image" class="product-image">
                                           </a>
-                                          <div class="product-action-vertical">
-                                            <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a>
-                                            <a href="popup/quickView" class="btn-product-icon btn-quickview" title="Quick view"><span>Quick view</span></a>
-                                            <a href="#" class="btn-product-icon btn-compare" title="Compare"><span>Compare</span></a>
-                                          </div>
+                                         
                                           <div class="product-action">
-                                            <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
+                                            <a  class="btn-product btn-cart"
+                                        onclick="addToCart('<%= product._id %>');"><span>add to cart</span></a>
                                           </div>
                                         </figure>
                                         <div class="product-body">
@@ -464,7 +470,6 @@
             var product = products[i];
             var productName = product.textContent.toLowerCase();
 
-            // Check if the product name contains the search query
             if (productName.includes(searchQuery)) {
                 product.style.display = 'block';
             } else {
@@ -473,6 +478,40 @@
         }
     });
 });
+
+
+function addToCart(productId) {
+    $.ajax({
+        url: '/addtocart',
+        method: 'patch',
+        data: { productId },
+        success: function (response) {
+            console.log('Response from server:', response);
+
+            if (!response.success) {
+                Swal.fire(
+                    'Out of Stock or Already in Cart',
+                    response.error || 'This product is currently out of stock or already in your cart.',
+                    'warning'
+                );
+            } else {
+                Swal.fire(
+                    'Saved to cart!',
+                    'Product added to cart successfully!',
+                    'success'
+                );
+            }
+        },
+        error: function (error) {
+            console.error('Error:', error);
+            Swal.fire(
+                'Error',
+                'An error occurred while processing your request.',
+                'error'
+            );
+        }
+    });
+}
 
 </script>
 

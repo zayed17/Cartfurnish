@@ -32,6 +32,8 @@
     <link rel="stylesheet" href="public/assets/css/style.css">
     <link rel="stylesheet" href="public/assets/css/plugins/nouislider/nouislider.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
     <style>
         .user-photo-container {
@@ -47,6 +49,21 @@
     height: auto;
     border-radius: 50%;
 }
+
+
+ .review-action button {
+        border: none;
+        background-color: transparent;
+        cursor: pointer;
+        padding: 0; /* Optional: Remove padding to make the button even more minimal */
+    }
+
+    .icon-thumbs-up,
+    .icon-thumbs-down {
+        /* Optional: Style the icons */
+        font-size: 16px;
+        margin-right: 5px;
+    }
 
     </style>
 
@@ -277,7 +294,7 @@
                                 </div><!-- End .details-filter-row -->
 
                                 <div class="product-details-action">
-                                    <a href="#" class="btn-product btn-cart"
+                                    <a  class="btn-product btn-cart"
                                         onclick="addToCart('<%= product._id %>');"><span>add to cart</span></a>
 
                                     <div class="details-action-wrapper">
@@ -363,7 +380,7 @@
                                                         <img src="/public/assets/images/contact.png" alt="User Photo" class="user-photo">
                                                     </div>
                                                 </div>
-                                                <div class="col">
+                                                <div class="col-2">
                                                     <div>
                                                         <h4><a href="#"><%= reviewItem.userId.name %>.</a></h4>
                                                         <div class="ratings-container">
@@ -380,11 +397,15 @@
                                                         <span class="review-date"><%= formattedDate %></span>
                                                     </div>
                                                 </div>
-                                                <div class="col">
+                                                <div class="col-4">
                                                     <h4><%= reviewItem.comment %></h4>
                                                     <div class="review-action">
-                                                        <a href="#"><i class="icon-thumbs-up"></i>Helpful (2)</a>
-                                                        <a href="#"><i class="icon-thumbs-down"></i>Unhelpful (0)</a>
+                                                        <button onclick="vote('like', '<%=reviewItem._id%>', '<%=reviewItem.productId%>')">
+                                                            <i class="icon-thumbs-up"></i> Like (<span id="likeCount">2</span>)
+                                                        </button>
+                                                        <button onclick="vote('dislike', '<%=reviewItem._id%>', '<%=reviewItem.productId%>')">
+                                                            <i class="icon-thumbs-down"></i> Dislike (<span id="dislikeCount">0</span>)
+                                                        </button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -411,12 +432,22 @@ function addToCart(productId) {
         success: function (response) {
             console.log('Response from server:', response);
 
-            if (!response.success) {
+            if (response.success == false) {
                 Swal.fire(
                     'Out of Stock or Already in Cart',
                     response.error || 'This product is currently out of stock or already in your cart.',
                     'warning'
                 );
+            }
+            
+                else if(response.session== false){
+                    
+                    Swal.fire(
+                    'Out of Stock or Already in Cart',
+                    response.error || 'This product is currently out of stock or already in your cart.',
+                    'warning'
+                );
+                
             } else {
                 Swal.fire(
                     'Saved to cart!',
@@ -534,25 +565,53 @@ function addToCart(productId) {
     <button id="scroll-top" title="Back to Top"><i class="icon-arrow-up"></i></button>
 
     <script>
-        // Get all gallery items
         const galleryItems = document.querySelectorAll('.product-gallery-item');
 
-        // Get the main image element
         const mainImage = document.getElementById('mainImage');
 
-        // Add click event listener to each gallery item
         galleryItems.forEach(item => {
             item.addEventListener('click', function (event) {
                 const imageURL = this.dataset.zoomImage || this.dataset.image;
                 mainImage.src = imageURL;
 
-                // Update the active class
                 galleryItems.forEach(item => item.classList.remove('active'));
                 this.classList.add('active');
 
-                event.preventDefault(); // Prevent default click behavior
+                event.preventDefault(); 
             });
         });
+
+    function vote(type, reviewId, productId) {
+    console.log(type,  reviewId, productId);
+    $.ajax({
+        url: '/vote',
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({ type, reviewId, productId }),
+        dataType: 'json',
+        success: (response) => {
+            console.log(response)
+            if (response.success === true && response.likes) {
+    $('#likeCount').text(response.likes.filter(like => like.type === 'like').length);
+    $('#dislikeCount').text(response.likes.filter(like => like.type === 'dislike').length);
+} else if (response.success === false) {
+    Swal.fire({
+        icon: 'error',
+        title: 'Unauthorized',
+        text: response.error,
+    });
+} else {
+    console.error('Error:', response);
+}
+
+        },
+        error: (error) => {
+            console.error('Error:', error);
+        },
+    });
+}
+
+
 
     </script>
 

@@ -19,29 +19,25 @@ const reviewSchema = mongoose.Schema({
     comment: {
         type: String
     },
-    likes: [{
-        type: ObjectId,
-        ref: 'users'
+    votes: [{
+        userId: {
+            type: ObjectId,
+            ref: 'users',
+            required: true
+        },
+        type: {
+            type: String,
+            enum: ['like', 'dislike'],
+            required: true
+        }
     }],
-    // replies: [{
-    //     userId: {
-    //         type: ObjectId,
-    //         ref: 'User',
-    //         required: true
-    //     },
-    //     reply: {
-    //         type: String,
-    //         required: true
-    //     },
-    //     createdAt: {
-    //         type: Date,
-    //         default: Date.now
-    //     }
-    // }],
     createdAt: {
         type: Date,
         default: Date.now
     }
 });
+
+// reviewSchema.index({ 'votes.userId': 1, productId: 1 }, { unique: true });
+
 
 module.exports = mongoose.model('Review', reviewSchema);

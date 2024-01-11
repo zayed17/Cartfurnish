@@ -808,17 +808,17 @@ function razorpayPayment(order) {
         "order_id": order.id,
         handler: function (response) {
             verifyPayment(response, order);
-        },
-        "prefill": {
-            "name": "Furni Ltd",
-            "email": "furniworld@gmail.com",
-            "contact": "9999999999"
-        },
-        "notes": {
-            "address": "India"
-        },
-        "theme": {
-            "color": "#cc9967"
+			},
+			"prefill": {
+				"name": "Furni Ltd",
+				"email": "furniworld@gmail.com",
+				"contact": "9999999999"
+			},
+			"notes": {
+				"address": "India"
+			},
+			"theme": {
+				"color": "#cc9967"
         }
     };
 

@@ -43,3 +43,13 @@
     font-size: 12px; /* Adjust font size as needed */
 }
 
+.label-orange {
+    background-color: orange;
+    color: white; /* Adjust the text color as needed */
+    /* Add any other styling you want */
+}
+.label-out-of-stock {
+    background-color: red; /* Adjust the background color as needed */
+    color: white; /* Adjust the text color as needed */
+    /* Add any other styling you want */
+}

@@ -24,6 +24,9 @@ const loadcart = async(req,res)=>{
 const addtocart = async (req, res) => {
     try {
         const user_id = req.session.user_id; 
+        if(!user_id){
+            return res.json({session:false,error:"You want to Login"})
+        }
         console.log(req.session);
         const product_id = req.body.productId;
 

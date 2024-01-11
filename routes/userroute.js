@@ -62,6 +62,6 @@ userRoute.post('/rechargeWallet',auth.isLogin,usercontrollers.walletReacharge)
 userRoute.post('/returnproduct',auth.isLogin,ordercontrollers.returnproduct)
 userRoute.post('/walletverify',auth.isLogin,usercontrollers.verifypayment)
 userRoute.post('/submit-review',auth.isLogin,reviewcontrollers.addreview)
-
+userRoute.post('/vote',auth.isLogin,reviewcontrollers.voting)
 
 module.exports = userRoute;
