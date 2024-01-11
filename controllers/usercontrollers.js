@@ -67,12 +67,10 @@ const loadsignup = async (req, res) => {
 
 const insertuser = async (req, res) => {
     try {
-        // Validate request body before proceeding
         if (!req.body.name.trim() || !req.body.email.trim() || !req.body.mobile.trim() || !req.body.password.trim()) {
             return res.status(400).render('signup', { message: 'All fields are required.' });
         }
 
-        // Additional validation logic for email and password
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(req.body.email.trim())) {
             return res.status(400).render('signup', { message: 'Invalid email format.' });
@@ -82,7 +80,6 @@ const insertuser = async (req, res) => {
             return res.status(400).render('signup', { message: 'Password must be at least 8 characters long.' });
         }
 
-        // Check if the email is already registered
         const existingUser = await User.findOne({
             $or: [{ email: req.body.email.trim() }, { mobile: req.body.mobile.trim() }],
           });
@@ -114,14 +111,15 @@ const insertuser = async (req, res) => {
 
         const spassword = await securePassword(req.body.password.trim());
 
-        // Create a new user instance without saving it to the database yet
+        const { name, email, mobile } = req.body;
         const user = new User({
-            name: req.body.name.trim(),
-            email: req.body.email.trim(),
-            mobile: req.body.mobile.trim(),
+            name: name.trim(),
+            email: email.trim(),
+            mobile: mobile.trim(),
             password: spassword,
-            referral_code:id
+            referral_code: id
         });
+        
 
         const userData = await user.save();
         await sendOtpVerificationEmail(userData, res);
@@ -133,89 +131,19 @@ const insertuser = async (req, res) => {
     };
 
 
-// const insertuser = async (req, res) => {
-//     try {
-//       const existingUser = await User.findOne({
-//         $or: [{ email: req.body.email }, { mobile: req.body.mobile }],
-//       });
-  
-//       if (existingUser) {
-//         res.render('signup', { message: "User already exists" });
-//         return;
-//       }
-  
-//       const hashedPassword = await securePassword(req.body.password);
-//       const user = new User({
-//         name: req.body.name,
-//         email: req.body.email,
-//         mobile: req.body.mobile,
-//         password: hashedPassword,
-//       });
-  
-//       const userData = await user.save();
-//       await sendOtpVerificationEmail(userData, res);
-//     } catch (error) {
-//       console.error(error.message);
-//     }
-//   };
-  
-
 const loadVerificationPage = async(req,res)=>{
     try {
-        req.session.user_id = req.query.id;    
-        res.render('otp');
+        const id = req.query.id;    
+        res.render('otp',{id});
     } catch (error) {
         console.log(error.message);
     }
 }
 
-// const sendOtpVerificationEmail = async ({ email, _id }, res) => {
-//     try {
-//       const transporter = nodemailer.createTransport({
-//         service: 'gmail',
-//         host: 'smtp.gmail.com',
-//         port: 587,
-//         secure: true,
-//         auth: {
-//           user: process.env.email_user, // Your Gmail email address
-//           pass: process.env.password_user
-//         }
-//       });
-  
-//       const otp = `${Math.floor(1000 + Math.random() * 9000)}`;
-  
-//       const hashedOtp = await bcrypt.hash(otp, 10);
-  
-//       const mailOptions = {
-//         from: process.env.email_user,
-//         to: email,
-//         subject: "Verify Your Email",
-//         html: `
-//           <p> Enter <b>${otp}</b> in the app to verify your email address and complete</p>
-//           <p> This code will expire soon </p>`
-//       };
-  
-//       // Hash the OTP before storing it in the database
-//       const newOtpVerification = new userOtpVerification({
-//         userId: _id,
-//         otp: hashedOtp,
-//         createAt: Date.now(),
-//         // expiresAt: Date.now() + 60000
-//       });
-  
-//       await newOtpVerification.save();
-  
-//       await transporter.sendMail(mailOptions);
-  
-//       res.redirect(`/verifyotp?id=${_id}`);
-//     } catch (error) {
-//       console.error(error);
-//     }
-//   };
   
 
 
-const sendOtpVerificationEmail = async ({ email, _id }, res, isResend = false) => {
+const sendOtpVerificationEmail = async ({ email, _id }, res) => {
     try {
         const transporter = nodemailer.createTransport({
             service: 'gmail',
@@ -229,7 +157,7 @@ const sendOtpVerificationEmail = async ({ email, _id }, res, isResend = false) =
         });
 
         const otp = `${Math.floor(1000 + Math.random() * 9000)}`;
-console.log(otp);
+        console.log(otp);
         const hashedOtp = await bcrypt.hash(otp, 10);
 
         const mailOptions = {
@@ -237,80 +165,85 @@ console.log(otp);
             to: email,
             subject: "Verify Your Email",
             html: `
-                <p> Enter <b>${otp}</b> in the app to verify your email address and complete</p>
-                <p> This code will expire soon </p>`
+                <div style="font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px; text-align: center;">
+                    <h2 style="color: #007BFF;">Welcome to Your App!</h2>
+                    <p style="font-size: 16px;">Thank you for choosing our service. To complete your registration, please verify your email address.</p>
+                    
+                    <div style="background-color: #ffffff; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+                        <p style="font-size: 18px; margin-bottom: 10px;">Verification Code:</p>
+                        <h3 style="color: #007BFF; margin: 0; font-size: 24px; padding: 10px; background-color: #f0f0f0; border-radius: 5px;">${otp}</h3>
+                        <p style="font-size: 14px; color: #666;">This code will expire soon, so please use it promptly.</p>
+                    </div>
+        
+                    <p style="font-size: 14px; color: #666; margin-top: 20px;">Thank you for choosing our app!</p>
+                </div>`
         };
+        
+        const userOtpVerificationRecord = await userOtpVerification.findOne({ userId: _id });
 
-        // Hash the OTP before storing it in the database
-        const newOtpVerification = new userOtpVerification({
-            userId: _id,
-            otp: hashedOtp,
-            createAt: Date.now(),
-            // expiresAt: Date.now() + 60000
-        });
-
-        await newOtpVerification.save();
-
-        // If it's a resend, send a different response
-        if (isResend) {
-            res.status(200).json({ message: 'OTP resent successfully' });
+        if (userOtpVerificationRecord) {
+            await userOtpVerification.updateOne({ userId: _id }, { otp: hashedOtp, createAt: Date.now() });
         } else {
-            // If it's not a resend, redirect to the verification page
-            await transporter.sendMail(mailOptions);
-            res.redirect(`/verifyotp?id=${_id}`);
+            const newOtpVerification = new userOtpVerification({
+                userId: _id,
+                otp: hashedOtp,
+                createAt: Date.now(),
+            });
 
+            await newOtpVerification.save();
         }
+
+
+
+        await transporter.sendMail(mailOptions);
+        res.redirect(`/verifyotp?id=${_id}`);
     } catch (error) {
         console.error('Error in sendOtpVerificationEmail:', error);
         res.status(500).json({ error: 'Internal server error' });
     }
 };
 
-  const verifyOtp=async(req,res)=>{
+const verifyOtp = async (req, res) => {
     try {
-      const Otp= req.body.otp
-      const userId=req.session.user_id
-     
-       
-          console.log(userId);
-          const userOtpVerificationRecords= await userOtpVerification.find({userId})
-       console.log(userOtpVerificationRecords);
-          if(!userOtpVerificationRecords.length){
-            return res.render('otp',{ message:  `Otp expired`  })
-          }
-        
-            //user otp record exists
-           const {otp:hashedOtp}=userOtpVerificationRecords[0];
+        const { otp, id: userId } = req.body;
 
-            const enteredOtp=Otp
-            //compare the entered otp
-            console.log(enteredOtp);
-            console.log(hashedOtp);
-             const validOtp = await bcrypt.compare(enteredOtp, hashedOtp);
-  
-             if(!validOtp){
-              //case otp invalid
-             return res.render('otp',{message:'Invalid Otp Please try again'})
-             }
+        console.log(userId);
 
-           //update user to mask is verified true
-            await User.updateOne({_id:userId},{$set:{is_verified:true }})
+        const userOtpVerificationRecord = await userOtpVerification.findOne({ userId });
 
+        console.log(userOtpVerificationRecord);
 
-            //delete the used otp of otp database 
-            await userOtpVerification.deleteOne({userId})
-            req.session.user_id = userId;
+        if (!userOtpVerificationRecord) {
+            return res.render('otp', { message: 'Otp expired' });
+        }
 
-            // req.session.user_id = userData._id;
-            return res.redirect('/')
-        
-  
+        const { otp: hashedOtp } = userOtpVerificationRecord;
+
+        console.log(otp);
+        console.log(hashedOtp);
+
+        const validOtp = await bcrypt.compare(otp, hashedOtp);
+
+        console.log(validOtp, "is it valid");
+
+        if (!validOtp) {
+            return res.render('otp', { message: 'Invalid Otp. Please try again', id: userId });
+        }
+
+        await User.updateOne({ _id: userId }, { $set: { is_verified: true } });
+
+        await userOtpVerification.deleteOne({ userId });
+
+        req.session.user_id = userId;
+
+        return res.redirect('/');
     } catch (error) {
-      console.log(error.message);
+        console.log(error.message);
     }
-  }
-  
-  
+};
+
+    
+    
 
   
 
@@ -361,11 +294,10 @@ const loademailinput = async (req,res)=>{
 const sentOtpbyMail = async(req,res)=>{
     try {
         const userData = await User.findOne({email:req.body.email});
-
         if(!userData){
             res.render('loginwithotp',{message:'User not exist.'});
         }else{
-            if(userData.is_verified==1){
+            if(userData.is_verified==true){
                 sendOtpVerificationEmail(userData,res);
             }else{
                 res.render('loginwithotp',{message:'user not verifed. Verify now'});  
@@ -444,27 +376,16 @@ const loadeachproduct = async(req,res)=>{
     }
   }
 
-
-const resendotp = async (req, res) => {
+  const resendotp = async (req, res) => {
     try {
-        const userData = await User.findOne({ _id: req.session.user_id });
-
-        if (!userData) {
-            console.log("User data not found");
-            return res.render('500Error');
-        }
-
-        console.log(userData.email, "ethano nnull");
-
-        await sendOtpVerificationEmail({ email: userData.email, _id: userData._id }, res, true);
-
-        res.render("loginwithotp", { email: userData.email });
+        const id = req.query.id;
+        const userData = await User.findOne({ _id: id });
+        await sendOtpVerificationEmail({ email: userData.email, _id: userData._id }, res);
     } catch (error) {
-        console.log(error.message);
-        res.render('500Error');
+        console.error('Error in resendotp:', error);
+        res.status(500).json({ error: 'Internal server error' });
     }
 };
-
 
 
 const edituser = async (req, res) => {
