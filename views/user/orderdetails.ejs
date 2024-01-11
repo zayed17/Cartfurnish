@@ -201,7 +201,7 @@
                                     <a href="/invoice?productId=<%= product._id %>&orderId=<%= order._id %>" download="invoice.pdf" class="btn btn-primary btn-sm w-100">Download Invoice</a>
                                 </div>
                                 <div>
-                                    <button type="button" class="btn btn-success btn-sm mt-2" data-toggle="modal" onclick="getProductId('<%= product._id %>','<%= order._id %>')" data-target="#reviewModal">Leave a Review</button>
+                                    <button type="button" class="btn btn-success btn-sm mt-2" data-toggle="modal" onclick="getProductId('<%= product.productId._id %>','<%= order._id %>')" data-target="#reviewModal">Leave a Review</button>
                                 </div>
                             </div>
                         <% } %>

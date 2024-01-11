@@ -33,6 +33,22 @@
     <link rel="stylesheet" href="public/assets/css/plugins/nouislider/nouislider.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10">
 
+    <style>
+        .user-photo-container {
+    width: 40px; /* Adjust the size as needed */
+    height: 40px;
+    overflow: hidden;
+    border-radius: 50%;
+    margin-right: 10px; /* Add spacing between the photo and the user name */
+}
+
+.user-photo {
+    width: 100%;
+    height: auto;
+    border-radius: 50%;
+}
+
+    </style>
 
 </head>
 
@@ -309,7 +325,7 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" id="product-review-link" data-toggle="tab" href="#product-review-tab"
-                                role="tab" aria-controls="product-review-tab" aria-selected="false">Reviews (2)</a>
+                                role="tab" aria-controls="product-review-tab" aria-selected="false">Reviews (<%=review.length%>)</a>
                         </li>
                     </ul>
                     <div class="tab-content">
@@ -335,73 +351,53 @@
                                     view our <a href="#">Returns information</a></p>
                             </div><!-- End .product-desc-content -->
                         </div><!-- .End .tab-pane -->
-                        <div class="tab-pane fade" id="product-review-tab" role="tabpanel"
-                            aria-labelledby="product-review-link">
-                            <div class="reviews">
-                                <h3>Reviews (2)</h3>
-                                <div class="review">
-                                    <div class="row no-gutters">
-                                        <div class="col-auto">
-                                            <h4><a href="#">Samanta J.</a></h4>
-                                            <div class="ratings-container">
-                                                <div class="ratings">
-                                                    <div class="ratings-val" style="width: 80%;"></div>
-                                                    <!-- End .ratings-val -->
-                                                </div><!-- End .ratings -->
-                                            </div><!-- End .rating-container -->
-                                            <span class="review-date">6 days ago</span>
-                                        </div><!-- End .col -->
-                                        <div class="col">
-                                            <h4>Good, perfect size</h4>
-
-                                            <div class="review-content">
-                                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ducimus cum
-                                                    dolores assumenda asperiores facilis porro reprehenderit animi culpa
-                                                    atque blanditiis commodi perspiciatis doloremque, possimus,
-                                                    explicabo, autem fugit beatae quae voluptas!</p>
-                                            </div><!-- End .review-content -->
-
-                                            <div class="review-action">
-                                                <a href="#"><i class="icon-thumbs-up"></i>Helpful (2)</a>
-                                                <a href="#"><i class="icon-thumbs-down"></i>Unhelpful (0)</a>
-                                            </div><!-- End .review-action -->
-                                        </div><!-- End .col-auto -->
-                                    </div><!-- End .row -->
-                                </div><!-- End .review -->
-
-                                <div class="review">
-                                    <div class="row no-gutters">
-                                        <div class="col-auto">
-                                            <h4><a href="#">John Doe</a></h4>
-                                            <div class="ratings-container">
-                                                <div class="ratings">
-                                                    <div class="ratings-val" style="width: 100%;"></div>
-                                                    <!-- End .ratings-val -->
-                                                </div><!-- End .ratings -->
-                                            </div><!-- End .rating-container -->
-                                            <span class="review-date">5 days ago</span>
-                                        </div><!-- End .col -->
-                                        <div class="col">
-                                            <h4>Very good</h4>
-
-                                            <div class="review-content">
-                                                <p>Sed, molestias, tempore? Ex dolor esse iure hic veniam laborum
-                                                    blanditiis laudantium iste amet. Cum non voluptate eos enim, ab
-                                                    cumque nam, modi, quas iure illum repellendus, blanditiis
-                                                    perspiciatis beatae!</p>
-                                            </div><!-- End .review-content -->
-
-                                            <div class="review-action">
-                                                <a href="#"><i class="icon-thumbs-up"></i>Helpful (0)</a>
-                                                <a href="#"><i class="icon-thumbs-down"></i>Unhelpful (0)</a>
-                                            </div><!-- End .review-action -->
-                                        </div><!-- End .col-auto -->
-                                    </div><!-- End .row -->
-                                </div><!-- End .review -->
-                            </div><!-- End .reviews -->
-                        </div><!-- .End .tab-pane -->
-                    </div><!-- End .tab-content -->
-                </div><!-- End .product-details-tab -->
+                        <div class="tab-pane fade" id="product-review-tab" role="tabpanel" aria-labelledby="product-review-link">
+                            <% if (review && review.length>0) { %>
+                                <div class="reviews">
+                                    <h3>Reviews (<%= review.length %>)</h3>
+                                    <% review.forEach((reviewItem) => { %>
+                                        <div class="review">
+                                            <div class="row no-gutters">
+                                                <div class="col-auto">
+                                                    <div class="user-photo-container">
+                                                        <img src="/public/assets/images/contact.png" alt="User Photo" class="user-photo">
+                                                    </div>
+                                                </div>
+                                                <div class="col">
+                                                    <div>
+                                                        <h4><a href="#"><%= reviewItem.userId.name %>.</a></h4>
+                                                        <div class="ratings-container">
+                                                            <div class="ratings">
+                                                                <div class="ratings-val" style="width: <%= (reviewItem.rating * 20) + '%' %>"></div>
+                                                            </div>
+                                                        </div>
+                                                        <% 
+                                                            const currentDate = new Date();
+                                                            const reviewDate = new Date(reviewItem.createdAt);
+                                                            const timeDifference = Math.floor((currentDate - reviewDate) / (1000 * 60 * 60 * 24)); // Difference in days
+                                                            const formattedDate = timeDifference === 0 ? 'today' : `${timeDifference} day${timeDifference > 1 ? 's' : ''} ago`;
+                                                        %>
+                                                        <span class="review-date"><%= formattedDate %></span>
+                                                    </div>
+                                                </div>
+                                                <div class="col">
+                                                    <h4><%= reviewItem.comment %></h4>
+                                                    <div class="review-action">
+                                                        <a href="#"><i class="icon-thumbs-up"></i>Helpful (2)</a>
+                                                        <a href="#"><i class="icon-thumbs-down"></i>Unhelpful (0)</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <% }); %>
+                                </div>
+                            <% } else { %>
+                                <h3 class="text-center">No reviews have been posted</h3>
+                            <% } %>
+                        </div>
+                                              
+                    </div>
+                </div>
 
 
 

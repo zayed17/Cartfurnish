@@ -9,7 +9,7 @@ const reviewSchema = mongoose.Schema({
     },
     userId: {
         type: ObjectId,
-        ref: "User",
+        ref: "users",
         required: true
     },
     rating: {
@@ -21,7 +21,7 @@ const reviewSchema = mongoose.Schema({
     },
     likes: [{
         type: ObjectId,
-        ref: 'User'
+        ref: 'users'
     }],
     // replies: [{
     //     userId: {

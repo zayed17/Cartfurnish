@@ -12,6 +12,7 @@ const Category = require('../models/categorymodal')
 const Order = require('../models/ordermodels')
 const Coupon = require('../models/couponmodels')
 const Banner = require('../models/bannermodels')
+const Review = require('../models/reviewmodels')
 const dotenv = require('dotenv')
 const crypto = require("crypto")
 
@@ -353,8 +354,11 @@ const loadeachproduct = async(req,res)=>{
     try {
         const userData = await User.findOne({_id:req.session.user_id})
         const id = req.query.id;
+        console.log(id, id)
+        const date = Date.now()
         const product = await Product.findOne({_id:id})
-      res.render("product",{product,user:userData})
+        const review = await Review.find({productId:id}).populate('userId')
+      res.render("product",{product,user:userData,review,date})
     } catch (error) {
       console.log(error);
     }
