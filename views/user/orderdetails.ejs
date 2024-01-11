@@ -197,20 +197,55 @@
                         </div>
                         <% if(product.productstatus=="Delivered") { %>
                             <div class="ml-auto align-self-end">
-                                <div class="col-6">
+                                <div class="my-4">
                                     <a href="/invoice?productId=<%= product._id %>&orderId=<%= order._id %>" download="invoice.pdf" class="btn btn-primary btn-sm w-100">Download Invoice</a>
                                 </div>
+                                <div>
+                                    <button type="button" class="btn btn-success btn-sm mt-2" data-toggle="modal" onclick="getProductId('<%= product._id %>','<%= order._id %>')" data-target="#reviewModal">Leave a Review</button>
+                                </div>
                             </div>
-                            
                         <% } %>
                     </div>
                 <% }) %>
-            </div>
-            
-            
+            </div>         
         </div>
             
-        
+        <div class="modal fade" id="reviewModal" tabindex="-1" role="dialog" aria-labelledby="reviewModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="reviewModalLabel">Leave a Review</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <form action="/submit-review" method="post">
+                    <div class="form-group">
+                      <label for="reviewText">Your Review</label>
+                      <textarea class="form-control" id="reviewText" name="reviewText" rows="3" required></textarea>
+                    </div>
+          
+                    <input type="text" id="productId" name="productId" hidden>
+                    <input type="text" id="orderId" name="orderId" hidden>
+                    <div class="form-group">
+                      <label for="starRating">Rate the Product</label>
+                      <select class="form-control" id="starRating"  name="starRating" required>
+                        <option value="5">⭐⭐⭐⭐⭐ (5 Stars)</option>
+                        <option value="4">⭐⭐⭐⭐ (4 Stars)</option>
+                        <option value="3">⭐⭐⭐ (3 Stars)</option>
+                        <option value="2">⭐⭐ (2 Stars)</option>
+                        <option value="1">⭐ (1 Star)</option>
+                      </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-success">Submit Review</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+          
 
 
 
@@ -385,6 +420,26 @@ function returnProduct(productId) {
         }
     });
 }
+
+
+
+
+
+function getProductId(productId, orderId) {
+  selectedProductId = productId;
+  console.log(productId, orderId)
+  console.log(selectedProductId);
+
+  const inputField1 = document.getElementById("productId");
+  const inputField2 = document.getElementById("orderId");
+
+  inputField1.value = selectedProductId;
+  inputField2.value = orderId;
+
+  console.log(inputField2.value)
+}
+
+
 
 </script>
 
