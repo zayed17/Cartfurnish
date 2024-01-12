@@ -152,9 +152,9 @@
 				</div>
 			</nav><!-- End .breadcrumb-nav -->
 
-			<div class="page-content d-flex">
+			<div class="page-content ">
 				<div class="checkout">
-					<div class="container clearfix ">
+					<div class="container  ">
 						<div class="checkout-discount" id="reloadArea2">
 							<% console.log(cartData.couponDiscount, "is tsi ") %>
 							<% if (cartData.couponDiscount == 0) { %>
@@ -180,88 +180,30 @@
 			
 						<form id="orderForm">
 							<div class="row" style="justify-content: space-around;">
-								<% if (addresses && addresses.address && addresses.address.length > 0) { %>
-									<div class="row" id="addrassArea">
-										<% addresses.address.forEach(function (address, index) { %>
-											<div class="col-lg-6">
-												<div class="card card-dashboard">
-													<div class="card-body">
-														<input type="radio" name="address" value="<%= index %>" <%= index === 0 ? 'checked' : '' %> >
-														<h3 class="card-title">Address <%= index + 1 %></h3>
-														<p>
-															Name: <%= address.fullName %><br>
-															Country: <%= address.country %><br>
-															House Name: <%= address.housename %><br>
-															State: <%= address.state %><br>
-															City: <%= address.city %><br>
-															Pincode: <%= address.pincode %><br>
-															Phone: <%= address.phone %><br>
-															Email: <%= address.email %><br>
-															<a href="#" data-toggle="modal" data-target="#addAddressModals" onclick="showEditAddressModal('<%= address.fullName %>','<%= address.country %>', '<%= address.housename %>', '<%= address.state %>', '<%= address.city %>', '<%= address.pincode %>', '<%= address.phone %>', '<%= address.email %>','<%= address._id %>')">Edit <i class="icon-edit"></i></a>
-														</p>
-													</div>
-												</div>
-											</div>
-										<% }); %>
-									</div>
-								<% } else { %>
-									<div class="col-lg-9 billing-details">
-										<h2 class="checkout-title">Billing Details</h2>
-			
-										<div class="form-group">
-											<label for="fullName">Full Name *</label>
-											<input type="text" class="form-control" id="fullName" name="fullName">
-										</div>
-			
-										<div class="form-group">
-											<label for="country">Country *</label>
-											<input type="text" class="form-control" id="country" name="country">
-										</div>
-			
-										<div class="form-group">
-											<label for="streetAddress">House name *</label>
-											<input type="text" class="form-control" id="streetAddress" name="housename">
-										</div>
 
-										<div class="row">
-											<div class="col-sm-6">
-												<div class="form-group">
-													<label for="stateCounty">State *</label>
-													<input type="text" class="form-control" id="stateCounty" name="state">
-												</div>
-											</div>
-									
-											<div class="col-sm-6">
-												<div class="form-group">
-													<label for="townCity"> City *</label>
-													<input type="text" class="form-control" id="townCity" name="city">
-												</div>
-											</div>
-										</div>
-									
-										<div class="row">
-											<div class="col-sm-6">
-												<div class="form-group">
-													<label for="postcode">Pincode *</label>
-													<input type="text" class="form-control" id="postcode" name="pincode">
-												</div>
-											</div>
-									
-											<div class="col-sm-6">
-												<div class="form-group">
-													<label for="phone">Phone *</label>
-													<input type="tel" class="form-control" id="phone" name="phone">
+									<% addresses.address.forEach(function (address, index) { %>
+										<div class="col-lg-4">
+											<div class="card card-dashboard">
+												<div class="card-body">
+													<input type="radio" name="address" value="<%= index %>" <%= index === 0 ? 'checked' : '' %> >
+													<h3 class="card-title">Address <%= index + 1 %></h3>
+													<p>
+														Name: <%= address.fullName %><br>
+														Country: <%= address.country %><br>
+														House Name: <%= address.housename %><br>
+														State: <%= address.state %><br>
+														City: <%= address.city %><br>
+														Pincode: <%= address.pincode %><br>
+														Phone: <%= address.phone %><br>
+														Email: <%= address.email %><br>
+														<a href="#" data-toggle="modal" data-target="#addAddressModals" onclick="showEditAddressModal('<%= address.fullName %>','<%= address.country %>', '<%= address.housename %>', '<%= address.state %>', '<%= address.city %>', '<%= address.pincode %>', '<%= address.phone %>', '<%= address.email %>','<%= address._id %>')">Edit <i class="icon-edit"></i></a>
+													</p>
 												</div>
 											</div>
 										</div>
-										<div class="form-group">
-											<label for="email">Email *</label>
-											<input type="email" class="form-control" id="email" name="email">
-										</div>
-									</div>
-								<% } %>
+									<% }); %>
 			
-								<aside class="col-lg-3 justify-content-end ">
+								<aside class="col-lg-3 ">
 									<div class="summary">
 										<h3 class="summary-title">Your Order</h3>
 										<table class="table table-summary"  id="reloadArea">

@@ -168,6 +168,20 @@
                         <div class="card-header">
                             <h3>Add Category</h3>
                         </div>
+                        <% if (typeof message !=='undefined' ) { %>
+                            <p class="m-3" id="message" style="color: rgb(255, 0, 0);">
+                                <%= message %>
+                            </p>
+                            <script>
+                                // Set a timer to remove the message after 5000 milliseconds (5 seconds)
+                                setTimeout(function () {
+                                    var messageElement = document.getElementById('message');
+                                    if (messageElement) {
+                                        messageElement.style.display = 'none';
+                                    }
+                                }, 3500);
+                            </script>
+                            <% } %>
                         <div class="card-body">
                             <!-- Category Form -->
                             <form action="/admin/addcategory" method="post">

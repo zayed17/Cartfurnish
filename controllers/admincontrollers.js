@@ -169,18 +169,17 @@ const loadeditCategory=async(req,res)=>{
 
 const editCategory = async (req, res) => {
     try {
+        const categoryData = await Category.findById({_id: req.body.id  });
+        const exist = await Category.findOne({ name: new RegExp(req.body.name, 'i') })
+        if(exist){
+            res.render('editcategory',{message:"Duplicate is not allowed!",categoryData})
+        }
         await Category.findByIdAndUpdate(
             { _id: req.body.id },
             { $set: { name: req.body.name, description: req.body.description } }
         );
         res.redirect(`/admin/category?message=${'successfully added'}`);
     } catch (error) {
-        if (error.code === 11000) {
-            // Duplicate key error (E11000)
-            return res.render('editCategory', { message: 'Category name already exists' });
-            // or you can redirect with a query parameter
-            // return res.redirect(`/admin/category?error=${'Category name already exists'}`);
-        }
         console.log(error.message);
     }
 };
