@@ -358,8 +358,8 @@ const loadeachproduct = async(req,res)=>{
         const date = Date.now()
         const product = await Product.findOne({_id:id})
         const review = await Review.find({productId:id}).populate('userId')
-        const total = review.rating.reduce((acc,num)=>acc+num,0)
-        console.log(review[0],total);
+        // const total = review.rating.reduce((acc,num)=>acc+num,0)
+        // console.log(review[0],total);
       res.render("product",{product,user:userData,review,date})
     } catch (error) {
       console.log(error);

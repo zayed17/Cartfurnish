@@ -125,7 +125,7 @@
                         </button>
 
                         <a href="/" class="logo">
-                            <img src="public/assets/images/logo.png" alt="Molla Logo" width="105" height="25">
+                            <img src=" /public/assets/imgs/theme/logo.png" alt="Molla Logo" width="105" height="25">
                         </a>
 
                         <nav class="main-nav">
@@ -440,13 +440,15 @@ function addToCart(productId) {
                 );
             }
             
-                else if(response.session== false){
-                    
-                    Swal.fire(
-                    'Out of Stock or Already in Cart',
-                    response.error || 'This product is currently out of stock or already in your cart.',
-                    'warning'
-                );
+            else if(response.session== false){
+                    Swal.fire({
+                    title: 'Login Required',
+                    text: response.error || 'You want to login.',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Login',
+                    cancelButtonText: 'Cancel',
+                });
                 
             } else {
                 Swal.fire(
@@ -485,7 +487,7 @@ function addToCart(productId) {
                 <div class="row">
                     <div class="col-sm-6 col-lg-3">
                         <div class="widget widget-about">
-                            <img src="public/assets/images/logo.png" class="footer-logo" alt="Footer Logo" width="105"
+                            <img src=" /public/assets/imgs/theme/logo.png" class="footer-logo" alt="Footer Logo" width="105"
                                 height="25">
                             <p>Praesent dapibus, neque id cursus ucibus, tortor neque egestas augue, eu vulputate magna
                                 eros eu erat. </p>

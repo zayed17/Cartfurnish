@@ -92,9 +92,8 @@
                         </button>
 
                         <a href="/" class="logo">
-                            <img src="public/assets/images/logo.png" alt="Molla Logo" width="105" height="25">
+                            <img src=" /public/assets/imgs/theme/logo.png" alt="Molla Logo" width="105" height="25">
                         </a>
-
                         <nav class="main-nav">
                             <ul class="menu sf-arrows">
                                 <li class="megamenu-container active">
@@ -184,49 +183,6 @@
                                             </select>
                                         </div>
                                     </div><!-- End .toolbox-sort -->
-                                    <div class="toolbox-layout">
-                                        <a href="category-list" class="btn-layout">
-                                            <svg width="16" height="10">
-                                                <rect x="0" y="0" width="4" height="4" />
-                                                <rect x="6" y="0" width="10" height="4" />
-                                                <rect x="0" y="6" width="4" height="4" />
-                                                <rect x="6" y="6" width="10" height="4" />
-                                            </svg>
-                                        </a>
-
-                                        <a href="category-2cols" class="btn-layout">
-                                            <svg width="10" height="10">
-                                                <rect x="0" y="0" width="4" height="4" />
-                                                <rect x="6" y="0" width="4" height="4" />
-                                                <rect x="0" y="6" width="4" height="4" />
-                                                <rect x="6" y="6" width="4" height="4" />
-                                            </svg>
-                                        </a>
-
-                                        <a href="category" class="btn-layout">
-                                            <svg width="16" height="10">
-                                                <rect x="0" y="0" width="4" height="4" />
-                                                <rect x="6" y="0" width="4" height="4" />
-                                                <rect x="12" y="0" width="4" height="4" />
-                                                <rect x="0" y="6" width="4" height="4" />
-                                                <rect x="6" y="6" width="4" height="4" />
-                                                <rect x="12" y="6" width="4" height="4" />
-                                            </svg>
-                                        </a>
-
-                                        <a href="shop" class="btn-layout active">
-                                            <svg width="22" height="10">
-                                                <rect x="0" y="0" width="4" height="4" />
-                                                <rect x="6" y="0" width="4" height="4" />
-                                                <rect x="12" y="0" width="4" height="4" />
-                                                <rect x="18" y="0" width="4" height="4" />
-                                                <rect x="0" y="6" width="4" height="4" />
-                                                <rect x="6" y="6" width="4" height="4" />
-                                                <rect x="12" y="6" width="4" height="4" />
-                                                <rect x="18" y="6" width="4" height="4" />
-                                            </svg>
-                                        </a>
-                                    </div><!-- End .toolbox-layout -->
                                 </div><!-- End .toolbox-right -->
                             </div><!-- End .toolbox -->
 
@@ -270,14 +226,6 @@
                                         </div>
                                       </div>
                                     </div>
-                              
-                                    <% counter++; %>
-                                    <% if (counter % 2 === 0) { %>
-                                      <div class="w-100 d-md-none d-lg-none d-xl-none"></div>
-                                    <% } %>
-                                    <% if (counter % 3 === 0) { %>
-                                      <div class="w-100 d-none d-md-block d-lg-block d-xl-block"></div>
-                                    <% } %>
                                   <% }) %>
                                 </div>
                             </div>
@@ -377,7 +325,7 @@
                 <div class="row">
                     <div class="col-sm-6 col-lg-3">
                         <div class="widget widget-about">
-                            <img src="public/assets/images/logo.png" class="footer-logo" alt="Footer Logo" width="105"
+                            <img src=" /public/assets/imgs/theme/logo.png" class="footer-logo" alt="Footer Logo" width="105"
                                 height="25">
                             <p>Praesent dapibus, neque id cursus ucibus, tortor neque egestas augue, eu vulputate magna
                                 eros eu erat. </p>
@@ -479,7 +427,6 @@
     });
 });
 
-
 function addToCart(productId) {
     $.ajax({
         url: '/addtocart',
@@ -488,12 +435,24 @@ function addToCart(productId) {
         success: function (response) {
             console.log('Response from server:', response);
 
-            if (!response.success) {
+            if (response.success == false) {
                 Swal.fire(
                     'Out of Stock or Already in Cart',
                     response.error || 'This product is currently out of stock or already in your cart.',
                     'warning'
                 );
+            }
+            
+                else if(response.session== false){
+                    Swal.fire({
+                    title: 'Login Required',
+                    text: response.error || 'You want to login.',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Login',
+                    cancelButtonText: 'Cancel',
+                });
+                
             } else {
                 Swal.fire(
                     'Saved to cart!',
