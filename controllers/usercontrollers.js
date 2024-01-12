@@ -294,7 +294,13 @@ const loademailinput = async (req,res)=>{
 
 const sentOtpbyMail = async(req,res)=>{
     try {
-        const userData = await User.findOne({email:req.body.email});
+        // const userData = await User.findOne({email:req.body.email});
+        const userData = await User.aggregate([
+            { $match: { email: req.body.email } },
+            { $unwind: "$walletHistory" },
+            { $sort: { "walletHistory.date": -1 } },
+            { $limit: 1 }
+          ]); 
         if(!userData){
             res.render('loginwithotp',{message:'User not exist.'});
         }else{
@@ -332,7 +338,7 @@ const userLogout = async (req, res) => {
 const loadshop = async (req, res) => {
     try {
       const page = parseInt(req.query.page) || 1;
-      const productsPerPage = 9; // Number of products per page
+      const productsPerPage = 9; 
       const startIndex = (page - 1) * productsPerPage;
       const endIndex = startIndex + productsPerPage;
       const userData = await User.findOne({_id:req.session.user_id})

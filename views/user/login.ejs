@@ -115,28 +115,6 @@
                             </ul><!-- End .menu -->
                         </nav><!-- End .main-nav -->
                     </div><!-- End .header-left -->
-
-                    <div class="header-right">
-                       
-
-                        <div class="dropdown cart-dropdown">
-                            <% if(locals.user){ %>
-                                <a href="/cart" class="dropdown-toggle" >
-                                    <div class="icon">
-                                        <i class="icon-shopping-cart"></i>
-                                        <span class="cart-count">2</span>
-                                    </div>
-                                </a>
-                            <%}else{%>
-                                <a href="/login" class="dropdown-toggle">
-                                    <div class="icon">
-                                        <i class="icon-shopping-cart"></i>
-                                        <!-- <span class="cart-count">2</span> -->
-                                    </div>
-                                </a>
-                                <%}%>
-                        </div><!-- End .cart-dropdown -->
-                    </div><!-- End .header-right -->
                 </div><!-- End .container -->
             </div><!-- End .header-middle -->
         </header><!-- End .header -->
@@ -159,14 +137,6 @@
                             <div class="text-center text-dark ">
                                 Login-In
                             </div>
-	            			<!-- <ul class="nav nav-pills nav-fill" role="tablist">
-							    <li class="nav-item">
-							        <a class="nav-link" id="signin-tab-2" data-toggle="tab" href="#signin-2" role="tab" aria-controls="signin-2" aria-selected="false">Sign In</a>
-							    </li>
-							    <li class="nav-item">
-							        <a class="nav-link active" id="register-tab-2" data-toggle="tab" href="#register-2" role="tab" aria-controls="register-2" aria-selected="true">Register</a>
-							    </li>
-							</ul> -->
 							<div class="tab-content">
 							    
 							    <div class="tab-pane fade show active" id="register-2" role="tabpanel" aria-labelledby="register-tab-2">
@@ -199,7 +169,7 @@
                                             }
                                         </style>
                                         
-                                        <form action="/login" method="post" novalidate>
+                                        <form action="/login" method="post" >
                                             <div class="form-group">
                                                 <label for="email">Email *</label>
                                                 <input type="email" class="form-control" id="register-email-2" name="email" placeholder="Enter email" required>
@@ -228,7 +198,7 @@
                                                 </div>
                                             </div><!-- End .form-footer -->
                                         </form>
-                                        
+
                                         <script>
                                             function validateFormAndSubmit() {
                                                 var emailInput = document.getElementById('register-email-2');
@@ -237,35 +207,29 @@
                                                 var passwordErrorMessage = document.getElementById('password-error-message');
                                                 var isValid = true;
                                         
-                                                // Remove existing validation classes
                                                 emailInput.classList.remove('is-invalid');
                                                 passwordInput.classList.remove('is-invalid');
                                         
-                                                // Hide existing error messages
                                                 document.querySelectorAll('.invalid-feedback').forEach(function (element) {
                                                     element.style.display = 'none';
                                                 });
                                         
-                                                // Validate email
                                                 if (!emailInput.value.trim() || !isValidEmail(emailInput.value.trim())) {
                                                     emailInput.classList.add('is-invalid');
                                                     emailErrorMessage.style.display = 'block';
                                                     isValid = false;
                                                 }
                                         
-                                                // Validate password
                                                 if (!passwordInput.value.trim()) {
                                                     passwordInput.classList.add('is-invalid');
                                                     passwordErrorMessage.style.display = 'block';
                                                     isValid = false;
                                                 }
                                         
-                                                // Submit the form if valid
                                                 if (isValid) {
-                                                    document.forms[0].submit(); // Submit the first (and only) form on the page
+                                                    document.forms[0].submit(); 
                                                 }
                                         
-                                                // Hide error messages after a certain time (e.g., 3 seconds)
                                                 setTimeout(function () {
                                                     document.querySelectorAll('.invalid-feedback').forEach(function (element) {
                                                         element.style.display = 'none';
@@ -274,7 +238,6 @@
                                             }
                                         
                                             function isValidEmail(email) {
-                                                // Simple email validation using regular expression
                                                 var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                                                 return emailRegex.test(email);
                                             }

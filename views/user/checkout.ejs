@@ -33,6 +33,7 @@
 	<!-- Include jQuery from a CDN -->
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
 
 
@@ -519,8 +520,7 @@ aria-hidden="true">
 
 
 <!-- modal for adding address -->
-<div class="modal fade" id="addAddressModal" tabindex="-1" role="dialog" aria-labelledby="addAddressModalLabel"
-aria-hidden="true">
+<div class="modal fade" id="addAddressModal" tabindex="-1" role="dialog" aria-labelledby="addAddressModalLabel" aria-hidden="true">
 <div class="modal-dialog modal-dialog-centered" role="document">
 	<div class="modal-content">
 		<div class="modal-header">
@@ -530,46 +530,38 @@ aria-hidden="true">
 			</button>
 		</div>
 		<div class="modal-body">
-			<form id="addAddressForm" action="/addaddresses" method="post" novalidate>
+			<form id="addAddressForm"  method="post" novalidate>
 				<div class="form-group">
 					<label for="fullName">Full Name:</label>
 					<input type="text" class="form-control" id="fullName" name="fullName" required>
-					<div class="invalid-feedback">Please enter your full name.</div>
 				</div>
 				<div class="form-group">
 					<label for="country">Country:</label>
 					<input type="text" class="form-control" id="country" name="country" required>
-					<div class="invalid-feedback">Please enter the country.</div>
 				</div>
 				<div class="form-group">
 					<label for="housename">House Name:</label>
 					<input type="text" class="form-control" id="housename" name="housename" required>
-					<div class="invalid-feedback">Please enter the house name.</div>
 				</div>
 				<div class="form-group">
 					<label for="state">State:</label>
 					<input type="text" class="form-control" id="state" name="state" required>
-					<div class="invalid-feedback">Please enter the state.</div>
 				</div>
 				<div class="form-group">
 					<label for="city">City:</label>
 					<input type="text" class="form-control" id="city" name="city" required>
-					<div class="invalid-feedback">Please enter the city.</div>
 				</div>
 				<div class="form-group">
 					<label for="pincode">Pincode (6 digits):</label>
 					<input type="text" class="form-control" id="pincode" name="pincode" pattern="\d{6}" required>
-					<div class="invalid-feedback">Please enter a valid 6-digit pincode.</div>
 				</div>
 				<div class="form-group">
 					<label for="phone">Phone (10 digits):</label>
 					<input type="tel" class="form-control" id="phone" name="phone" pattern="\d{10}" required>
-					<div class="invalid-feedback">Please enter a valid 10-digit phone number.</div>
 				</div>
 				<div class="form-group">
 					<label for="email">Email:</label>
 					<input type="email" class="form-control" id="email" name="email" required>
-					<div class="invalid-feedback">Please enter a valid email address.</div>
 				</div>
 			</form>
 		</div>
@@ -586,276 +578,8 @@ aria-hidden="true">
 
 
 
-
-
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        // Edit Address form
-        const editAddressForm = document.getElementById('addAddressForms');
-        const editAddressBtn = document.getElementById('submitAddressBtns');
-
-        editAddressBtn.addEventListener('click', function (event) {
-            if (!validateForm(editAddressForm)) {
-                event.preventDefault();
-            }
-        });
-
-        // Add Address form
-        const addAddressForm = document.getElementById('addAddressForm');
-        const addAddressBtn = document.getElementById('submitAddressBtn');
-
-        addAddressBtn.addEventListener('click', function (event) {
-            if (!validateForm(addAddressForm)) {
-                event.preventDefault();
-            }
-        });
-
-        function validateForm(form) {
-            let isValid = true;
-
-            // Reset validation styles and messages
-            resetValidation(form);
-
-            // Validate each input
-            isValid = isValid && validateInput(form, 'fullNames', 'Please enter your full name.');
-            isValid = isValid && validateInput(form, 'countrys', 'Please enter the country.');
-            isValid = isValid && validateInput(form, 'housenames', 'Please enter the house name.');
-            isValid = isValid && validateInput(form, 'states', 'Please enter the state.');
-            isValid = isValid && validateInput(form, 'citys', 'Please enter the city.');
-            isValid = isValid && validatePattern(form, 'pincodes', /^\d{6}$/, 'Please enter a valid 6-digit pincode.');
-            isValid = isValid && validatePattern(form, 'phones', /^\d{10}$/, 'Please enter a valid 10-digit phone number.');
-            isValid = isValid && validateInput(form, 'emails', 'Please enter a valid email address.');
-
-            return isValid;
-        }
-
-        function validateInput(form, id, errorMessage) {
-            const input = form.querySelector(`#${id}`);
-            const value = input.value.trim();
-
-            if (value === '') {
-                setInvalid(input, errorMessage);
-                return false;
-            }
-
-            return true;
-        }
-
-        function validatePattern(form, id, pattern, errorMessage) {
-            const input = form.querySelector(`#${id}`);
-            const value = input.value.trim();
-
-            if (!pattern.test(value)) {
-                setInvalid(input, errorMessage);
-                return false;
-            }
-
-            return true;
-        }
-
-        function resetValidation(form) {
-            const formInputs = form.querySelectorAll('.form-control');
-            formInputs.forEach(function (input) {
-                input.classList.remove('is-invalid');
-                const feedback = input.nextElementSibling;
-                if (feedback && feedback.classList.contains('invalid-feedback')) {
-                    feedback.textContent = '';
-                }
-            });
-        }
-
-        function setInvalid(input, message) {
-            input.classList.add('is-invalid');
-            const feedback = input.nextElementSibling;
-            if (feedback && feedback.classList.contains('invalid-feedback')) {
-                feedback.textContent = message;
-            }
-        }
-    });
-</script>
-
-
-
-
-
-
-
-	<script>
-
-
-//edit address
-		function showEditAddressModal(fullName, country, housename, state, city, pincode, phone, email, addressId) {
-		   document.getElementById('fullNames').value = fullName;
-		   document.getElementById('countrys').value = country;
-		   document.getElementById('housenames').value = housename;
-		   document.getElementById('states').value = state;
-		   document.getElementById('citys').value = city;
-		   document.getElementById('pincodes').value = pincode;
-		   document.getElementById('phones').value = phone;
-		   document.getElementById('emails').value = email;
-		   document.getElementById('addressId').value = addressId;
-	   
-		   // Show the modal
-		$('#addAddressModals').modal('show');
-	   }
-	   
-	   $('#submitAddressBtns').on('click', function() {
-		   const formData = $('#addAddressForms').serialize();
-		   console.log(formData);
-	   
-		   $.ajax({
-			   type: 'POST',
-			   url: '/editaddresses',
-			   data: formData,
-			   success: function(response) {
-				   if (response.success == true) {
-					   $('#addrassArea').load('/checkout #addrassArea');
-					   $('#addAddressModals').modal('hide');
-					   $('.modal-backdrop').remove();
-	   
-				   }
-			   },
-			   error: function(error) {
-				   console.error('Error:', error);
-			   }
-		   });
-	   
-		   return false;
-	   });
-	   
-
-
-//add address
-	   $(document).ready(function () {
-    $('#submitAddressBtn').on('click', function () {
-        var formData = $('#addAddressForm').serialize();
-console.log(formData)
-        $.ajax({
-            type: 'POST',
-            url: '/addaddresses',
-            data: formData,
-            success: function (response) {
-                console.log(response)
-                if (response.add == true) {
-                    $('#addrassArea').load('/account #addrassArea');
-                    $('#addAddressModal').modal('hide');
-                    $('.modal-backdrop').remove();
-                    // Use SweetAlert2 for a success message
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Address Added Successfully',
-                        text: 'Your address has been added successfully.',
-                    });
-                } else {
-                    // Use SweetAlert2 for an error message
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: 'There was a problem adding your address!',
-                    });
-                }
-            },
-            error: function (error) {
-                console.error('Error:', error);
-            }
-        });
-    });
-});
-</script>
-	   
-<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-
-<script>
-    $(document).ready(function () {
-    // Handle click event on the "Place Order" button
-    $("#placeOrderBtn").on("click", function (event) {
-        var formData = $("#orderForm").serialize();
-        event.preventDefault();
-
-        // Make an AJAX request
-        $.ajax({
-            type: "POST",
-            url: "/placeorder",
-            data: formData,
-            success: function (response) {
-                console.log(response);
-                if (response.placed == true) {
-                    window.location.href = '/success';
-                }else if(response.wallet == false){
-                        swal.fire("Oops, it looks like your wallet balance is too low to place this order !!", "", "error")
-                    }
-				 else {
-                    razorpayPayment(response.order);
-                }
-            },
-            error: function (error) {
-                console.error('Error:', error);
-                alert("An error occurred while processing the order.");
-            }
-        });
-    });
-});
-
-function razorpayPayment(order) {
-    console.log(order,"tihiu");
-    var options = {
-        "key": "rzp_test_6nfEH21z7G2Wtu",
-        "amount": order.amount,
-        "currency": "INR",
-        "name": "Furni.Ltd",
-        "description": "Test Transaction",
-        "image": "",
-        "order_id": order.id,
-        handler: function (response) {
-            verifyPayment(response, order);
-			},
-			"prefill": {
-				"name": "Furni Ltd",
-				"email": "furniworld@gmail.com",
-				"contact": "9999999999"
-			},
-			"notes": {
-				"address": "India"
-			},
-			"theme": {
-				"color": "#cc9967"
-        }
-    };
-
-    var rzp1 = new Razorpay(options);
-    rzp1.open();
-}
-
-function verifyPayment(payment, order) {
-
-    $.ajax({
-        url: "/verifypayment",
-        method: "post",
-        data: {
-            payment: payment,
-            order: order,
-        },
-        success: (response) => {
-            if (response.placed == true) {
-                window.location.href = '/success'
-            } else {
-                swal.fire({
-                    positon: "center",
-                    icon: "error",
-                    title: "Payment failed",
-                    showConfirmButton: false,
-                    timer: 1500,
-                });
-            }
-        },
-    });
-}
-    </script>
-
-
-
-
 	<!-- Plugins JS File -->
+	<script src="/public/assets/js/checkout.js"></script>
 	<script src="public/assets/js/jquery.min.js"></script>
 	<script src="public/assets/js/bootstrap.bundle.min.js"></script>
 	<script src="public/assets/js/jquery.hoverIntent.min.js"></script>
@@ -865,58 +589,6 @@ function verifyPayment(payment, order) {
 	<!-- Main JS File -->
 	<script src="public/assets/js/main.js"></script>
 
-	<script>
-function applyCoupon() {
-    const couponCodeInput = document.getElementById("couponinput"); // Fix typo in the element ID
-    const couponCode = couponCodeInput.value;
-
-    $.ajax({
-        type: "POST",
-        url: "/checkcoupon", 
-        data: { coupon: couponCode },
-        success: function(response) {
-            if(response.coupon == false) {
-                swal.fire("No Coupon Available", "", "error");
-            } else if(response.coupon == 'notAct') {
-                swal.fire("This Coupon is No Longer Available", "", "error");
-            } else if(response.coupon == 'used') {
-                swal.fire("This Coupon is Already Used. Try Another One", "", "error");
-            } else if(response.coupon == 'amountIssue') {
-                swal.fire("Purchase More to Use This Coupon", "", "error");
-            } else if(response.coupon) {
-                swal.fire("Success", "Coupon Added!", "success");
-                $('#reloadArea').load('/checkout #reloadArea'); 
-                $('#reloadArea2').load('/checkout #reloadArea2');
-            } else {
-                swal.fire("Something Went Wrong", "", "error");
-            }
-        }
-    });
-}
-
-
-function removecoupon(){
-        $.ajax({
-            method: 'POST',
-            url: '/removecoupon', 
-            data: JSON.stringify(),
-            contentType: 'application/json',
-            success: function (response) {
-                if(response.remove===true){
-					swal.fire("Success", "Coupon Removed!", "success");
-                    $('#reloadArea').load('/checkout #reloadArea');
-                    $('#reloadArea2').load('/checkout #reloadArea2');
-                }else{
-                 
-                }
-            },
-            error: function (error) {
-
-                console.error(error);
-            }
-        });
-    }
-	</script>
 </body>
 
 

@@ -267,24 +267,21 @@
                                         aria-controls="widget-1">
                                         Category
                                     </a>
-                                </h3><!-- End .widget-title -->
-                                <% category.forEach(categoryItem => { %>
+                                </h3>
+                                <% category.forEach(category => { %>
                                     <div class="collapse show" id="widget-1">
                                         <div class="widget-body">
                                             <div class="filter-items filter-items-count">
                                                 <div class="filter-item">
                                                     <div class="custom-control custom-checkbox">
-                                                        <input type="checkbox" class="custom-control-input" id="<%= categoryItem._id %>">
-                                                        <label class="custom-control-label" for="<%= categoryItem._id %>"><%= categoryItem.name %></label>
-                                                    </div><!-- End .custom-checkbox -->
-                                                    <span class="item-count"><%= category.length %></span>
-                                                </div><!-- End .filter-item -->
-                                            </div><!-- End .filter-items -->
-                                        </div><!-- End .widget-body -->
-                                    </div><!-- End .collapse -->
-                                <% }) %>
-                                
-
+                                                        <input type="checkbox" class="custom-control-input" id="<%= category._id %>">
+                                                        <label class="custom-control-label" for="<%= category._id %>"><%= category.name %></label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <% }) %>                                
                             
 
                             
