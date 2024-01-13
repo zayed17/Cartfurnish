@@ -47,11 +47,9 @@ const ordersSchema = new mongoose.Schema({
     },
     deliveredDate: {
         type: Date,
-        default: null, 
     },
     returnedDate: {
         type: Date,
-        default: null, 
     },
     totalAmount: {
         type: Number,

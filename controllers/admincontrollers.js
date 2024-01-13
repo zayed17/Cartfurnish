@@ -221,16 +221,14 @@ const adminLogout = async (req, res) => {
 
 const loadreport = async(req,res)=>{
     try {
-        const startDate = req.query.startDate;
+    const startDate = req.query.startDate;
     const endDate = req.query.endDate;
-console.log(startDate,endDate);
-    let query = {}; 
     if (startDate && endDate) {
-        query = { "products.purchaseDate": { $gte: startDate, $lte: endDate } };
-    }
+         filteredSales = await Order.find({purchaseDate: { $gte: startDate, $lte: endDate }, "products.productstatus":"Delivered"} ).populate('userId');
+    }else{
+        filteredSales = await Order.find({"products.productstatus":"Delivered"} ).populate('userId');
 
-    const filteredSales = await Order.find(query);
-console.log(filteredSales.length)
+    }
     res.render('report', { order: filteredSales });
     } catch (error) {
         console.log(error);

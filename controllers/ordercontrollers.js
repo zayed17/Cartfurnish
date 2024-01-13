@@ -204,7 +204,6 @@ const loadshoworder = async(req,res)=>{
   try {
     const id = req.query.id;
     const order = await Order.findOne({_id:id}).populate('products.productId')
-    // console.log(order);
     res.render('showorder',{order})
   } catch (error) {
     console.log(error);
