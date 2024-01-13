@@ -269,13 +269,13 @@ $('#submitAddressBtns').on('click', function () {
                 "key": "rzp_test_6nfEH21z7G2Wtu",
                 "amount": parseInt(rechargeAmount) * 100,
                 "currency": "INR",
-                "name": "Furni.Ltd",
+                "name": "CartFurnish.Ltd",
                 "description": "Wallet Recharge",
-                "image": "",
+                "image": "/public/assets/imgs/theme/logo.png",
                 "order_id": order.id,
                 "prefill": {
-                    "name": "Furni Ltd",
-                    "email": "furniworld@gmail.com",
+                    "name": "cartFurnish Ltd",
+                    "email": "cartFurish@gmail.com",
                     "contact": "9999999999"
                 },
                 "notes": {

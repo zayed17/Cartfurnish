@@ -10,7 +10,7 @@ const loadcart = async(req,res)=>{
     try { 
       const user_id = req.session.user_id; 
       const cartData =  await Cart.findOne({user:user_id}).populate("product.productId")
-      const subtotal = cartData.product.reduce((acc,val)=> acc+val.totalPrice,0)
+      const subtotal = cartData?.product.reduce((acc,val)=> acc+val.totalPrice,0)
         res.render('cart',{cart:cartData,subtotal})
     } catch (error) {
         console.log(error);
@@ -25,18 +25,18 @@ const addtocart = async (req, res) => {
     try {
         const user_id = req.session.user_id; 
         if(!user_id){
-            return res.json({session:false,error:"You want to Login"})
-        }
+            return res.json({session:false, error:"You want to Login"})
+        } 
         console.log(req.session);
         const product_id = req.body.productId;
 
-        const isValidObjectId = mongoose.Types.ObjectId.isValid(product_id);
-        if (!isValidObjectId) {
-            return res.status(400).json({ error: 'Invalid product ID' });
-        }
+
 
         const productData = await Product.findById(product_id);
-
+        console.log(productData)
+        if(productData.quantity==0){
+            return res.json({ quantity: false, error: 'Product is out of stock' });
+        }
         if (productData.quantity > 0) {
             const cartProduct = await Cart.findOne({ user: user_id, 'product.productId': product_id });
             
@@ -60,9 +60,7 @@ const addtocart = async (req, res) => {
             );
 
             return res.json({ success: true, stock: true });
-        } else {
-            return res.json({ success: true, stock: false });
-        }
+        } 
     } catch (error) {
         console.error(error);
         return res.status(500).json({ error: 'Internal Server Error' });
@@ -146,10 +144,11 @@ const loadcheckoutpage = async(req,res)=>{
             const percentageDiscount = subtotal - (discountpercentage/100) *subtotal;
             const discountAmount =subtotal - percentageDiscount;
             const discount = subtotal - maxDiscount
+            console.log(discount,subtotal,"discount","subtotal")
             if(discountAmount<=maxDiscount){
-                res.render('checkout',{addresses,discount:percentageDiscount,cartData,subtotal})
+                res.render('checkout',{addresses,discount:percentageDiscount,cartData,subtotal,disamo:discountAmount})
             }else{
-                res.render('checkout',{addresses,discount,cartData,subtotal})
+                res.render('checkout',{addresses,discount,cartData,subtotal,disamo:maxDiscount})
             }
             console.log(discountpercentage,percentageDiscount,"percentage");
         }

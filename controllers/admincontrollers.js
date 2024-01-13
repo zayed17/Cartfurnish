@@ -3,6 +3,10 @@ const bcrypt = require('bcrypt');
 const Category = require('../models/categorymodal')
 const Product = require('../models/productmodal')
 const Order = require('../models/ordermodels')
+const puppeteer = require('puppeteer');
+const path = require('path');
+const ejs = require('ejs');
+const ExcelJS = require('exceljs');
 
 const loadadmin = async(req,res)=>{
     try {
@@ -229,11 +233,87 @@ const loadreport = async(req,res)=>{
         filteredSales = await Order.find({"products.productstatus":"Delivered"} ).populate('userId');
 
     }
-    res.render('report', { order: filteredSales });
+    res.render('report', { order: filteredSales ,startDate,endDate});
     } catch (error) {
         console.log(error);
     }
 }
+
+const downloadReport = async(req,res)=>{
+    try {
+    const startDate = req.query.startDate;
+    const endDate = req.query.endDate; 
+    if (startDate && endDate) {
+        filteredSales = await Order.find({purchaseDate: { $gte: startDate, $lte: endDate }, "products.productstatus":"Delivered"} ).populate('userId');
+   }else{
+       filteredSales = await Order.find({"products.productstatus":"Delivered"} ).populate('userId');
+   }
+
+   const projectRoot = path.join(__dirname, '..');
+
+   const invoiceTemplatePath = path.join(projectRoot, 'views', 'admin', 'sale-report.ejs');
+   const htmlContent = await ejs.renderFile(invoiceTemplatePath, { order:filteredSales});
+
+   const browser = await puppeteer.launch();
+   const page = await browser.newPage();
+
+   await page.setContent(htmlContent);
+
+   // Generate PDF
+   const pdfBuffer = await page.pdf();
+
+   res.setHeader('Content-Type', 'application/pdf');
+   res.setHeader('Content-Disposition', `attachment; filename=report-download.pdf`);
+   res.send(pdfBuffer);
+
+   await browser.close();
+
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+const excelreport = async (req, res) => {
+    try {
+        const startDate = req.query.startDate;
+        const endDate = req.query.endDate;
+
+        let filteredSales;
+
+        if (startDate && endDate) {
+            filteredSales = await Order.find({ purchaseDate: { $gte: startDate, $lte: endDate }, "products.productstatus": "Delivered" }).populate('userId');
+        } else {
+            filteredSales = await Order.find({ "products.productstatus": "Delivered" }).populate('userId');
+        }
+
+        const workbook = new ExcelJS.Workbook();
+        const worksheet = workbook.addWorksheet('Sales Report');
+
+        worksheet.addRow(['Order ID', 'Billing Name', 'Date', 'Total', 'Payment Method']);
+
+        filteredSales.forEach(order => {
+            order.products.forEach(product => {
+                worksheet.addRow([
+                    order._id.toString().substring(6, 12).toUpperCase(),
+                    order.userId.name,
+                    new Date(order.purchaseDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }),
+                    product.price.toFixed(2),
+                    order.paymentMethod
+                ]);
+            });
+        });
+
+        res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        res.setHeader('Content-Disposition', 'attachment; filename=report-download.xlsx');
+
+        await workbook.xlsx.write(res);
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+};
+
 
 module.exports = {
     loadadmin,
@@ -249,5 +329,7 @@ module.exports = {
     editCategory,
     adminLogout,
     blockCategory,
-    loadreport
+    loadreport,
+    downloadReport,
+    excelreport
 }

@@ -180,53 +180,41 @@
 										</div>
 									</div><!-- .End .tab-pane -->
 
-									<div class="tab-pane fade" id="tab-orders" role="tabpanel"
-										aria-labelledby="tab-orders-link">
+									<div class="tab-pane fade" id="tab-orders" role="tabpanel" aria-labelledby="tab-orders-link">
 										<div class="user-profile text-center">
-											<%if(orders&&orders.length>0){%>
-												<table class="table custom-width-table">
-													<thead>
-														<tr>
-															<th>No</th>
-															<th>Date</th>
-															<th>Amount</th>
-															<th>Payment Method</th>
-															<th>Details</th>
-														</tr>
-													</thead>
-													<tbody>
-														<% orders.forEach(function(order,index) { %>
+											<% if (orders && orders.length > 0) { %>
+												<div class="table-responsive">
+													<table class="table custom-width-table">
+														<thead>
 															<tr>
-																<td>
-																	<%= index + 1 %>
-																</td>
-																<td>
-																	<%= new
-																		Date(order.purchaseDate).toLocaleDateString('en-US',
-																		{ year: 'numeric' , month: 'short' ,
-																		day: 'numeric' }) %>
-																</td>
-																<td>
-																	<%= order.totalAmount %>
-																</td>
-																<td>
-																	<%= order.paymentMethod %>
-																</td>
-																<td><a
-																		href="/orderdetails?id=<%= order._id %>">Details</a>
-																</td>
+																<th class="fs-5">No</th>
+																<th class="fs-5">Date</th>
+																<th class="fs-5">Amount</th>
+																<th class="fs-5">Payment Method</th>
+																<th class="fs-5">Details</th>
 															</tr>
+														</thead>
+														<tbody>
+															<% orders.forEach(function (order, index) { %>
+																<tr>
+																	<td class="fs-6"><%= index + 1 %></td>
+																	<td class="fs-6"><%= new Date(order.purchaseDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %></td>
+																	<td class="fs-6"><%= order.totalAmount %></td>
+																	<td class="fs-6"><%= order.paymentMethod %></td>
+																	<td class="fs-6"><a href="/orderdetails?id=<%= order._id %>" class="btn btn-info btn-sm">Details</a></td>
+																</tr>
 															<% }); %>
-													</tbody>
-												</table>
-												<%}else{%>
-													<div class="col-md-12">
-														<div class="alert alert-warning" role="alert">
-															No Order available.
-														</div>
+														</tbody>
+													</table>
+												</div>
+											<% } else { %>
+												<div class="col-md-12">
+													<div class="alert alert-warning fs-5" role="alert">
+														No orders available.
 													</div>
-													<% } %>
-										</div>
+												</div>
+											<% } %>
+										</div>										
 									</div><!-- .End .tab-pane -->
 
 									<div class="tab-pane fade" id="tab-downloads" role="tabpanel"

@@ -423,7 +423,6 @@
         }
     });
 });
-
 function addToCart(productId) {
     $.ajax({
         url: '/addtocart',
@@ -432,15 +431,15 @@ function addToCart(productId) {
         success: function (response) {
             console.log('Response from server:', response);
 
-            if (response.success == false) {
+            if (response.quantity == false) {
                 Swal.fire(
-                    'Out of Stock or Already in Cart',
-                    response.error || 'This product is currently out of stock or already in your cart.',
+                    'Out of Stock',
+                    response.error || 'Product is Out of stock',
                     'warning'
                 );
             }
             
-                else if(response.session== false){
+            else if(response.session== false){
                     Swal.fire({
                     title: 'Login Required',
                     text: response.error || 'You want to login.',
@@ -468,6 +467,7 @@ function addToCart(productId) {
         }
     });
 }
+
 
 </script>
 

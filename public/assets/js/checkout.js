@@ -162,12 +162,11 @@ if (phone === '') {
 	   
 
     $(document).ready(function () {
-    // Handle click event on the "Place Order" button
     $("#placeOrderBtn").on("click", function (event) {
         var formData = $("#orderForm").serialize();
         event.preventDefault();
 
-        // Make an AJAX request
+        console.log(formData,"is getting")
         $.ajax({
             type: "POST",
             url: "/placeorder",

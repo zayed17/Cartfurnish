@@ -14,10 +14,13 @@ const instance = new Razorpay({
 //Place order
 const placeorder = async (req, res) => {
   try {
+    const total = req.body.total
+    console.log(total,"total")
     console.log(req.body);
     const userId = req.session.user_id;
     const addressIndex = !req.body.address ? 0 : req.body.address;
     const paymentMethod = req.body.payment;
+    console.log(req.body,"is it getting")
     const status = paymentMethod == "COD" ? 'placed' : 'pending';
     console.log(paymentMethod, addressIndex, status, userId);
 

@@ -432,10 +432,10 @@ function addToCart(productId) {
         success: function (response) {
             console.log('Response from server:', response);
 
-            if (response.success == false) {
+            if (response.quantity == false) {
                 Swal.fire(
-                    'Out of Stock or Already in Cart',
-                    response.error || 'This product is currently out of stock or already in your cart.',
+                    'Out of Stock',
+                    response.error || 'Product is Out of stock',
                     'warning'
                 );
             }

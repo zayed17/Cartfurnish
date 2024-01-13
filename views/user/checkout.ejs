@@ -95,7 +95,7 @@
 						</button>
 
 						<a href="index" class="logo">
-							<img src=" /public/assets/imgs/theme/logo.png" alt="Molla Logo" width="105" height="25">
+							<img src="/public/assets/imgs/theme/logo.png" alt="Molla Logo" width="105" height="25">
 						</a>
 
 						<nav class="main-nav">
@@ -128,15 +128,7 @@
 						</nav><!-- End .main-nav -->
 					</div><!-- End .header-left -->
 
-					<div class="header-right">
-						<div class="dropdown cart-dropdown">
-							<a href="#" class="dropdown-toggle" role="button" data-toggle="dropdown"
-								aria-haspopup="true" aria-expanded="false" data-display="static">
-								<i class="icon-shopping-cart"></i>
-								<span class="cart-count">2</span>
-							</a>
-						</div>
-					</div><!-- End .header-right -->
+					
 				</div>
 			</div><!-- End .header-middle -->
 		</header><!-- End .header -->
@@ -233,12 +225,12 @@
 												<% if (cartData.couponDiscount!=0 ) { %>
 													<tr>
 														<td class="text-danger">Coupon Discount:</td>
-														<td class="text-danger">-<%= cartData.couponDiscount.discountPercentage %>%</td>
+														<td id="disamount" class="text-danger">-<%= disamo %></td>
 													</tr>
 													<% } %>
 												<tr class="summary-total">
 													<td>Total:</td>
-													<td>₹<%= discount %></td>
+													<td id="totalamount">₹<%= discount %></td>
 												</tr>
 											</tbody>
 										</table>
@@ -466,7 +458,7 @@ aria-hidden="true">
 <div class="modal-dialog modal-dialog-centered" role="document">
 	<div class="modal-content">
 		<div class="modal-header">
-			<h5 class="modal-title" id="addAddressModalLabel">Add Address</h5>
+			<h5 class="modal-title 	" id="addAddressModalLabel">Add Address</h5>
 			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 				<span aria-hidden="true">&times;</span>
 			</button>
