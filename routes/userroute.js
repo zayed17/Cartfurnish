@@ -33,6 +33,8 @@ userRoute.post('/verifyotp',auth.isLogout,usercontrollers.verifyOtp)
 userRoute.get('/login',usercontrollers.loadlogin);
 userRoute.post('/login',auth.isLogout,usercontrollers.verifyLogin)
 userRoute.get('/shop',usercontrollers.loadshop);
+// userRoute.post('/shop',usercontrollers.loadshop);
+
 userRoute.get('/loginwithotp',auth.isLogout,usercontrollers.loademailinput)
 userRoute.post('/loginwithotp',auth.isLogout,usercontrollers.sentOtpbyMail)
 userRoute.get('/resendotp',auth.isLogout,usercontrollers.resendotp)
@@ -63,5 +65,5 @@ userRoute.post('/returnproduct',auth.isLogin,ordercontrollers.returnproduct)
 userRoute.post('/walletverify',auth.isLogin,usercontrollers.verifypayment)
 userRoute.post('/submit-review',auth.isLogin,reviewcontrollers.addreview)
 userRoute.post('/vote',auth.isLogin,reviewcontrollers.voting)
-
+userRoute.get('/search',usercontrollers.productSearch)
 module.exports = userRoute;

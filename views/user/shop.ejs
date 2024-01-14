@@ -128,30 +128,114 @@
 
                     
                     <div class="header-right">
-                        <input type="text" id="searchInput" placeholder="Search products">         
+                        <div class="search-container">
+                            <input type="text" id="searchInput" placeholder="Search products" onkeydown="handleSearchInput(event)">
+                            <div class="suggestions-container">
+                                <ul id="suggestionsList"></ul>
+                            </div>
+                        </div>
+                        
+                        
                         <div class="dropdown cart-dropdown">
                             <% if(locals.user){ %>
-                                <a href="/cart" class="dropdown-toggle" >
+                                <a href="/cart" class="dropdown-toggle">
                                     <div class="icon">
                                         <i class="icon-shopping-cart"></i>
                                     </div>
                                 </a>
-                            <%}else{%>
+                            <% } else { %>
                                 <a href="/login" class="dropdown-toggle">
                                     <div class="icon">
                                         <i class="icon-shopping-cart"></i>
-                                        <!-- <span class="cart-count">2</span> -->
                                     </div>
                                 </a>
-                                <%}%>
+                            <% } %>
                         </div><!-- End .cart-dropdown -->
-                    </div><!-- End .header-right -->
+                    </div><!-- End .header-right -->                    
                 </div><!-- End .container -->
             </div><!-- End .header-middle -->
         </header><!-- End .header -->
 
-        <main class="main">
 
+
+
+
+
+
+        <script>
+         let previousInputValue = '';
+
+async function handleSearchInput(event) {
+    const partialInput = document.getElementById('searchInput').value;
+
+    if (event.key === 'Enter') {
+        // If Enter key is pressed, navigate to the search URL
+        window.location.href = `/shop?search=${partialInput}`;
+    } else {
+        // If other keys are pressed, perform autocomplete and send query to the backend
+        if (partialInput !== previousInputValue) {
+            const response = await fetch(`/search?input=${partialInput}`);
+            const data = await response.json();
+            displayAutocompleteSuggestions(data.suggestions);
+            
+            // Note: sendSearchQueryToBackend is not needed in this case
+            // Backend query will be handled when navigating to /shop
+            previousInputValue = partialInput;
+        }
+    }
+}
+
+    function displayAutocompleteSuggestions(suggestions) {
+    const partialInput = document.getElementById('searchInput').value.toLowerCase();
+
+    // If the input is empty, hide the suggestions and return
+    if (partialInput.trim() === '') {
+        document.querySelector('.suggestions-container').style.display = 'none';
+        return;
+    }
+
+    suggestions.sort((a, b) => {
+        const nameA = a.name.toLowerCase();
+        const nameB = b.name.toLowerCase();
+
+        // Sort by the number of occurrences of the partial input in the name
+        const countA = (nameA.match(new RegExp(partialInput, 'g')) || []).length;
+        const countB = (nameB.match(new RegExp(partialInput, 'g')) || []).length;
+
+        return countB - countA;
+    });
+
+    const suggestionsList = document.getElementById('suggestionsList');
+    suggestionsList.innerHTML = '';
+
+    // Display the top three most matching suggestions
+    suggestions.slice(0, 2).forEach(suggestion => {
+        const listItem = document.createElement('li');
+        listItem.textContent = suggestion.name;
+        suggestionsList.appendChild(listItem);
+
+        // Add a click event listener to each suggestion
+        listItem.addEventListener('click', () => {
+            // Set the selected suggestion as the input value
+            document.getElementById('searchInput').value = suggestion.name;
+            // Clear the suggestions list
+            suggestionsList.innerHTML = '';
+        });
+    });
+
+    // Show or hide the suggestions container based on whether there are suggestions
+    document.querySelector('.suggestions-container').style.display = suggestions.length > 0 ? 'block' : 'none';
+}
+        </script>
+
+
+
+
+
+
+
+
+        <main class="main">
             <nav aria-label="breadcrumb" class="breadcrumb-nav mb-2">
                 <div class="container">
                     <ol class="breadcrumb">
@@ -239,17 +323,8 @@
 
                         <nav aria-label="Page navigation">
                             <ul class="pagination justify-content-center">
-                                <% for (let i=1; i <=totalPages; i++) { %>
-                                    <% if (currentPage===i) { %>
-                                        <li class="page-item active" aria-current="page"><span class="page-link">
-                                                <%= i %>
-                                            </span></li>
-                                        <% } else { %>
-                                            <li class="page-item"><a class="page-link" href="/shop?page=<%= i %>">
-                                                    <%= i %>
-                                                </a></li>
-                                            <% } %>
-                                                <% } %>
+                                <li class="page-item active" aria-current="page"><span class="page-link"></span></li>
+                                <li class="page-item"><a class="page-link" href=""></a></li>
                             </ul>
                         </nav>
 
@@ -260,57 +335,58 @@
                                 <label>Filters:</label>
                                 <a href="#" class="sidebar-filter-clear">Clean All</a>
                             </div><!-- End .widget widget-clean -->
-
+                    
                             <div class="widget widget-collapsible">
                                 <h3 class="widget-title">
-                                    <a data-toggle="collapse" href="#widget-1" role="button" aria-expanded="true"
-                                        aria-controls="widget-1">
+                                    <a data-toggle="collapse" href="#widget-category" role="button" aria-expanded="true" aria-controls="widget-category">
                                         Category
                                     </a>
                                 </h3>
-                                <% category.forEach(category => { %>
-                                    <div class="collapse show" id="widget-1">
-                                        <div class="widget-body">
-                                            <div class="filter-items filter-items-count">
+                                <div class="collapse show" id="widget-category">
+                                    <div class="widget-body">
+                                        <div class="filter-items filter-items-count">
+                                            <% category.forEach(category => { %>
                                                 <div class="filter-item">
-                                                    <div class="custom-control custom-checkbox">
-                                                        <input type="checkbox" class="custom-control-input" id="<%= category._id %>">
-                                                        <label class="custom-control-label" for="<%= category._id %>"><%= category.name %></label>
+                                                    <div class="custom-control custom-radio">
+                                                        <input type="radio" class="custom-control-input" id="<%= `category-${category._id}` %>" name="category" value="<%= category._id %>">
+                                                        <label class="custom-control-label" for="<%= `category-${category._id}` %>"><%= category.name %></label>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            <% }) %>                                            
                                         </div>
                                     </div>
-                                <% }) %>                                
-                            
-
-                            
-
-                            
-
+                                </div>
+                            </div><!-- End .widget widget-collapsible -->
+                    
                             <div class="widget widget-collapsible">
                                 <h3 class="widget-title">
-                                    <a data-toggle="collapse" href="#widget-5" role="button" aria-expanded="true"
-                                        aria-controls="widget-5">
+                                    <a data-toggle="collapse" href="#widget-price" role="button" aria-expanded="true" aria-controls="widget-price">
                                         Price
                                     </a>
                                 </h3><!-- End .widget-title -->
-
-                                <div class="collapse show" id="widget-5">
+                                <div class="collapse show" id="widget-price">
                                     <div class="widget-body">
                                         <div class="filter-price">
-                                            <div class="filter-price-text">
-                                                Price Range:
-                                                <span id="filter-price-range"></span>
-                                            </div><!-- End .filter-price-text -->
-
-                                            <div id="price-slider"></div><!-- End #price-slider -->
-                                        </div><!-- End .filter-price -->
+                                            <div class="filter-sort-options">
+                                                <div class="custom-control custom-radio">
+                                                    <input type="radio" class="custom-control-input" id="high-to-low" name="price-filter" value="high-to-low">
+                                                    <label class="custom-control-label" for="high-to-low">High to Low</label>
+                                                </div>
+                                                <div class="custom-control custom-radio">
+                                                    <input type="radio" class="custom-control-input" id="low-to-high" name="price-filter" value="low-to-high">
+                                                    <label class="custom-control-label" for="low-to-high">Low to High</label>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div><!-- End .widget-body -->
                                 </div><!-- End .collapse -->
+                                
+                                <button id="applyFiltersBtn">Apply Filters</button>
                             </div><!-- End .widget -->
                         </div><!-- End .sidebar sidebar-shop -->
                     </aside><!-- End .col-lg-3 -->
+                    
+                    
                 </div><!-- End .row -->
             </div><!-- End .container -->
     </div><!-- End .page-content -->
@@ -403,26 +479,9 @@
 
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-    var searchInput = document.getElementById('searchInput');
-    var productContainer = document.getElementById('productContainer');
-    var products = productContainer.getElementsByClassName('col-12');
+  
 
-    searchInput.addEventListener('input', function () {
-        var searchQuery = searchInput.value.trim().toLowerCase();
 
-        for (var i = 0; i < products.length; i++) {
-            var product = products[i];
-            var productName = product.textContent.toLowerCase();
-
-            if (productName.includes(searchQuery)) {
-                product.style.display = 'block';
-            } else {
-                product.style.display = 'none';
-            }
-        }
-    });
-});
 function addToCart(productId) {
     $.ajax({
         url: '/addtocart',

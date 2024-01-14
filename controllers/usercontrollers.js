@@ -333,28 +333,33 @@ const userLogout = async (req, res) => {
         console.log(error.message);
     }
 }
-
-
 const loadshop = async (req, res) => {
     try {
-      const page = parseInt(req.query.page) || 1;
-      const productsPerPage = 9; 
-      const startIndex = (page - 1) * productsPerPage;
-      const endIndex = startIndex + productsPerPage;
-      const userData = await User.findOne({_id:req.session.user_id})
+        const userData = await User.findOne({ _id: req.session.user_id });
+        const query = req.query.search
+        let productData;
 
-      const totalProducts = await Product.countDocuments({});
-      const totalPages = Math.ceil(totalProducts / productsPerPage);
-  
-      const productData = await Product.find({is_blocked:false,isCategoryBlocked:false}).skip(startIndex).limit(productsPerPage).populate('categoryId')
-      const category = await Category.find({})
-      
-      res.render('shop', { product: productData, currentPage: page, totalPages,user:userData , category });
+        if (query) {
+            productData = await Product.find({
+                is_blocked: false,
+                isCategoryBlocked: false,
+                name: { $regex: query, $options: 'i' },
+            }).populate('categoryId');
+                   
+        } else {
+            productData = await Product.find({ is_blocked: false, isCategoryBlocked: false }).populate('categoryId');
+        }
+
+        const category = await Category.find({});
+
+        res.render("shop", { product: productData, user: userData, category });
     } catch (error) {
-      console.error(error.message);
-      res.status(500).send('Internal Server Error');
+        console.error(error.message);
+        res.status(500).send('Internal Server Error');
     }
-  };
+};
+
+
   
 const loadeachproduct = async(req,res)=>{
     try {
@@ -371,6 +376,23 @@ const loadeachproduct = async(req,res)=>{
       console.log(error);
     }
   }
+
+
+  const productSearch = async(req,res)=>{
+    try {
+        const productname = req.query.input.toLowerCase();
+        console.log(productname);
+        const matchingProducts = await Product.find({
+            name: { $regex: productname, $options: 'i' } 
+        });
+        console.log(matchingProducts.length)
+        res.json({ suggestions: matchingProducts });
+
+    } catch (error) {
+        console.log(error);
+    }
+  }
+
 
   const loadaccount = async(req,res)=>{
     try {
@@ -606,5 +628,6 @@ module.exports = {
     passwordchange,
     invoice,
     walletReacharge,
-    verifypayment
+    verifypayment,
+    productSearch
 }

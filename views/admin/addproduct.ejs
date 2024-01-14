@@ -17,6 +17,13 @@
         <link rel="shortcut icon" type="image/x-icon" href="/public/assets/imgs/theme/favicon.svg" />
         <!-- Template CSS -->
         <link href="/public/assets/css/main.css?v=1.1" rel="stylesheet" type="text/css" />
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+        <!-- Cropper.js CSS -->
+        <link rel="stylesheet" href="path/to/cropper.min.css">
+    
+        <!-- Cropper.js script -->
+        <script src="path/to/cropper.min.js"></script>
     </head>
 
       
@@ -201,8 +208,7 @@
                                                         <div class="rounded-image-preview">
                                                             <img id="imagePreview1" src="/public/assets/images/add Image.jpg" alt="Preview" />
                                                         </div>
-                                                        <input name="image1" type="file" accept="image/*" id="imageInput1" class="imageInput" data-target="#cropperModal1">
-                                                        <button class="btn btn-primary mt-2" data-toggle="modal" data-target="#cropperModal1">Adjust Crop</button>
+                                                        <input name="image1" type="file" accept="image/*" id="imageInput1" class="imageInput"">
                                                     </label>
                                                 </div>
                                         
@@ -211,8 +217,7 @@
                                                         <div class="rounded-image-preview">
                                                             <img id="imagePreview2" src="/public/assets/images/add Image.jpg" alt="Preview" />
                                                         </div>
-                                                        <input name="image2" type="file" accept="image/*" id="imageInput2" class="imageInput" data-target="#cropperModal2">
-                                                        <button class="btn btn-primary mt-2" data-toggle="modal" data-target="#cropperModal2">Adjust Crop</button>
+                                                        <input name="image2" type="file" accept="image/*" id="imageInput2" class="imageInput"">
                                                     </label>
                                                 </div>
                                         
@@ -221,8 +226,7 @@
                                                         <div class="rounded-image-preview">
                                                             <img id="imagePreview3" src="/public/assets/images/add Image.jpg" alt="Preview" />
                                                         </div>
-                                                        <input name="image3" type="file" accept="image/*" id="imageInput3" class="imageInput" data-target="#cropperModal3">
-                                                        <button class="btn btn-primary mt-2" data-toggle="modal" data-target="#cropperModal3">Adjust Crop</button>
+                                                        <input name="image3" type="file" accept="image/*" id="imageInput3" class="imageInput"">
                                                     </label>
                                                 </div>
                                         
@@ -231,8 +235,7 @@
                                                         <div class="rounded-image-preview">
                                                             <img id="imagePreview4" src="/public/assets/images/add Image.jpg" alt="Preview" />
                                                         </div>
-                                                        <input name="image4" type="file" accept="image/*" id="imageInput4" class="imageInput" data-target="#cropperModal4">
-                                                        <button class="btn btn-primary mt-2" data-toggle="modal" data-target="#cropperModal4">Adjust Crop</button>
+                                                        <input name="image4" type="file" accept="image/*" id="imageInput4" class="imageInput"">
                                                     </label>
                                                 </div>
                                             </div>
@@ -254,90 +257,6 @@
             
 
 
-
-            <div class="modal fade" id="cropperModal1" tabindex="-1" role="dialog" aria-labelledby="cropperModalLabel1" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="cropperModalLabel1">Adjust Crop</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <img id="cropperImage1" src="" alt="Crop" style="max-width: 100%;">
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary" id="cropButton1">Crop Image</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Modal for Cropper 2 -->
-            <div class="modal fade" id="cropperModal2" tabindex="-1" role="dialog" aria-labelledby="cropperModalLabel2" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="cropperModalLabel2">Adjust Crop</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <img id="cropperImage2" src="" alt="Crop" style="max-width: 100%;">
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary" id="cropButton2">Crop Image</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Modal for Cropper 3 -->
-            <div class="modal fade" id="cropperModal3" tabindex="-1" role="dialog" aria-labelledby="cropperModalLabel3" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="cropperModalLabel3">Adjust Crop</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <img id="cropperImage3" src="" alt="Crop" style="max-width: 100%;">
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary" id="cropButton3">Crop Image</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Modal for Cropper 4 -->
-            <div class="modal fade" id="cropperModal4" tabindex="-1" role="dialog" aria-labelledby="cropperModalLabel4" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="cropperModalLabel4">Adjust Crop</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <img id="cropperImage4" src="" alt="Crop" style="max-width: 100%;">
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary" id="cropButton4">Crop Image</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
 
             
 
@@ -361,7 +280,7 @@
 
 
 
-
+c
 
         <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.11/cropper.min.js"></script>
