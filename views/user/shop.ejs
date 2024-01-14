@@ -272,6 +272,7 @@ async function handleSearchInput(event) {
 
                             <div class="products mb-3">
                                 <div  id="productContainer" class="row justify-content-center">
+                                    <% if (product.length > 0) { %>  
                                   <% let counter = 0; %>
                                   <% product.forEach(product => { %>
                                     <div class="col-12 col-md-6 col-lg-4 col-xl-4">
@@ -311,6 +312,9 @@ async function handleSearchInput(event) {
                                       </div>
                                     </div>
                                   <% }) %>
+                                  <% } else { %>
+                                    <p >No products found.</p>
+                                <% } %>
                                 </div>
                             </div>
                               
@@ -319,22 +323,21 @@ async function handleSearchInput(event) {
 
 
 
-                        <!-- Your existing product grid code here -->
-
-                        <nav aria-label="Page navigation">
-                            <ul class="pagination justify-content-center">
-                                <li class="page-item active" aria-current="page"><span class="page-link"></span></li>
-                                <li class="page-item"><a class="page-link" href=""></a></li>
-                            </ul>
-                        </nav>
+                     <nav aria-label="Page navigation">
+                         <ul class="pagination justify-content-center">
+                             <% for (let page = 1; page <= totalPages; page++) { %>
+                                 <li class="page-item<%= currentPage === page ? ' active' : '' %>">
+                                     <a class="page-link" href="/shop?page=<%= page %>"><%= page %></a>
+                                 </li>
+                             <% } %>
+                         </ul>
+                     </nav>
+                     
 
                     </div><!-- End .col-lg-9 -->
                     <aside class="col-lg-3 order-lg-first">
                         <div class="sidebar sidebar-shop">
-                            <div class="widget widget-clean">
-                                <label>Filters:</label>
-                                <a href="#" class="sidebar-filter-clear">Clean All</a>
-                            </div><!-- End .widget widget-clean -->
+                           
                     
                             <div class="widget widget-collapsible">
                                 <h3 class="widget-title">
@@ -380,17 +383,48 @@ async function handleSearchInput(event) {
                                         </div>
                                     </div><!-- End .widget-body -->
                                 </div><!-- End .collapse -->
-                                
                                 <button id="applyFiltersBtn">Apply Filters</button>
                             </div><!-- End .widget -->
                         </div><!-- End .sidebar sidebar-shop -->
                     </aside><!-- End .col-lg-3 -->
-                    
-                    
                 </div><!-- End .row -->
             </div><!-- End .container -->
     </div><!-- End .page-content -->
     </main><!-- End .main -->
+
+
+
+
+<script>
+    document.getElementById('applyFiltersBtn').addEventListener('click', function () {
+    const selectedCategory = document.querySelector('input[name="category"]:checked');
+    const categoryValue = selectedCategory ? selectedCategory.value : null;
+
+    const selectedPriceFilter = document.querySelector('input[name="price-filter"]:checked');
+    const priceFilterValue = selectedPriceFilter ? selectedPriceFilter.value : null;
+
+    const filters = {
+        category: categoryValue,
+        priceFilter: priceFilterValue
+    };
+    console.log(filters);
+
+    const queryString = Object.keys(filters)
+        .filter(key => filters[key] !== null)
+        .map(key => `${key}=${encodeURIComponent(filters[key])}`)
+        .join('&');
+
+    const url = `/shop?${queryString}`;
+
+    window.location.href = url;
+});
+
+</script>
+
+
+
+
+    
 
     <footer class="footer">
         <div class="footer-middle">

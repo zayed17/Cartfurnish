@@ -333,32 +333,66 @@ const userLogout = async (req, res) => {
         console.log(error.message);
     }
 }
+
 const loadshop = async (req, res) => {
     try {
+        const categoryId = req.query.category;
+        const priceFilter = req.query.priceFilter === "low-to-high" ? 1 : -1;
+        const page = parseInt(req.query.page) || 1;
+        const itemsPerPage = 9;
+
         const userData = await User.findOne({ _id: req.session.user_id });
-        const query = req.query.search
+        const search = req.query.search;
+
         let productData;
 
-        if (query) {
-            productData = await Product.find({
-                is_blocked: false,
-                isCategoryBlocked: false,
-                name: { $regex: query, $options: 'i' },
-            }).populate('categoryId');
-                   
-        } else {
-            productData = await Product.find({ is_blocked: false, isCategoryBlocked: false }).populate('categoryId');
+        let filterCriteria = {
+            is_blocked: false,
+            isCategoryBlocked: false
+        };
+
+        if (search) {
+            filterCriteria.name = { $regex: search, $options: 'i' };
         }
 
-        const category = await Category.find({});
+        if (categoryId) {
+            filterCriteria.categoryId = categoryId;
+        }
 
-        res.render("shop", { product: productData, user: userData, category });
+        const totalCount = await Product.countDocuments(filterCriteria);
+
+        if (totalCount > 0) {
+            const totalPages = Math.ceil(totalCount / itemsPerPage);
+
+            productData = await Product.find(filterCriteria)
+                .populate('categoryId')
+                .sort({ price: priceFilter })
+                .skip((page - 1) * itemsPerPage)
+                .limit(itemsPerPage);
+
+            const category = await Category.find({});
+
+            res.render("shop", {
+                product: productData,
+                user: userData,
+                category,
+                totalPages,
+                currentPage: page
+            });
+        } else {
+            res.render("shop", {
+                product: [],
+                user: userData,
+                category: [],
+                totalPages: 0,
+                currentPage: 0
+            });
+        }
     } catch (error) {
         console.error(error.message);
         res.status(500).send('Internal Server Error');
     }
 };
-
 
   
 const loadeachproduct = async(req,res)=>{
