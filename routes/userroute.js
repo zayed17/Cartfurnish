@@ -66,4 +66,9 @@ userRoute.post('/walletverify',auth.isLogin,usercontrollers.verifypayment)
 userRoute.post('/submit-review',auth.isLogin,reviewcontrollers.addreview)
 userRoute.post('/vote',auth.isLogin,reviewcontrollers.voting)
 userRoute.get('/search',usercontrollers.productSearch)
+userRoute.get('/forgot',usercontrollers.loadforgot)
+userRoute.post('/forgot',usercontrollers.forgot)
+userRoute.get('/resetPassword:token',usercontrollers.loadresetpassword)
+userRoute.post('/resetPassword',usercontrollers.resetPassword)
+
 module.exports = userRoute;

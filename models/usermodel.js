@@ -35,6 +35,8 @@ const userSchema  = mongoose.Schema({
     type: Boolean,
     default: false
   },
+  resetToken: String,
+  resetTokenExpiry: Date,
   wallet:{
     type:Number,
     default:0

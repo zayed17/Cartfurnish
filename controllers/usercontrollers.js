@@ -92,7 +92,7 @@ const insertuser = async (req, res) => {
 
           const existrefferal = await User.findOne({referral_code:req.body.referralCode})
           if(!existrefferal){
-            return res.status(400).render('signup', { message: 'Refferal code is valid.' });
+            return res.status(400).render('signup', { message: 'Refferal code is not valid.' });
           }else{
             const data = {
                 amount: 1000,
@@ -141,22 +141,20 @@ const loadVerificationPage = async(req,res)=>{
     }
 }
 
-  
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    host: 'smtp.gmail.com',
+    port: 587,
+    secure: true,
+    auth: {
+        user: process.env.email_user, 
+        pass: process.env.password_user
+    }
+});
 
 
 const sendOtpVerificationEmail = async ({ email, _id }, res) => {
     try {
-        const transporter = nodemailer.createTransport({
-            service: 'gmail',
-            host: 'smtp.gmail.com',
-            port: 587,
-            secure: true,
-            auth: {
-                user: process.env.email_user, 
-                pass: process.env.password_user
-            }
-        });
-
         const otp = `${Math.floor(1000 + Math.random() * 9000)}`;
         console.log(otp);
         const hashedOtp = await bcrypt.hash(otp, 10);
@@ -641,6 +639,75 @@ console.log(rechargeAmount,typeof(rechargeAmount),"herd");
     }
 };
 
+const loadforgot = async(req,res)=>{
+    try {
+        res.render('forgot')
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+const forgot = async(req,res)=>{
+    try {
+        const email = req.body.email;
+        const user = await User.findOne({email:email});
+        if(!user){
+            res.render('forgot',{message:"User not found"})
+        }else{
+            const token = crypto.randomBytes(20).toString('hex');
+            user.resetToken = token;
+            user.resetTokenExpiry = Date.now() + 300000; 
+            await user.save()
+            const resetLink = `http://localhost:3009/resetPassword${token}`
+            const mailOptions = {
+                from: process.env.email_user,
+                to: email,
+                subject: 'Password Reset',
+                text: `Click the following link to reset your password: ${resetLink}`,
+              };
+              await transporter.sendMail(mailOptions);
+              res.render('login',{message: "verification mail have been send"})
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+const loadresetpassword = async(req,res)=>{
+    try {
+        const token = req.params.token;
+        res.render("resetPassword",{token})
+    } catch (error) {
+        console.log(error);
+    }
+}
+const resetPassword = async (req, res) => {
+    try {
+        const token = req.body.token;
+        const pass1 = req.body.password1;
+        const pass2 = req.body.password2;
+        const user = await User.findOne({ resetToken: token, resetTokenExpiry: { $gt: Date.now() } });
+
+        if (pass1 !== pass2) {
+            res.render('resetPassword', { message: "Passwords do not match!", token });
+        } else {
+            const newPasswordHash = await bcrypt.hash(pass1, 10);
+
+            if (await bcrypt.compare(pass1, user.password)) {
+                res.render('resetPassword', { message: "Your old password and new password are the same!", token });
+            } else {
+                user.password = newPasswordHash;
+                user.resetToken = null;
+                user.resetTokenExpiry = null;
+                await user.save();
+                res.render('login');
+            }
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+};
 
 
 
@@ -665,4 +732,8 @@ module.exports = {
     walletReacharge,
     verifypayment,
     productSearch,
+    loadforgot,
+    forgot,
+    loadresetpassword,
+    resetPassword
 }
