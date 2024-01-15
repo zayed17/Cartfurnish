@@ -314,6 +314,58 @@ const excelreport = async (req, res) => {
     }
 };
 
+const chartData = async (req, res) => {
+    try {
+        const salesData = await Order.aggregate([
+            {
+                $match: { "products.productstatus": "Delivered" } // Add this $match stage
+            },
+            {
+                $group: {
+                    _id: { $month: "$purchaseDate" },
+                    totalAmount: { $sum: "$totalAmount" },
+                },
+            },
+            {
+                $project: {
+                    _id: 0,
+                    month: "$_id",
+                    totalAmount: 1,
+                },
+            },
+            {
+                $sort: { month: 1 },
+            },
+        ]);
+
+        console.log(salesData);
+
+        res.json(salesData);
+    } catch (error) {
+        console.error('Error fetching data from database:', error.message);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
+
+const paymentChartData = async (req, res) => {
+    try {
+        const paymentData = await Order.aggregate([
+            {
+                $group: {
+                    _id: "$paymentMethod",
+                    totalAmount: { $sum: "$totalAmount" },
+                },
+            },
+        ]);
+
+        console.log(paymentData);
+
+        res.json(paymentData);
+    } catch (error) {
+        console.error('Error fetching payment data from database:', error.message);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
 
 module.exports = {
     loadadmin,
@@ -331,5 +383,7 @@ module.exports = {
     blockCategory,
     loadreport,
     downloadReport,
-    excelreport
+    excelreport,
+    chartData,
+    paymentChartData
 }

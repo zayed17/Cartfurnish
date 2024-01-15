@@ -88,3 +88,26 @@
 #suggestionsList li:hover {
     background-color: #f2f2f2;
 }
+#zoom-container {
+    overflow: hidden;
+}
+
+
+
+.product-image-gallery {
+    display: flex;
+}
+
+.product-gallery-item {
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.product-gallery-item img {
+    width: 100;
+    height: auto;
+}
+
+.product-gallery-item.active img {
+    border: 2px solid #333; /* Optional: Add a border to the active thumbnail */
+}

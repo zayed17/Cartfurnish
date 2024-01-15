@@ -1,104 +1,131 @@
-(function ($) {
-    "use strict";
+    (function ($) {
+        "use strict";
+      const salesEndpoint = '/admin/chart';
 
-    /*Sale statistics Chart*/
-    if ($('#myChart').length) {
+fetch(salesEndpoint)
+    .then(response => response.json())
+    .then(salesData => {
+        console.log(salesData);
+
+        // Create an array with sales data for each month
+        const monthlySales = Array.from({ length: 12 }, (_, month) => {
+            const dataForMonth = salesData.find(monthlyData => monthlyData.month === (month + 1)); // Adjust month value
+            return dataForMonth ? dataForMonth.totalAmount : 0;
+        });
+
         var ctx = document.getElementById('myChart').getContext('2d');
         var chart = new Chart(ctx, {
-            // The type of chart we want to create
             type: 'line',
-            
-            // The data for our dataset
             data: {
                 labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
                 datasets: [{
-                        label: 'Sales',
-                        tension: 0.3,
-                        fill: true,
-                        backgroundColor: 'rgba(44, 120, 220, 0.2)',
-                        borderColor: 'rgba(44, 120, 220)',
-                        data: [18, 17, 4, 3, 2, 20, 25, 31, 25, 22, 20, 9]
-                    },
-                    {
-                        label: 'Visitors',
-                        tension: 0.3,
-                        fill: true,
-                        backgroundColor: 'rgba(4, 209, 130, 0.2)',
-                        borderColor: 'rgb(4, 209, 130)',
-                        data: [40, 20, 17, 9, 23, 35, 39, 30, 34, 25, 27, 17]
-                    },
-                    {
-                        label: 'Products',
-                        tension: 0.3,
-                        fill: true,
-                        backgroundColor: 'rgba(380, 200, 230, 0.2)',
-                        borderColor: 'rgb(380, 200, 230)',
-                        data: [30, 10, 27, 19, 33, 15, 19, 20, 24, 15, 37, 6]
-                    }
-
-                ]
-            },
-            options: {
-                plugins: {
-                legend: {
-                    labels: {
-                    usePointStyle: true,
-                    },
-                }
-                }
-            }
-        });
-    } //End if
-
-    /*Sale statistics Chart*/
-    if ($('#myChart2').length) {
-        var ctx = document.getElementById("myChart2");
-        var myChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-            labels: ["900", "1200", "1400", "1600"],
-            datasets: [
-                {
-                    label: "US",
-                    backgroundColor: "#5897fb",
-                    barThickness:10,
-                    data: [233,321,783,900]
-                }, 
-                {
-                    label: "Europe",
-                    backgroundColor: "#7bcf86",
-                    barThickness:10,
-                    data: [408,547,675,734]
-                },
-                {
-                    label: "Asian",
-                    backgroundColor: "#ff9076",
-                    barThickness:10,
-                    data: [208,447,575,634]
-                },
-                {
-                    label: "Africa",
-                    backgroundColor: "#d595e5",
-                    barThickness:10,
-                    data: [123,345,122,302]
-                },
-            ]
+                    label: 'Sales',
+                    tension: 0.3,
+                    fill: true,
+                    backgroundColor: 'rgba(44, 120, 220, 0.2)',
+                    borderColor: 'rgba(44, 120, 220)',
+                    data: monthlySales,
+                }],
             },
             options: {
                 plugins: {
                     legend: {
                         labels: {
-                        usePointStyle: true,
+                            usePointStyle: true,
                         },
-                    }
+                    },
                 },
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
+            },
         });
-    } //end if
-    
-})(jQuery);
+    })
+    .catch(error => console.error('Error fetching sales data:', error));
+
+// Event listener for the "Fetch Weekly Chart" button
+$('#fetchWeeklyChart').on('click', function () {
+    const weeklySalesEndpoint = '/admin/weeklyChart';
+
+    fetch(weeklySalesEndpoint)
+        .then(response => response.json())
+        .then(weeklySalesData => {
+            console.log(weeklySalesData);
+
+            // Create an array with sales data for each week
+            const weeklySales = Array.from({ length: 52 }, (_, week) => {
+                const dataForWeek = weeklySalesData.find(order => order.week === week + 1);
+
+                return dataForWeek ? dataForWeek.totalAmount : 0;
+            });
+
+            var ctxWeekly = document.getElementById('myWeeklyChart').getContext('2d');
+            var chartWeekly = new Chart(ctxWeekly, {
+                type: 'line',
+                data: {
+                    labels: Array.from({ length: 52 }, (_, week) => `Week ${week + 1}`),
+                    datasets: [{
+                        label: 'Weekly Sales',
+                        tension: 0.3,
+                        fill: true,
+                        backgroundColor: 'rgba(44, 120, 220, 0.2)',
+                        borderColor: 'rgba(44, 120, 220)',
+                        data: weeklySales,
+                    }],
+                },
+                options: {
+                    plugins: {
+                        legend: {
+                            labels: {
+                                usePointStyle: true,
+                            },
+                        },
+                    },
+                },
+            });
+        })
+        .catch(error => console.error('Error fetching weekly sales data:', error));
+});
+
+        /*Sale statistics Chart*/
+        if ($('#myChart2').length) {
+            const paymentEndpoint = '/admin/paymentChart';
+        
+            fetch(paymentEndpoint)
+                .then(response => response.json())
+                .then(paymentData => {
+                    console.log(paymentData);
+        
+                    const paymentLabels = paymentData.map(entry => entry._id);
+                    const paymentValues = paymentData.map(entry => entry.totalAmount);
+        
+                    var ctxPayment = document.getElementById('myChart2').getContext('2d');
+                    var chartPayment = new Chart(ctxPayment, {
+                        type: 'bar',
+                        data: {
+                            labels: paymentLabels,
+                            datasets: [{
+                                label: 'Payment Method',
+                                backgroundColor: ['#5897fb', '#7bcf86', '#ff9076'], // Adjust colors as needed
+                                barThickness: 30,
+                                data: paymentValues,
+                            }],
+                        },
+                        options: {
+                            plugins: {
+                                legend: {
+                                    labels: {
+                                        usePointStyle: true,
+                                    },
+                                },
+                            },
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                },
+                            },
+                        },
+                    });
+                })
+                .catch(error => console.error('Error fetching payment data:', error));
+        }
+        
+        
+    })(jQuery);

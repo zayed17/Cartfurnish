@@ -67,4 +67,7 @@ adminRoute.get('/logout',admincontrollers.adminLogout)
 adminRoute.get('/order',auth.isLogin,ordercontrollers.loadordermanagement)
 adminRoute.get('/showorder',auth.isLogin,ordercontrollers.loadshoworder)
 adminRoute.post('/updateProductStatus',auth.isLogin,ordercontrollers.updatastatus)
+adminRoute.get('/chart',auth.isLogin,admincontrollers.chartData)
+adminRoute.get('/paymentChart',auth.isLogin,admincontrollers.paymentChartData)
+
 module.exports = adminRoute;

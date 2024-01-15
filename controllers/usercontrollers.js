@@ -643,6 +643,7 @@ console.log(rechargeAmount,typeof(rechargeAmount),"herd");
 
 
 
+
 module.exports = {
     loadhome,
     loadshop,
@@ -663,5 +664,5 @@ module.exports = {
     invoice,
     walletReacharge,
     verifypayment,
-    productSearch
+    productSearch,
 }
