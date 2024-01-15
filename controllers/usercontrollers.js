@@ -90,23 +90,26 @@ const insertuser = async (req, res) => {
             return;
           }
 
-          const existrefferal = await User.findOne({referral_code:req.body.referralCode})
-          if(!existrefferal){
-            return res.status(400).render('signup', { message: 'Refferal code is not valid.' });
-          }else{
-            const data = {
-                amount: 1000,
-                date: new Date()
-            };
-            
-            await User.findOneAndUpdate(
-                { _id: existrefferal._id },
-                {
-                    $inc: { wallet: 1000 },
-                    $push: { walletHistory: data }
-                }
-            );
-          }
+          if (req.body.referralCode) {
+            const existReferral = await User.findOne({ referral_code: req.body.referralCode });
+        
+            if (!existReferral) {
+                return res.status(400).render('signup', { message: 'Referral code is not valid.' });
+            } else {
+                const data = {
+                    amount: 1000,
+                    date: new Date()
+                };
+        
+                await User.findOneAndUpdate(
+                    { _id: existReferral._id },
+                    {
+                        $inc: { wallet: 1000 },
+                        $push: { walletHistory: data }
+                    }
+                );
+            }
+        }
           const id = generateUniqueId(7);
           console.log(id,"id keto a");
 
