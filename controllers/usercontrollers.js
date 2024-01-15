@@ -292,13 +292,8 @@ const loademailinput = async (req,res)=>{
 
 const sentOtpbyMail = async(req,res)=>{
     try {
-        // const userData = await User.findOne({email:req.body.email});
-        const userData = await User.aggregate([
-            { $match: { email: req.body.email } },
-            { $unwind: "$walletHistory" },
-            { $sort: { "walletHistory.date": -1 } },
-            { $limit: 1 }
-          ]); 
+        const userData = await User.findOne({email:req.body.email});
+   
         if(!userData){
             res.render('loginwithotp',{message:'User not exist.'});
         }else{
@@ -444,6 +439,7 @@ const loadeachproduct = async(req,res)=>{
 
   const resendotp = async (req, res) => {
     try {
+        console.log("heelo");
         const id = req.query.id;
         const userData = await User.findOne({ _id: id });
         await sendOtpVerificationEmail({ email: userData.email, _id: userData._id }, res);

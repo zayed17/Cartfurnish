@@ -133,26 +133,23 @@
         
             <div class="login-page bg-image pt-8 pb-8 pt-md-12 pb-md-12 pt-lg-17 pb-lg-17"
                 style="background-image: url('public/assets/images/backgrounds/login-bg.jpg')">
-                <div class="container">
                     <div class="container">
                         <div class="form-box">
                             <div class="form-tab">
                                 <div class="text-center text-dark">Verify OTP</div>
-                    
                                 <div class="tab-content">
                                     <div class="tab-pane fade show active" id="register-2" role="tabpanel" aria-labelledby="register-tab-2">
                                         <% if (typeof message !== 'undefined') { %>
                                             <p style="color: rgb(255, 0, 0);"><%= message %></p>
                                         <% } %>
-                    
-                                        <!-- Add this HTML code in your template -->
+                                
                                         <form id="otpForm" action="/verifyotp" method="post">
                                             <div class="mb-3">
                                                 <input type="hidden" name="email" id="email" value="">
                                             </div>
                                             <div class="mb-3">
                                                 <label for="otp" class="form-label">OTP:</label>
-                                                <input type="text" id="otp" name="otp" class="form-control" >
+                                                <input type="text" id="otp" name="otp" class="form-control">
                                             </div>
                                             <input type="text" name="id" value="<%=id%>" hidden>
                                             <div class="row g-2">
@@ -162,23 +159,20 @@
                                                         <i class="icon-long-arrow-right"></i>
                                                     </button>
                                                 </div>
-                                            
+                                
                                                 <!-- Resend Button -->
                                                 <div class="col">
-                                                   <a href="/resendotp?id=<%=id%>"> <button type="button" class="btn btn-outline-primary-2" id="resendOtpButton">
-                                                    <span id="timer">Resend OTP</span>
-                                                </button></a>
+                                                    <button type="button" class="btn btn-outline-primary-2" id="resendOtpButton">
+                                                        <span id="timer">Resend OTP</span>
+                                                    </button>
                                                 </div>
-                                            </div>
                                             </div>
                                         </form>
                                     </div>
-                                </div>
+                                </div>                                
                             </div>
                         </div>
                     </div>
-                    
-                </div>
                 
             </div>
         </main><!-- End .main -->
@@ -274,19 +268,72 @@
 
 
 
-    <script>
-        
-    </script>
-
-    <!-- Plugins JS File -->
     <script src="public/assets/js/jquery.min.js"></script
     <script src="public/assets/js/bootstrap.bundle.min.js"></script>
     <script src="public/assets/js/jquery.hoverIntent.min.js"></script>
     <script src="public/assets/js/jquery.waypoints.min.js"></script>
     <script src="public/assets/js/superfish.min.js"></script>
     <script src="public/assets/js/owl.carousel.min.js"></script>
-    <!-- Main JS File -->
     <script src="public/assets/js/main.js"></script>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('resendOtpButton').addEventListener('click', function () {
+            const userId = '<%=id%>';
+            
+            fetch(`/resendotp?id=${userId}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    console.log('OTP Resent successfully');
+                } else {
+                    console.error('Error resending OTP:', data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+
+        const resendButton = document.getElementById('resendOtpButton');
+        let countdown = 60;
+        let timerInterval;
+
+        function updateTimer() {
+            if (countdown > 0) {
+                resendButton.disabled = true;
+                document.getElementById('timer').textContent = `Resend OTP (${countdown}s)`;
+                countdown--;
+            } else {
+                clearInterval(timerInterval);
+                resendButton.disabled = false;
+                document.getElementById('timer').textContent = 'Resend OTP';
+                countdown = 60;
+            }
+        }
+
+        document.getElementById('timer').textContent = 'Resend OTP';
+
+        timerInterval = setInterval(updateTimer, 1000);
+
+        resendButton.addEventListener('click', function () {
+            resendButton.disabled = true;
+            
+            countdown = 60;
+            clearInterval(timerInterval);
+            timerInterval = setInterval(updateTimer, 1000);
+
+
+        });
+    });
+</script>
+
 </body>
 
 
