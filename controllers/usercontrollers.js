@@ -111,7 +111,7 @@ const insertuser = async (req, res) => {
             }
         }
           const id = generateUniqueId(7);
-          console.log(id,"id keto a");
+        //   console.log(id,"id keto a");
 
         const spassword = await securePassword(req.body.password.trim());
 
@@ -657,13 +657,20 @@ const forgot = async(req,res)=>{
             user.resetToken = token;
             user.resetTokenExpiry = Date.now() + 300000; 
             await user.save()
-            const resetLink = `http://localhost:3009/resetPassword${token}`
+            const resetLink = `http://localhost:3009/resetPassword${token}`;
             const mailOptions = {
                 from: process.env.email_user,
                 to: email,
                 subject: 'Password Reset',
-                text: `Click the following link to reset your password: ${resetLink}`,
-              };
+                html: `
+                    <p>Dear User,</p>
+                    <p>We received a request to reset your password. Click the following link to proceed:</p>
+                    <a href="${resetLink}" style="text-decoration: none; color: #007BFF; font-weight: bold;">Reset Your Password</a>
+                    <p>If you didn't initiate this request, please ignore this email.</p>
+                    <p>Thank you,</p>
+                    <p>CartFurnish</p>
+                `,
+            };
               await transporter.sendMail(mailOptions);
               res.render('login',{message: "verification mail have been send"})
         }

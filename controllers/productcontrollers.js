@@ -7,7 +7,7 @@ const Category = require('../models/categorymodal')
 
 const loadproduct = async (req,res)=>{
     try {
-        const products = await Product.find({})
+        const products = await Product.find({}).populate('categoryId')
         res.render('product',{products})
     } catch (error) {
         console.log(error);
@@ -16,9 +16,9 @@ const loadproduct = async (req,res)=>{
 const loadaddproduct = async (req, res) => {
   try {
       // Assuming is_list is a field in your Category model
-      const categories = await Category.find({ is_list: true });
+      const categoryData = await Category.find({is_list:true})
 
-      res.render('addproduct', { categories });
+      res.render('addproduct', { category:categoryData });
   } catch (error) {
       console.log(error);
   }
@@ -52,7 +52,7 @@ console.log(req.body.price);
         const product = new Product({
           name: details.name,
           quantity: details.quantity,
-          category: details.category,
+          categoryId: details.category,
           price: details.price,
           offer: details.offer,
           description: details.description,
@@ -80,19 +80,23 @@ console.log(req.body.price);
 
   const loadeditproduct = async(req,res)=>{
     try {
+      console.log("heello");
       const productid = req.query.id;
-      const productData = await Product.findOne({_id:productid}).populate('category')
+      console.log("1");
+      const productData = await Product.findOne({_id:productid}).populate('categoryId')
+      console.log("2");
       const categoryData = await Category.find({is_list:true})
-
+      console.log("3");
       res.render('editproduct',{product:productData,category:categoryData})
     } catch (error) {
-      console.log();
+      console.log(error);
     }
   }
   
 
   const editproduct = async (req, res) => {
     try {
+      console.log("hi");
       const id = req.query.id;
       const details = req.body;
       const files = req.files;
@@ -121,7 +125,7 @@ console.log(req.body.price);
         const product = {
           name: details.name,
           quantity: details.quantity,
-          category: details.category,
+          categoryId: details.category,
           price: details.price,
           offer: details.offer,
           description: details.description,

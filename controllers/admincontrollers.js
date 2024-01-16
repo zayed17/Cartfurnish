@@ -259,7 +259,6 @@ const downloadReport = async(req,res)=>{
 
    await page.setContent(htmlContent);
 
-   // Generate PDF
    const pdfBuffer = await page.pdf();
 
    res.setHeader('Content-Type', 'application/pdf');
@@ -318,7 +317,7 @@ const chartData = async (req, res) => {
     try {
         const salesData = await Order.aggregate([
             {
-                $match: { "products.productstatus": "Delivered" } // Add this $match stage
+                $match: { "products.productstatus": "Delivered" }
             },
             {
                 $group: {
@@ -346,15 +345,17 @@ const chartData = async (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 };
-
 const paymentChartData = async (req, res) => {
     try {
         const paymentData = await Order.aggregate([
             {
+                $match: { "products.productstatus": "Delivered" }
+            },
+            {
                 $group: {
                     _id: "$paymentMethod",
                     totalAmount: { $sum: "$totalAmount" },
-                },
+                }
             },
         ]);
 
@@ -362,10 +363,11 @@ const paymentChartData = async (req, res) => {
 
         res.json(paymentData);
     } catch (error) {
-        console.error('Error fetching payment data from database:', error.message);
+        console.error('Error fetching payment data from the database:', error.message);
         res.status(500).json({ error: 'Internal Server Error' });
     }
 };
+
 
 module.exports = {
     loadadmin,

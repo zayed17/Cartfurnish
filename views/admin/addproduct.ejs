@@ -181,13 +181,10 @@
                                         <div class="form-group">
                                             <label>Category</label>
                                             <select class="form-control" id="product-category" name="category">
-                                       
-                                                    <% for (let i = 0; i < categories.length; i++) { %>
-                                                        <option value="<%= categories[i].name %>"><%= categories[i].name %></option>
-                                                    <% } %>
- 
-                                                
-                                            </select>
+                                            <% for (let i = 0; i < category.length; i++) { %>
+                                                    <option value="<%= category[i]._id %>"><%= category[i].name %></option>
+                                            <% } %>
+                                        </select>
                                         </div>
                                         <div class="form-group">
                                             <label>Price</label>

@@ -212,7 +212,6 @@ $('#submitAddressBtns').on('click', function () {
                 $('#addrassArea').load('/checkout #addrassArea');
                 $('#addAddressModals').modal('hide');
                 $('.modal-backdrop').remove();
-
             }
         },
         error: function (error) {
