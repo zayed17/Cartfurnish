@@ -31,10 +31,12 @@
     <!-- Main CSS File -->
     <link rel="stylesheet" href="public/assets/css/style.css">
     <link rel="stylesheet" href="public/assets/css/plugins/nouislider/nouislider.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.rawgit.com/elevateweb/elevatezoom/master/jquery.elevatezoom.js"></script>
+    
     <style>
         .user-photo-container {
     width: 40px; /* Adjust the size as needed */
@@ -213,40 +215,41 @@
                             <div class="col-md-6">
                                 <div class="product-gallery product-gallery-vertical class=" zoom-container"
                                     id="zoom-container"">
-                                <div class=" row">
-                                    <div class="product-main-image">
-                                        <img id="mainImage"
-                                            src="/public/assets/images/products/sharpened/<%= product.images.image1 %>"
-                                            id="zoom-image" alt="Product image">
-                                    </div><!-- End .product-main-image -->
-                                    <div id="product-zoom-gallery" class="product-image-gallery">
-                                        <a class="product-gallery-item active" href="#"
-                                            data-image="/public/assets/images/products/sharpened/<%= product.images.image1 %>"
-                                            data-zoom-image="/public/assets/images/products/original/<%= product.images.image1 %>">
-                                            <img src="/public/assets/images/products/sharpened/<%= product.images.image1 %>"
-                                                alt="product side">
-                                        </a>
-                                        <a class="product-gallery-item" href="#"
-                                            data-image="/public/assets/images/products/sharpened/<%= product.images.image2 %>"
-                                            data-zoom-image="/public/assets/images/products/original/<%= product.images.image2 %>">
-                                            <img src="/public/assets/images/products/sharpened/<%= product.images.image2 %>"
-                                                alt="product cross">
-                                        </a>
-                                        <a class="product-gallery-item" href="#"
-                                            data-image="/public/assets/images/products/sharpened/<%= product.images.image3 %>"
-                                            data-zoom-image="/public/assets/images/products/sharpened/<%= product.images.image3 %>">
-                                            <img src="/public/assets/images/products/sharpened/<%= product.images.image3 %>"
-                                                alt="product with model">
-                                        </a>
-
-                                        <a class="product-gallery-item" href="#"
-                                            data-image="/public/assets/images/products/sharpened/<%= product.images.image4 %> "
-                                            data-zoom-image="/public/assets/images/products/sharpened/<%= product.images.image4 %>">
-                                            <img src="/public/assets/images/products/sharpened/<%= product.images.image4 %>"
-                                                alt="product back">
-                                        </a>
+                                    <div class="row">
+                                        <div class="product-main-image">
+                                            <img id="mainImage"
+                                                src="/public/assets/images/products/sharpened/<%= product.images.image1 %>"
+                                                id="zoom-image" alt="Product image">
+                                        </div><!-- End .product-main-image -->
+                                        <div id="product-zoom-gallery" class="product-image-gallery">
+                                            <a class="product-gallery-item active" href="#"
+                                                data-image="/public/assets/images/products/sharpened/<%= product.images.image1 %>"
+                                                data-zoom-image="/public/assets/images/products/original/<%= product.images.image1 %>">
+                                                <img src="/public/assets/images/products/sharpened/<%= product.images.image1 %>"
+                                                    alt="product side">
+                                            </a>
+                                            <a class="product-gallery-item" href="#"
+                                                data-image="/public/assets/images/products/sharpened/<%= product.images.image2 %>"
+                                                data-zoom-image="/public/assets/images/products/original/<%= product.images.image2 %>">
+                                                <img src="/public/assets/images/products/sharpened/<%= product.images.image2 %>"
+                                                    alt="product cross">
+                                            </a>
+                                            <a class="product-gallery-item" href="#"
+                                                data-image="/public/assets/images/products/sharpened/<%= product.images.image3 %>"
+                                                data-zoom-image="/public/assets/images/products/original/<%= product.images.image3 %>">
+                                                <img src="/public/assets/images/products/sharpened/<%= product.images.image3 %>"
+                                                    alt="product with model">
+                                            </a>
+                                    
+                                            <a class="product-gallery-item" href="#"
+                                                data-image="/public/assets/images/products/sharpened/<%= product.images.image4 %> "
+                                                data-zoom-image="/public/assets/images/products/original/<%= product.images.image4 %>">
+                                                <img src="/public/assets/images/products/sharpened/<%= product.images.image4 %>"
+                                                    alt="product back">
+                                            </a>
+                                        </div>
                                     </div>
-                                </div>
+                                    
                             </div><!-- End .product-gallery -->
                         </div><!-- End .col-md-6 -->
                         <div class="col-md-6">
@@ -612,6 +615,18 @@ function addToCart(productId) {
         },
     });
 }
+
+
+   $(document).ready(function () {
+       $('.product-main-image img').elevateZoom({
+           zoomType: "inner",
+           cursor: "crosshair",
+           gallery: 'product-zoom-gallery',
+           galleryActiveClass: 'active',
+           imageCrossfade: true
+       });
+   });
+</script>
 
 
 

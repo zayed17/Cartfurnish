@@ -142,6 +142,7 @@ console.log(req.body.price);
       }
     } catch (error) {
       console.log(error.message);
+      console.log(error);
     }
   };
   
