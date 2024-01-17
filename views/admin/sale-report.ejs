@@ -60,7 +60,7 @@
                             <% order.products.forEach(product => { %>
                                 <tr>
                                     <td><a class="fw-bold"><%= order._id.toString().substring(6, 12).toUpperCase() %></a></td>
-                                    <td><%= order.userId.name %></td>
+                                    <td><%= order?.userId?.name %></td>
                                     <td><%= new Date(order.purchaseDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %></td>
                                     <td>$<%= product.price.toFixed(2) %></td>
                                     <td><i class="material-icons md-payment font-xxl text-muted mr-5"></i> <%= order.paymentMethod %></td>

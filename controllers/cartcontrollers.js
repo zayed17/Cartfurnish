@@ -71,9 +71,13 @@ const addtocart = async (req, res) => {
 
 const updatecart = async (req, res) => {
     try {
+        
         const product_id = req.body.productId;
         const user_id = req.session.user_id;
         const count = req.body.count;
+
+        console.log( product_id,"quantity");
+        const product = await Product.findOne({_id:product_id})
 
         const cartD = await Cart.findOne({ user: user_id });
         if (count === -1) {
@@ -85,8 +89,8 @@ const updatecart = async (req, res) => {
 
         if (count === 1) {
             const currentQuantity = cartD.product.find((p) => p.productId == product_id).quantity;
-            if (currentQuantity + count > 5) {
-                return res.json({ success: false, message: 'Cannot add more than 5 items.' });
+            if (currentQuantity + count > product.quantity) {
+                return res.json({ success: false, message: 'Cannot add more than the quantity' });
             }
         }
 
