@@ -189,7 +189,7 @@
                             <p>Quantity: <%= product.quantity %></p>
                             <p>Total Price: ₹<%= product.totalPrice.toFixed(2) %></p>
                             <p>Status: <%= product.productstatus %></p>
-                            <% if(product.productstatus == "placed" || product.productstatus == "shipped" ) { %>
+                            <% if(product.productstatus == "placed" || product.productstatus == "Shipped" ) { %>
                                 <button class="btn btn-danger custom-btn" onclick="cancelProduct('<%= product._id %>')">Cancel</button>
                             <% } else if(product.productstatus == "Delivered") { %>
                                 <button class="btn btn-danger custom-btn" onclick="returnProduct('<%= product._id %>')">Return</button>

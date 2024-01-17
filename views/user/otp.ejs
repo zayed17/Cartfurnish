@@ -143,13 +143,14 @@
                                             <p style="color: rgb(255, 0, 0);"><%= message %></p>
                                         <% } %>
                                 
-                                        <form id="otpForm" action="/verifyotp" method="post">
+                                        <form id="otpForm" action="/verifyotp"  onsubmit="validate(event)" method="post">
                                             <div class="mb-3">
                                                 <input type="hidden" name="email" id="email" value="">
                                             </div>
                                             <div class="mb-3">
                                                 <label for="otp" class="form-label">OTP:</label>
                                                 <input type="text" id="otp" name="otp" class="form-control">
+                                                <span id="otpError" class="error-message text-danger"></span>
                                             </div>
                                             <input type="text" name="id" value="<%=id%>" hidden>
                                             <div class="row g-2">
@@ -173,9 +174,34 @@
                             </div>
                         </div>
                     </div>
-                
             </div>
         </main><!-- End .main -->
+
+        <script>
+           async function validate(event){
+            event.preventDefault();
+
+            const otp = document.getElementById('otp');
+            const errorshow = document.getElementById('otpError');
+            const otpForm = document.getElementById('otpForm');
+            if(otp.value.trim() == ""){
+                errorshow.textContent = "Enter OTP"
+                clearError(errorshow,2000)
+            }else if(/[a-z,A-Z]/.test(otp.value)){
+                errorshow.textContent = "Enter valid OTP"
+                clearError(errorshow,2000)
+            }else if(otp.value.length!= 4){
+                errorshow.textContent = "Enter 4 digits"
+                clearError(errorshow,2000)
+            }else{
+                otpForm.submit(); 
+            }
+        }
+        function clearError(element, time) {
+            setTimeout(() => element.textContent = "", time);
+        }
+    
+        </script>
         
 
 
@@ -277,6 +303,7 @@
     <script src="public/assets/js/main.js"></script>
 
 
+
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('resendOtpButton').addEventListener('click', function () {
@@ -335,8 +362,4 @@
 </script>
 
 </body>
-
-
-<!-- molla/login  22 Nov 2019 10:04:03 GMT -->
-
 </html>

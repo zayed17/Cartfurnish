@@ -129,7 +129,6 @@ const editaddress = async (req, res) => {
         res.json({ success: true});
     } catch (error) {
         console.error(error.message);
-        // indicating an error
         res.status(500).json({ success: false, message: 'Internal Server Error' });
     }
   };

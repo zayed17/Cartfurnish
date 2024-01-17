@@ -333,6 +333,7 @@ const userLogout = async (req, res) => {
 const loadshop = async (req, res) => {
     try {
         const categoryId = req.query.category;
+        const cart =  await Cart.findOne({user:req.session.user_id}).populate("product.productId")
         const priceFilter = req.query.priceFilter === "low-to-high" ? 1 : -1;
         const page = parseInt(req.query.page) || 1;
         const itemsPerPage = 9;
@@ -373,15 +374,17 @@ const loadshop = async (req, res) => {
                 user: userData,
                 category,
                 totalPages,
-                currentPage: page
+                currentPage: page,
+                cart
             });
-        } else {
+        } else { 
             res.render("shop", {
                 product: [],
                 user: userData,
                 category: [],
                 totalPages: 0,
-                currentPage: 0
+                currentPage: 0,
+                cart
             });
         }
     } catch (error) {

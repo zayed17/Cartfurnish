@@ -141,6 +141,7 @@
                                 <a href="/cart" class="dropdown-toggle">
                                     <div class="icon">
                                         <i class="icon-shopping-cart"></i>
+                                        <span class="cart-count"><%= cart?.product?.length || 0 %></span>
                                     </div>
                                 </a>
                             <% } else { %>
@@ -153,8 +154,8 @@
                         </div><!-- End .cart-dropdown -->
                     </div><!-- End .header-right -->                    
                 </div><!-- End .container -->
-            </div><!-- End .header-middle -->
-        </header><!-- End .header -->
+            </div>
+        </header>
 
 
 
@@ -162,7 +163,7 @@
 
 
 
-        <script>
+<script>
          let previousInputValue = '';
 
 async function handleSearchInput(event) {

@@ -172,7 +172,7 @@
 			
 						<form id="orderForm">
 							<div class="row" style="justify-content: space-around;">
-								<%if(addresses){%>
+								<%if(addresses.length <0){%>
 									<% addresses?.address?.forEach(function (address, index) { %>
 										<div class="col-lg-4">
 											<div class="card card-dashboard">
