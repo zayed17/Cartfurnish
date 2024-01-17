@@ -1,5 +1,4 @@
 const express = require('express');
-const userRoute = express();
 const session = require('express-session');
 const usercontrollers = require('../controllers/usercontrollers');
 const config = require('../config/config');
@@ -9,6 +8,9 @@ const addresscontrollers = require('../controllers/addresscontrollers')
 const ordercontrollers = require('../controllers/ordercontrollers')
 const couponcontrollers = require('../controllers/couponcontrollers')
 const reviewcontrollers = require('../controllers/reviewcontrollers')
+const flash = require('connect-flash');
+const userRoute = express();
+
 // Configure session middleware
 userRoute.use(session({
     secret: config.sessionSecret,
@@ -16,8 +18,12 @@ userRoute.use(session({
     saveUninitialized: true,
     // cookie: { maxAge: 30 * 24 * 60 * 60 * 1000 } 
 }));
+userRoute.use(flash());
 
-
+userRoute.use((req, res, next) => {
+    res.locals.messages = req.flash();
+    next();
+});
 // Parse JSON and URL-encoded data
 userRoute.use(express.json());
 userRoute.use(express.urlencoded({ extended: true }));

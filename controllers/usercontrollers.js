@@ -458,6 +458,7 @@ const loadeachproduct = async(req,res)=>{
 
 const edituser = async (req, res) => {
     try {
+        console.log("131")
             const userData = await User.findById(req.session.user_id)
 
        await User.findOneAndUpdate(
@@ -478,49 +479,32 @@ const edituser = async (req, res) => {
 }
 
 
-const passwordchange = async(req,res)=>{
+const passwordchange = async (req, res) => {
     try {
-        const userData = await User.findById(req.session.user_id)
+        const userData = await User.findById(req.session.user_id);
 
-            if (req.body.currentpassword  || (req.body.newpassword && req.body.newpassword2)) {
-                if (!req.body.newpassword || req.body.newpassword.trim() === "" || !req.body.newpassword2 || req.body.newpassword2.trim() === "") {
-                    return res.render('account', { message: 'New passwords cannot be empty.'});
-                }
-            
-                if (req.body.newpassword !== req.body.newpassword2) {
-                    return res.render('account', { message: 'New passwords do not match.'});
-                }
-            
-                if (req.body.newpassword.length < 8) {
-                    return res.render('account', { message: 'New password must be at least 8 characters long.'});
-                } else {
-                    const matchPassword = await bcrypt.compare(req.body.currentpassword, userData.password);
-            
-                    if (matchPassword) {
-                        sPassword = await securePassword(req.body.newpassword);
-                    } else {
-                        return res.render('account', { message: 'Current password is incorrect. Please try again.'});
-                    }
-                }
-            } else {
-                sPassword = userData.password;
-                return res.render('account', { message: 'Please enter either a current password or new passwords.'});
-            }
+        const matchPassword = await bcrypt.compare(req.body.currentpassword, userData.password);
+
+        if (matchPassword) {
+            const sPassword = await securePassword(req.body.newpassword);
             await User.findOneAndUpdate(
-                { email: userData.email,  },
+                { email: userData.email },
                 {
                     $set: {
-                        password:sPassword
+                        password: sPassword
                     },
                 },
                 { new: true }
             );
-            res.redirect('/account')
-
+            return res.status(200).json({ success: true, message: 'Password updated successfully.' });
+        } else {
+            return res.status(401).json({ success: false, message: 'Current password is incorrect. Please try again.' });
+        }
     } catch (error) {
-        console.log(error);
+        console.error(error);
+        return res.status(500).json({ success: false, message: 'An error occurred while updating the password. Please try again.' });
     }
-}
+};
 
 
 
@@ -694,12 +678,9 @@ const resetPassword = async (req, res) => {
     try {
         const token = req.body.token;
         const pass1 = req.body.password1;
-        const pass2 = req.body.password2;
         const user = await User.findOne({ resetToken: token, resetTokenExpiry: { $gt: Date.now() } });
 
-        if (pass1 !== pass2) {
-            res.render('resetPassword', { message: "Passwords do not match!", token });
-        } else {
+
             const newPasswordHash = await bcrypt.hash(pass1, 10);
 
             if (await bcrypt.compare(pass1, user.password)) {
@@ -711,7 +692,7 @@ const resetPassword = async (req, res) => {
                 await user.save();
                 res.render('login');
             }
-        }
+        
     } catch (error) {
         console.error(error);
         res.status(500).send('Internal Server Error');
