@@ -171,12 +171,12 @@
 						</span>
 			
 						<form id="orderForm">
-							<div class="row" style="justify-content: space-around;">
-								<%if(addresses.length <0){%>
+							<div class="row" style="justify-content: space-around;" id="addrassArea"> 
+								<% if (addresses && addresses.address && addresses.address.length > 0) { %>
 									<% addresses?.address?.forEach(function (address, index) { %>
-										<div class="col-lg-4">
-											<div class="card card-dashboard">
-												<div class="card-body">
+										<div class="col-lg-4" >
+											<div class="card card-dashboard" >
+												<div class="card-body" >
 													<input type="radio" name="address" value="<%= index %>" <%= index === 0 ? 'checked' : '' %> >
 													<h3 class="card-title">Address <%= index + 1 %></h3>
 													<p>
@@ -198,14 +198,14 @@
 											<div class="col-lg-9 billing-details">
 												<h2 class="checkout-title">Billing Details</h2>
 					
-												<div class="form-group">
+												<div class="form-group">		
 													<label for="fullName">Full Name *</label>
-													<input type="text" class="form-control" id="fullName" name="fullName">
+													<input type="text" class="form-control" id="fullNames" name="fullName">
 												</div>
 					
 												<div class="form-group">
 													<label for="country">Country *</label>
-													<input type="text" class="form-control" id="country" name="country">
+													<input type="text" class="form-control" id="countrys" name="country">
 												</div>
 					
 												<div class="form-group">
@@ -240,18 +240,16 @@
 													<div class="col-sm-6">
 														<div class="form-group">
 															<label for="phone">Phone *</label>
-															<input type="tel" class="form-control" id="phone" name="phone">
+															<input type="tel" class="form-control" id="phones" name="phone">
 														</div>
 													</div>
 												</div>
 												<div class="form-group">
 													<label for="email">Email *</label>
-													<input type="email" class="form-control" id="email" name="email">
+													<input type="email" class="form-control" id="emails" name="email">
 												</div>
 											</div>
 										<% } %>
-					
-
 
 
 
@@ -290,7 +288,7 @@
 													<% } %>
 												<tr class="summary-total">
 													<td>Total:</td>
-													<td id="totalamount">₹<%= discount %></td>
+													<td id="totalamount"  >₹<%= discount %></td>
 												</tr>
 											</tbody>
 										</table>
@@ -342,10 +340,7 @@
 											</div>
 										</div>
 
-										<button type="button" id="placeOrderBtn" class="btn btn-outline-primary-2 btn-order btn-block">
-											<span class="btn-text">Place Order</span>
-											<span class="btn-hover-text">Proceed to Checkout</span>
-										</button>
+										<button type="button" onclick="validateFormAddress(event)" id="placeOrderBtn" class="btn btn-outline-warning">PROCEED TOCHECKOUT</a></button>
 									</div>
 								</aside>
 							</div>
@@ -355,6 +350,65 @@
 				</div>
 			</div>
 	    </main>
+
+
+
+					
+
+		<script>
+			async function validateFormAddress(event) {
+				event.preventDefault();
+
+			 var fullName = $('#fullNames').val().trim();
+			 var country = $('#countrys').val().trim();
+			 var housename = $('#housenames').val().trim();
+			 var state = $('#states').val().trim();
+			 var city = $('#citys').val().trim();
+			 var pincode = $('#pincodes').val().trim();
+			 var phone = $('#phones').val().trim();
+			 var email = $('#emails').val().trim();
+			 var form = $('orderForm');
+		 
+			 if (fullName === '') {
+				 displayError('#fullNames', 'Please enter your full name.');
+			 }else if (country === '') {
+				 displayError('#countrys', 'Please enter the country.');
+			 }else if (housename === '') {
+				 displayError('#housenames', 'Please enter the house name.');
+			 }else if (state === '') {
+				 displayError('#states', 'Please enter the state.');
+			 }else if (city === '') {
+				 displayError('#citys', 'Please enter the city.');
+			 }else if (pincode === '') {
+				 displayError('#pincodes', 'Please enter the pincode.');
+			 }else if (pincode.length !== 6 || !/^\d+$/.test(pincode)) {
+				 displayError('#pincode', 'Please enter a valid 6-digit pincode with only digits.');
+			 }else if (phone === '') {
+			     displayError('#phones', 'Please enter the phone number.');
+		     }else if (phone.length !== 10 || !/^\d+$/.test(phone)) {
+			     displayError('#phone', 'Please enter a valid 10-digit phone number with only digits.');
+		     }else if (email === '') {
+				 displayError('#emails', 'Please enter the email.');
+			 }else if (!/\S+@\S+\.\S+/.test(email)) {
+				 displayError('#email', 'Please enter a valid email address.');
+			 }else{
+				form.submit();
+			 }
+		 }
+		 function displayError(elementId, message) {
+				 clearError(elementId);
+				 $(elementId).after('<div class="error-message text-danger">' + message + '</div>');
+			 }
+		 
+			 function clearError(elementId) {
+				 $(elementId).next('.error-message').remove();
+			 }
+		 
+		 
+		 </script> 
+
+
+
 	<footer class="footer">
 		<div class="footer-middle">
 			<div class="container">
@@ -504,7 +558,7 @@ aria-hidden="true">
 				<input type="text" class="form-control" style="display: none;" id="addressId" name="addressId">
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-					<button type="submit" class="btn btn-outline-warning" id="submitAddressBtns">Submit</button>
+					<button type="submit"  class="btn btn-outline-warning" id="submitAddressBtns">Submit</button>
 				</div>
 			</form>
 		</div>
@@ -515,57 +569,57 @@ aria-hidden="true">
 
 <!-- modal for adding address -->
 <div class="modal fade" id="addAddressModal" tabindex="-1" role="dialog" aria-labelledby="addAddressModalLabel" aria-hidden="true">
-<div class="modal-dialog modal-dialog-centered" role="document">
-	<div class="modal-content">
-		<div class="modal-header">
-			<h5 class="modal-title 	" id="addAddressModalLabel">Add Address</h5>
-			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-				<span aria-hidden="true">&times;</span>
-			</button>
-		</div>
-		<div class="modal-body">
-			<form id="addAddressForm"  method="post" novalidate>
-				<div class="form-group">
-					<label for="fullName">Full Name:</label>
-					<input type="text" class="form-control" id="fullName" name="fullName" required>
-				</div>
-				<div class="form-group">
-					<label for="country">Country:</label>
-					<input type="text" class="form-control" id="country" name="country" required>
-				</div>
-				<div class="form-group">
-					<label for="housename">House Name:</label>
-					<input type="text" class="form-control" id="housename" name="housename" required>
-				</div>
-				<div class="form-group">
-					<label for="state">State:</label>
-					<input type="text" class="form-control" id="state" name="state" required>
-				</div>
-				<div class="form-group">
-					<label for="city">City:</label>
-					<input type="text" class="form-control" id="city" name="city" required>
-				</div>
-				<div class="form-group">
-					<label for="pincode">Pincode (6 digits):</label>
-					<input type="text" class="form-control" id="pincode" name="pincode" pattern="\d{6}" required>
-				</div>
-				<div class="form-group">
-					<label for="phone">Phone (10 digits):</label>
-					<input type="tel" class="form-control" id="phone" name="phone" pattern="\d{10}" required>
-				</div>
-				<div class="form-group">
-					<label for="email">Email:</label>
-					<input type="email" class="form-control" id="email" name="email" required>
-				</div>
-			</form>
-		</div>
-		<div class="modal-footer">
-			<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-			<button type="button" class="btn btn-outline-warning" id="submitAddressBtn">Add Address</button>
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="addAddressModalLabel">Add Address</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<form id="addAddressForm"  method="post" novalidate>
+					<div class="form-group">
+						<label for="fullName">Full Name:</label>
+						<input type="text" class="form-control" id="fullName" name="fullName" required>
+					</div>
+					<div class="form-group">
+						<label for="country">Country:</label>
+						<input type="text" class="form-control" id="country" name="country" required>
+					</div>
+					<div class="form-group">
+						<label for="housename">House Name:</label>
+						<input type="text" class="form-control" id="housename" name="housename" required>
+					</div>
+					<div class="form-group">
+						<label for="state">State:</label>
+						<input type="text" class="form-control" id="state" name="state" required>
+					</div>
+					<div class="form-group">
+						<label for="city">City:</label>
+						<input type="text" class="form-control" id="city" name="city" required>
+					</div>
+					<div class="form-group">
+						<label for="pincode">Pincode (6 digits):</label>
+						<input type="text" class="form-control" id="pincode" name="pincode" pattern="\d{6}" required>
+					</div>
+					<div class="form-group">
+						<label for="phone">Phone (10 digits):</label>
+						<input type="tel" class="form-control" id="phone" name="phone" pattern="\d{10}" required>
+					</div>
+					<div class="form-group">
+						<label for="email">Email:</label>
+						<input type="email" class="form-control" id="email" name="email" required>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-outline-warning" id="submitAddressBtn">Add Address</button>
+			</div>
 		</div>
 	</div>
-</div>
-</div>
+	</div>
 
 
 
