@@ -659,7 +659,7 @@ const forgot = async(req,res)=>{
                 `,
             };
               await transporter.sendMail(mailOptions);
-              res.render('login',{message: "verification mail have been send"})
+              res.render('login',{success: "verification mail have been send"})
         }
     } catch (error) {
         console.log(error);

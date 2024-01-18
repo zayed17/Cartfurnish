@@ -138,6 +138,20 @@
                                 Login-In
                             </div>
 							<div class="tab-content">
+                                <% if (typeof success !=='undefined' ) { %>
+                                    <p id="success" style="color: rgb(6, 211, 20);">
+                                        <%= success %>
+                                    </p>
+                                    <script>
+                                        // Set a timer to remove the message after 5000 milliseconds (5 seconds)
+                                        setTimeout(function () {
+                                            var messageElement = document.getElementById('success');
+                                            if (messageElement) {
+                                                messageElement.style.display = 'none';
+                                            }
+                                        }, 3500);
+                                    </script>
+                                    <% } %> 
 							    
 							    <div class="tab-pane fade show active" id="register-2" role="tabpanel" aria-labelledby="register-tab-2">
                                     <% if (typeof message !=='undefined' ) { %>
