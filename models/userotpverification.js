@@ -9,6 +9,6 @@ const userOtpVerificationSchema = mongoose.Schema({
     }
 })
 
-userOtpVerificationSchema.index({createAt: 1},{expireAfterSeconds:50})
+userOtpVerificationSchema.index({createAt: 1},{expireAfterSeconds:60})
 
 module.exports = mongoose.model('userOtpVerification',userOtpVerificationSchema);

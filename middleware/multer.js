@@ -1,8 +1,7 @@
 const multer=require('multer');
 
 const productStorage = multer.diskStorage({
-    destination: "public/assets/images/products/original",
-
+    destination: "public/assets/images/products/sharpened",
     filename:(req,file,cb)=>{
         const filename = file.originalname;
         cb(null,filename)
@@ -21,15 +20,11 @@ const BannerStorage = multer.diskStorage({
 
 
 const products = multer({ storage:productStorage});
-const uploadproduct = products.fields([
-    { name: "image1", maxCount: 1 },
-    { name: "image2", maxCount: 1 },
-    { name: "image3", maxCount: 1 },
-    { name: "image4", maxCount: 1 },
-])
+const uploadproduct =products.array('cropedImages', 4)
 const uploadBanner = multer({ storage:BannerStorage})
 
 module.exports = {
     uploadproduct,
     uploadBanner
 }
+

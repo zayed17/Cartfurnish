@@ -1,7 +1,7 @@
 const Product = require('../models/productmodal')
 const Sharp = require('sharp');
 const Category = require('../models/categorymodal')
-
+const fs = require('fs');
 
 
 
@@ -15,7 +15,6 @@ const loadproduct = async (req,res)=>{
 }
 const loadaddproduct = async (req, res) => {
   try {
-      // Assuming is_list is a field in your Category model
       const categoryData = await Category.find({is_list:true})
 
       res.render('addproduct', { category:categoryData });
@@ -30,21 +29,9 @@ const loadaddproduct = async (req, res) => {
 const addproduct = async (req, res) => {
     try {
       const details = req.body;
-      // console.log(details);
       const files = await req.files;
       console.log(files, "kitto");
-      const img = [
-        files.image1[0].filename,
-        files.image2[0].filename,
-        files.image3[0].filename,
-        files.image4[0].filename,
-      ];
-      for (let i = 0; i < img.length; i++) {
-        await Sharp("public/assets/images/products/original/" + img[i])
-          .resize(500, 500)
-          .toFile("public/assets/images/products/sharpened/" + img[i]);
-      }
-  
+     
 console.log(req.body.quantity);
 console.log(req.body.price);
 
@@ -56,12 +43,12 @@ console.log(req.body.price);
           price: details.price,
           offer: details.offer,
           description: details.description,
-          "images.image1": files.image1[0].filename,
-          "images.image2": files.image2[0].filename,
-          "images.image3": files.image3[0].filename,
-          "images.image4": files.image4[0].filename,
+          "images.image1": files[0].filename,
+          "images.image2": files[1].filename,
+          "images.image3": files[2].filename,
+          "images.image4": files[3].filename,
         });
-        // console.log(product);
+        console.log(product);
   
         const result = await product.save();
         console.log(result);
@@ -92,17 +79,14 @@ console.log(req.body.price);
       console.log(error);
     }
   }
-  
-
   const editproduct = async (req, res) => {
     try {
-      console.log("hi");
       const id = req.query.id;
       const details = req.body;
       const files = req.files;
       console.log(id);
       console.log(details);
-      console.log(files);
+      console.log(files,req.files[0])
   
       const existingData = await Product.findOne({ _id: id });
   
@@ -113,19 +97,13 @@ console.log(req.body.price);
         files?.image4 ? (files.image4[0]?.filename || existingData.images.image4) : existingData.images.image4,
       ];
   
-      for (let i = 0; i < img.length; i++) {
-        if (img[i]) {
-          await Sharp("public/assets/images/products/original/" + img[i])
-            .resize(500, 500)
-            .toFile("public/assets/images/products/sharpened/" + img[i]);
-        }
-      }
+
   
       if (details.quantity > 0 && details.price > 0) {
         const product = {
           name: details.name,
           quantity: details.quantity,
-          categoryId: details.category,
+          category: details.category,
           price: details.price,
           offer: details.offer,
           description: details.description,
@@ -142,10 +120,9 @@ console.log(req.body.price);
       }
     } catch (error) {
       console.log(error.message);
-      console.log(error);
     }
   };
-  
+
   const blockProducts=async(req,res)=>{
     try {
       const user = req.params.id; 
@@ -161,6 +138,35 @@ console.log(req.body.price);
     }
   }
 
+const deleteImage = async (req,res)=>{
+  try {
+
+console.log("delete");
+    const productId = req.query.id;
+    const imageNumber = req.query.imageNumber;
+    const number = req.query.number;
+    const product = await Product.findById(productId);
+    console.log("delete2");
+
+    const imagePath = `public/assets/images/products/sharpened/${imageNumber}`;
+    console.log("delete3");
+
+    await fs.promises.unlink(imagePath);
+    console.log("delete4");
+
+    product.images['image' + number] = null;
+    console.log("delete5");
+
+    await product.save();
+    console.log("delete6");
+
+    res.status(200).json({ success: true, message: `Image ${imageNumber} deleted successfully.` });
+
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 
   module.exports = {
     loadaddproduct,
@@ -168,5 +174,6 @@ console.log(req.body.price);
     loadproduct,
     loadeditproduct,
     blockProducts,
-    editproduct
+    editproduct,
+    deleteImage
   }

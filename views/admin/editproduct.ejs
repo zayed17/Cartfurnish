@@ -1,19 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <meta charset="utf-8" />
-        <title>Nest Dashboard</title>
-        <meta http-equiv="x-ua-compatible" content="ie=edge" />
-        <meta name="description" content="" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta property="og:title" content="" />
-        <meta property="og:type" content="" />
-        <meta property="og:url" content="" />
-        <meta property="og:image" content="" />
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>Molla - Bootstrap eCommerce Template</title>
+        <meta name="keywords" content="HTML5 Template">
+        <meta name="description" content="Molla - Bootstrap eCommerce Template">
+        <meta name="author" content="p-themes">
         <!-- Favicon -->
-        <link rel="shortcut icon" type="image/x-icon" href="/public/assets/imgs/theme/favicon.svg" />
-        <!-- Template CSS -->
+        <link rel="apple-touch-icon" sizes="180x180" href="public/assets/images/icons/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="public/assets/images/icons/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="public/assets/images/icons/favicon-16x16.png">
+        <link rel="manifest" href="public/assets/images/icons/site">
+        <link rel="mask-icon" href="public/assets/images/icons/safari-pinned-tab.svg" color="#666666">
+        <link rel="shortcut icon" href="public/assets/images/icons/favicon.ico">
+        <meta name="apple-mobile-web-app-title" content="Molla">
+        <meta name="application-name" content="Molla">
+        <meta name="msapplication-TileColor" content="#cc9966">
+        <meta name="msapplication-config" content="public/assets/images/icons/browserconfig.xml">
+        <meta name="theme-color" content="#ffffff">
+        <!-- Plugins CSS File -->
+        <link rel="stylesheet" href="public/assets/css/bootstrap.min.css">
+        <!-- Main CSS File -->
+        <link rel="stylesheet" href="public/assets/css/style.css">
         <link href="/public/assets/css/main.css?v=1.1" rel="stylesheet" type="text/css" />
+
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.0.0-beta3/css/all.min.css" integrity="sha384-..." crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+
+        
     </head>
 
     <body>
@@ -158,7 +175,7 @@
                         <div class="col-12 col-md-12">
                             <div class="card">
                                 <div class="card-body">
-                                    <form action="/admin/editProduct?id=<%= product._id %>" method="post" enctype="multipart/form-data">
+                                    <form action="/admin/editproduct?id=<%= product._id %>" method="post" enctype="multipart/form-data">
                                         <div class="form-group">
                                             <label for="product_title">Product Name</label>
                                             <input type="text" class="form-control" id="product_title" name="name" value="<%=product.name%>">
@@ -175,14 +192,11 @@
                                                         <option value="<%= category[i]._id %>"><%= category[i].name %></option>
                                                 <% } %>
                                             </select>
-
-
-                                            
                                         </div>
                                         
                                         <div class="form-group">
                                             <label>Price</label>
-                                            <input type="text" class="form-control" name="price" value="<%=product.price%>">
+                                            <input type="text" class="form-control" id="price" name="price" value="<%=product.price%>">
                                         </div>
                                         <div class="form-group">
                                             <label for="offer">Offer</label>
@@ -190,56 +204,39 @@
                                         </div>
                                         <div class="form-group">
                                             <label>Description</label>
-                                            <input type="text" class="form-control" value="<%=product.description%>" name="description" required>   
+                                            <input type="text" class="form-control" value="<%=product.description%>" id="description" name="description" required>   
                                         </div>
-                                        <div class="row d-flex justify-content-center ">
-                                            <div class="row d-flex justify-content-between ">
-                                                <div class="col-lg-3 col-md-6 rounded-image-preview">
-                                                    <label for="imageInput1" class="image-label">Image 1
-                                                        <div class="rounded-image-preview">
-                                                            <img id="imagePreview1" src="/public/assets/images/products/sharpened/<%= product.images.image1 %>" alt="Preview" />
-                                                        </div>
-                                                        <input name="image1" type="file" accept="image/*" id="imageInput1" class="imageInput">
+
+                                        <div class="row mt-3">
+                                            <% for (let i = 1; i <= 4; i++) { %>
+                                                <div class="col-lg-3 col-md-6">
+                                                    <label>Existing Image <%= i %></label>
+                                                    <div class="rounded-image-preview" id="roundedImagePreview<%= i %>">
+                                                        <% if (product.images['image' + i]) { %>
+                                                            <img src="/public/assets/images/products/sharpened/<%= product.images['image' + i] %>" alt="Preview" />
+                                                        <% } else { %>
+                                                            <span class="image-not-found">Image not found</span>
+                                                        <% } %>
+                                                    </div>
+                                                    <% if (product.images['image' + i]) { %>
+                                                        <button type="button" class="btn btn-danger delete-btn" data-image-number="<%= i %>" data-image-name="<%= product.images['image' + i] %>">
+                                                            <i class="fas fa-trash-alt"></i> Delete Image <%= i %>
+                                                        </button>
+                                                    <% } %>
+                                                    <label for="addImage<%= i %>">
+                                                        <input type="file" accept="image/*" id="addImage<%= i %>" class="add-image-input" data-image-number="<%= i %>" style="display: none" multiple>
+                                                        <button type="button" class="btn btn-success add-image-btn" data-image-number="<%= i %>"
+                                                                onclick="uploadImages('<%= i %>')">
+                                                            <i class="fas fa-plus"></i> Add Image <%= i %>
+                                                        </button>
                                                     </label>
                                                 </div>
-            
-                                                <div class="col-lg-3 col-md-6 rounded-image-preview">
-                                                    <label for="imageInput2" class="image-label">Image 2
-                                                        <div class="rounded-image-preview">
-                                                            <img id="imagePreview2" src="/public/assets/images/products/sharpened/<%= product.images.image2 %>" alt="Preview" />
-                                                        </div>
-                                                        <input name="image2" type="file" accept="image/*" id="imageInput2" class="imageInput">
-                                                    </label>
-                                                </div>
-            
-                                                <div class="col-lg-3 col-md-6 rounded-image-preview">
-                                                    <label for="imageInput3" class="image-label">Image 3
-                                                        <div class="rounded-image-preview">
-                                                            <img id="imagePreview3" src="/public/assets/images/products/sharpened/<%= product.images.image3 %>" alt="Preview" />
-                                                        </div>
-                                                        <input name="image3" type="file" accept="image/*" id="imageInput3" class="imageInput">
-                                                    </label>
-                                                </div>
-            
-                                                <div class="col-lg-3 col-md-6 rounded-image-preview">
-                                                    <label for="imageInput4" class="image-label"><%= product.images.imag1 %>
-                                                        <div class="rounded-image-preview">
-                                                            <img id="imagePreview4" src="/public/assets/images/products/sharpened/<%= product.images.image4 %>" alt="Preview" />
-                                                        </div>
-                                                        <input name="image4" type="file" accept="image/*" id="imageInput4" class="imageInput">
-                                                    </label>
-                                                </div>
-                                            </div>
-
-
-
-
-                                           
-
-
-
-
+                                            <% } %>
                                         </div>
+                                        
+                                        
+                                        
+
                                         <div class="form-group mt-3">
                                             <button type="submit" class="btn btn-primary">Submit</button>
                                             <a href="product" class="btn btn-primary">
@@ -253,6 +250,238 @@
                     </div>
                 </div>
             </section>
+
+
+
+
+            <script>
+               document.addEventListener('DOMContentLoaded', function () {
+    const deleteButtons = document.querySelectorAll('.delete-btn');
+    const addImageButtons = document.querySelectorAll('.add-image-btn');
+    const addImageInputs = document.querySelectorAll('.add-image-input');
+
+    deleteButtons.forEach(button => {
+        button.addEventListener('click', function () {
+            const imageNumber = this.getAttribute('data-image-name');
+            const imageNumbers = this.getAttribute('data-image-number');
+            confirmDelete(imageNumber, imageNumbers);
+        });
+    });
+
+    addImageButtons.forEach((button, index) => {
+        button.addEventListener('click', function () {
+            addImageInputs[index].click();
+        });
+    });
+
+    addImageInputs.forEach(input => {
+        input.addEventListener('change', function () {
+            const imageNumber = this.getAttribute('data-image-number');
+            handleFileSelection(this.files[0], imageNumber);
+        });
+    });
+
+    function handleFileSelection(file, imageNumber) {
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const roundedImagePreview = document.querySelector(`#roundedImagePreview${imageNumber}`);
+                const imagePreview = roundedImagePreview.querySelector('img');
+
+                if (!imagePreview) {
+                    const newImage = document.createElement('img');
+                    newImage.src = e.target.result;
+                    roundedImagePreview.innerHTML = '';
+                    roundedImagePreview.appendChild(newImage);
+                } else {
+                    imagePreview.src = e.target.result;
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+
+    function confirmDelete(imageNumber, imageNumbers) {
+        const confirmDelete = confirm(`Are you sure you want to delete Image ${imageNumber}?`);
+
+        if (confirmDelete) {
+            fetch(`/admin/deleteImage?id=<%= product._id %>&imageNumber=${imageNumber}&number=${imageNumbers}`, {
+                method: 'DELETE',
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        Swal.fire(
+                            'Deleted!',
+                            `Image ${imageNumber} deleted successfully.`,
+                            'success'
+                        ).then(() => {
+                            location.reload();
+                        });
+                    } else {
+                        Swal.fire(
+                            'Error!',
+                            'Network response was not ok',
+                            'error'
+                        );
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
+    }
+});
+
+
+
+
+
+let filesValid;
+let cropedImages = [];
+
+document.querySelector('#choosen-file').addEventListener("change", handleFileChange);
+
+async function handleFileChange(e) {
+    if (supportsFileAPI()) {
+        cropedImages = [];
+        const files = e.target.files;
+        const output = document.querySelector('#result');
+
+        if (files.length !== 4) {
+            filesValid = false;
+            displayErrorMessage('Please select 4 images.');
+            return;
+        } else {
+            hideErrorMessage();
+            filesValid = true;
+        }
+
+        for (let i = 0; i < files.length; i++) {
+            if (!files[i].type.match('image')) continue;
+            
+            const picReader = new FileReader();
+            picReader.addEventListener('load', function (event) {
+                const picFile = event.target;
+                const div = createImageContainer(picFile.result);
+                output.appendChild(div);
+                const cropper = createImageCropper(div.querySelector('img'));
+                cropedImages.push(cropper);
+            });
+            picReader.readAsDataURL(files[i]);
+        }
+    } else {
+        alert('Your browser does not support the File API');
+    }
+}
+
+function supportsFileAPI() {
+    return window.File && window.FileReader && window.FileList && window.Blob;
+}
+
+function displayErrorMessage(message) {
+    $('#msg-message').css('display', 'block').text(message);
+}
+
+function hideErrorMessage() {
+    $('#msg-message').css('display', 'none');
+}
+
+function createImageContainer(imageSrc) {
+    const div = document.createElement("div");
+    const img = document.createElement('img');
+    img.src = imageSrc;
+    div.appendChild(img);
+    return div;
+}
+
+function createImageCropper(image) {
+    return new Cropper(image, {
+        veiwMode: 1,
+        guides: true,
+        autoCropArea: 1
+    });
+}
+
+async function addFormSubmit(event) {
+    event.preventDefault();
+
+    const addForm = document.getElementById('addForm');
+    const producterror = $("#pnameError");
+    const descriptionerror = $("#descriptionError");
+    const priceerror = $('#priceError');
+    const quantityerror = $('#quantityError');
+
+    const name = $('#product_title').val();
+    const description = $('#description').val();
+    const price = Number($('#price').val());
+    const quantity = Number($('#quantity').val());
+
+    producterror.text('');
+    descriptionerror.text('');
+    priceerror.text('');
+    quantityerror.text('');
+
+    if (name.trim() === '' || /\d/.test(name)) {
+        producterror.text("Enter a valid name");
+    } else if (description.trim() === '') {
+        descriptionerror.text("Enter a valid description");
+    } else if (price < 0 || isNaN(price) || price === '') {
+        priceerror.text("Enter a valid price");
+    } else if (quantity < 0 || isNaN(quantity) || quantity === '') {
+        quantityerror.text("Enter a valid quantity");
+    } else {
+        const formData = new FormData(addForm);
+
+        console.log(formData,"1")
+        cropedImages.forEach((cropper, index) => {
+            const croppedDataUrl = cropper.getCroppedCanvas().toDataURL('image/png');
+            const blob = dataURItoBlob(croppedDataUrl);
+
+            formData.append('cropedImages', blob, `cropped_image_${index}${Math.random()}.png`);
+        });
+        console.log(formData,"2")
+
+
+        try {
+            const response = await $.ajax({
+                url: '/admin/addproduct',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    window.location.href = "/admin/product";
+                },
+                error: function (error) {
+                    console.log("error", error);
+                }
+            });
+        } catch (error) {
+            console.error("An error occurred during form submission:", error);
+        }
+    }
+}
+
+function dataURItoBlob(dataURI) {
+    const byteString = atob(dataURI.split(',')[1]);
+    const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+    const ab = new ArrayBuffer(byteString.length);
+    const ia = new Uint8Array(ab);
+    for (let i = 0; i < byteString.length; i++) {
+        ia[i] = byteString.charCodeAt(i);
+    }
+    return new Blob([ab], { type: mimeString });
+}
+            </script>
+            
+
+
+
+           
             
      <footer class="main-footer font-xs">
                 <div class="row pb-30 pt-15">

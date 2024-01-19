@@ -4318,3 +4318,11 @@ body.dark .dropdown-menu .dropdown-item.text-danger {
 }
 
 /* Add more media queries for larger screens if needed */
+.image-not-found {
+  display: block;
+  text-align: center;
+  padding: 60px;
+  background-color: #f2f2f2;
+  color: #777;
+  font-style: italic;
+}
