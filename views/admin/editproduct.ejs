@@ -175,14 +175,18 @@
                         <div class="col-12 col-md-12">
                             <div class="card">
                                 <div class="card-body">
-                                    <form action="/admin/editproduct?id=<%= product._id %>" method="post" enctype="multipart/form-data">
+                                    <form action="/admin/editproduct?id=<%= product._id %>" onsubmit="addFormSubmit(event)" method="post" enctype="multipart/form-data">
                                         <div class="form-group">
                                             <label for="product_title">Product Name</label>
                                             <input type="text" class="form-control" id="product_title" name="name" value="<%=product.name%>">
+                                            <span class="text-danger" id="pnameError"> </span> 
+
                                         </div>
                                         <div class="form-group">
                                             <label for="quantity">Quantity</label>
                                             <input type="number" class="form-control" id="quantity" name="quantity" value="<%=product.quantity%>">
+                                            <span class="text-danger" id="quantityError"></span>
+
                                         </div>
                                         <div class="form-group">
                                             <label>Category</label>
@@ -197,6 +201,8 @@
                                         <div class="form-group">
                                             <label>Price</label>
                                             <input type="text" class="form-control" id="price" name="price" value="<%=product.price%>">
+                                            <span class="text-danger" id="priceError"> </span> 
+
                                         </div>
                                         <div class="form-group">
                                             <label for="offer">Offer</label>
@@ -205,6 +211,8 @@
                                         <div class="form-group">
                                             <label>Description</label>
                                             <input type="text" class="form-control" value="<%=product.description%>" id="description" name="description" required>   
+                                            <span class="text-danger" id="descriptionError"></span>
+
                                         </div>
 
                                         <div class="row mt-3">

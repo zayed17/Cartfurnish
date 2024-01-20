@@ -71,6 +71,7 @@ const placeorder = async (req, res) => {
       paymentMethod: paymentMethod,
     });
     const orderData = await data.save();
+    const orderId = orderData._id;
 
     if (status == "placed") {
       for (const item of orderItems) {
@@ -80,7 +81,7 @@ const placeorder = async (req, res) => {
         );
       }
       await Cart.deleteOne({ user: userId });
-      res.json({ placed: true });
+      res.json({orderId, placed: true });
     } else if (paymentMethod == "onlinePayment") {
       const options = {
         amount: totalAmount * 100,
@@ -89,7 +90,7 @@ const placeorder = async (req, res) => {
       };
       console.log(options);
       instance.orders.create(options, function (err, order) {
-        res.json({ order });
+        res.json({orderId, order });
       });
     }else{
       if(userData.wallet >= totalAmount){
@@ -105,7 +106,7 @@ const placeorder = async (req, res) => {
 
     await Product.updateOne({ _id: product }, { $inc: { quantity: -quantity } });
     await Cart.deleteOne({user:userId})
-    res.json({placed:true})
+    res.json({orderId,placed:true})
       }
     }else{
       res.json({wallet:false})     
@@ -137,13 +138,14 @@ const verifypayment = async (req, res) => {
       }
     }
 
-    await Order.findByIdAndUpdate(
+    const orders = await Order.findByIdAndUpdate(
       { _id: paymentData.order.receipt },
       { $set: { status: "placed", paymentId: paymentData.payment.razorpay_payment_id } }
     );
 
+    const orderId = orders._id
     await Cart.deleteOne({ user: userId });
-    res.json({ placed: true });
+    res.json({ placed: true ,orderId});
   } catch (error) {
     console.log(error.message);
   }

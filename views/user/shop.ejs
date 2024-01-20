@@ -543,7 +543,14 @@ function addToCart(productId) {
                     cancelButtonText: 'Cancel',
                 });
                 
-            } else {
+            }else if(response.success==false){
+                Swal.fire(
+                    'Product already in cart',
+                    response.error || 'Product already in cart',
+                    'warning'
+                );
+            }
+             else {
                 Swal.fire(
                     'Saved to cart!',
                     'Product added to cart successfully!',

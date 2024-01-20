@@ -78,7 +78,8 @@ const deleteaddress = async (req,res)=>{
 
 const success = async(req,res)=>{
     try {
-        res.render('success')
+        const id = req.query.id;
+        res.render('success',{id})
     } catch (error) {
         console.log(error);
     }

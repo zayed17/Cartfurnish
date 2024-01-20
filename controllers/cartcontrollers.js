@@ -50,6 +50,8 @@ const addtocart = async (req, res) => {
                 totalPrice: productData.price,
             };
 
+            console.log(productData.quantity);
+
             await Cart.findOneAndUpdate(
                 { user: user_id },
                 {

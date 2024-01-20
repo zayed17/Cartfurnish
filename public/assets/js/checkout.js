@@ -174,7 +174,8 @@ if (phone === '') {
             success: function (response) {
                 console.log(response);
                 if (response.placed == true) {
-                    window.location.href = '/success';
+                    const id = response.orderId;
+                    window.location.href = `/success?id=${id}`;
                 }else if(response.wallet == false){
                         swal.fire("Oops, it looks like your wallet balance is too low to place this order !!", "", "error")
                     }
@@ -231,7 +232,8 @@ function verifyPayment(payment, order) {
         },
         success: (response) => {
             if (response.placed == true) {
-                window.location.href = '/success'
+                const orderId = response.orderId
+                window.location.href = `/success?id=${orderId}`;
             } else {
                 swal.fire({
                     positon: "center",
