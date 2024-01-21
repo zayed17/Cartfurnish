@@ -35,9 +35,12 @@
     <link rel="stylesheet" href="public/assets/css/style.css">
     <link rel="stylesheet" href="public/assets/css/skins/skin-demo-2.css">
     <link rel="stylesheet" href="public/assets/css/demos/demo-2.css">
+    
 </head>
 
 <body>
+    <div id="preloader"></div>
+
     <div class="page-wrapper">
         <header class="header header-2 header-intro-clearance">
             <div class="header-middle">
@@ -1734,7 +1737,12 @@
         </footer><!-- End .footer -->
     </div><!-- End .page-wrapper -->
     <button id="scroll-top" title="Back to Top"><i class="icon-arrow-up"></i></button>
-
+    <script>
+        var loader = document.getElementById('preloader');
+        window.addEventListener("load",function(){
+            loader.style.display = "none"; 
+        })
+    </script>
     <!-- Plugins JS File -->
     <script src="public/assets/js/jquery.min.js"></script>
     <script src="public/assets/js/bootstrap.bundle.min.js"></script>

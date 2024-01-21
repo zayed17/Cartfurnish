@@ -14,9 +14,7 @@ const instance = new Razorpay({
 //Place order
 const placeorder = async (req, res) => {
   try {
-    const total = req.body.total
-    console.log(total,"total")
-    console.log(req.body);
+    console.log(req.body,"all body");
     const userId = req.session.user_id;
     const addressIndex = !req.body.address ? 0 : req.body.address;
     const paymentMethod = req.body.payment;
@@ -51,7 +49,9 @@ const placeorder = async (req, res) => {
     const userData = await User.findOne({_id:userId})
     console.log(cartData);
 
-    const totalAmount = cartData.product.reduce((acc, val) => acc + val.totalPrice, 0);
+    const subtotal = req.body.subtotal;
+    const totalAmount = req.body.totalamount
+
     console.log(totalAmount);
     const orderItems = cartData.product.map((product) => ({
       productId: product.productId,
@@ -66,6 +66,8 @@ const placeorder = async (req, res) => {
       deliveryDetails: address,
       products: orderItems,
       purchaseDate: new Date(),
+      subtotal:subtotal,
+      discountamount:subtotal - totalAmount,
       totalAmount: totalAmount,
       status: status,
       paymentMethod: paymentMethod,
@@ -197,7 +199,7 @@ const cancelproduct = async (req, res) => {
 //admin side
 const loadordermanagement = async(req,res)=>{
   try {
-    const order = await Order.find({})
+    const order = await Order.find({}).sort({purchaseDate:-1})
     // console.log(order);
     res.render('order',{order})
   } catch (error) {
@@ -226,7 +228,8 @@ const updatastatus = async(req,res)=>{
       },
       {
           $set: {
-              'products.$.productstatus': productStatus
+              'products.$.productstatus': productStatus,
+              status:productStatus
           }
       },
       { new: true }

@@ -431,7 +431,7 @@ const loadeachproduct = async(req,res)=>{
     try {
         const userData = await User.findOne({_id:req.session.user_id})
         const  addresses = await Address.findOne({user:req.session.user_id})
-        const orders = await Order.find({userId:req.session.user_id})
+        const orders = await Order.find({userId:req.session.user_id}).sort({purchaseDate:-1})
         const CouponData = await Coupon.find({})
        const user = req.session.user_id
 

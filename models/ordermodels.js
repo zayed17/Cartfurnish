@@ -51,11 +51,18 @@ const ordersSchema = new mongoose.Schema({
     returnedDate: {
         type: Date,
     },
+    subtotal:{
+      type:Number,
+      required:true
+    },
+    discountamount:{
+      type:Number,
+      required:true
+    },
     totalAmount: {
         type: Number,
         required: true,
     },
-    usedCouponCode: String,
     status: {
         type: String,
         required: true,

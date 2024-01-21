@@ -30,6 +30,8 @@
 </head>
 
 <body>
+    <div id="preloader"></div>
+
     <div class="page-wrapper">
         <header class="header">
             <div class="header-top">
@@ -350,7 +352,12 @@
     </div><!-- End .page-wrapper -->
     <button id="scroll-top" title="Back to Top"><i class="icon-arrow-up"></i></button>
 
-    
+    <script>
+        var loader = document.getElementById('preloader');
+        window.addEventListener("load",function(){
+            loader.style.display = "none"; 
+        })
+    </script>  
 
     <!-- Plugins JS File -->
     <script src="public/assets/js/jquery.min.js"></script>

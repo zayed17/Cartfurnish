@@ -31,6 +31,7 @@
 </head>
 
 <body>
+    <div id="preloader"></div>
     <div class="page-wrapper">
         <header class="header">
             <div class="header-top">
@@ -350,7 +351,12 @@
     <!-- Mobile Menu -->
     
 
-    
+    <script>
+        var loader = document.getElementById('preloader');
+        window.addEventListener("load",function(){
+            loader.style.display = "none"; 
+        })
+    </script>
 
     <!-- Plugins JS File -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>

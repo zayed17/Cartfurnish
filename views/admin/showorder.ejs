@@ -157,7 +157,7 @@
                     <header class="card-header">
                         <div class="row align-items-center">
                             <div class="col-lg-6 col-md-6 mb-lg-0 mb-15">
-                                <span> <i class="material-icons md-calendar_today"></i> <b>Wed, Aug 13, 2020, 4:34PM</b> </span> <br />
+                                <span> <i class="material-icons md-calendar_today"></i> <b><%= new Date(order.purchaseDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %></b> </span> <br />
                                 <small class="text-muted">Order ID: <%= order._id.toString().substring(0, 6) %></small>
                             </div>
                             <div class="col-lg-6 col-md-6 ms-auto text-md-end">
@@ -261,15 +261,21 @@
                                                             <option value="Shipped" <%= product.productstatus === 'Shipped' ? 'selected' : '' %>>Shipped</option>
                                                             <option value="Out for Delivery" <%= product.productstatus === 'Out for Delivery' ? 'selected' : '' %>>Out for Delivery</option>
                                                             <option value="Delivered" <%= product.productstatus === 'Delivered' ? 'selected' : '' %>>Delivered</option>
-                                                        </select>
-                                                        
-                                                        
+                                                        </select>  
                                                     </td>
                                                 </tr>
                                             <% }) %>
                                             <tr>
                                                 <td colspan="6">
                                                     <article class="float-end">
+                                                        <dl class="dlist">
+                                                            <dt>Discount Amount:</dt>
+                                                            <%if(!order.discountamount || order.discountamount === 0 ){%>
+                                                            <dd class="text-danger">No Discount</dd>
+                                                            <%}else{%>
+                                                                <dd class="text-danger">- <%= order.discountamount %></dd>
+                                                                <%}%>
+                                                        </dl>
                                                         <dl class="dlist">
                                                             <dt>Grand total:</dt>
                                                             <dd><b class="h5"><%= order.totalAmount %></b></dd>
@@ -301,30 +307,31 @@
 
 
             <script>
-    function changeProductStatus(productId,id) {
-    const newStatus = $('#orderstatus').val();
-    console.log(newStatus, productId,id);
-    $.ajax({
-        url: '/admin/updateProductStatus',
-        method: 'POST',
-        data: { productId, newStatus },
-        success: function (response) {
+    async function changeProductStatus(productId, id) {
+    try {
+        const newStatus = $('#orderstatus').val();
+        console.log(newStatus, productId, id);
+        
+        const response = await $.ajax({
+            url: '/admin/updateProductStatus',
+            method: 'POST',
+            data: { productId, newStatus },
+        });
 
-            if (response.success) {
-                $('#reload').load(`/admin/showorder?id=${id} #reload`);
-            } else {
-                swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: "Somthing happened",
-                });
-            }
-        },
-        error: function (error) {
-            console.error('Error updating product status:', error);
+        if (response.success) {
+            $('#reload').load(`/admin/showorder?id=${id} #reload`);
+        } else {
+            swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: "Something happened",
+            });
         }
-    });
+    } catch (error) {
+        console.error('Error updating product status:', error);
+    }
 }
+
 
             </script>
             <!-- content-main end// -->

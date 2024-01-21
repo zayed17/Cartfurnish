@@ -173,6 +173,7 @@
                                                 <tr>
                                                     <th scope="col"><center>Sl.No.</center></th>
                                                     <th scope="col"><center>Order Id</center></th>
+                                                    <th scope="col"><center>Date</center></th>
                                                     <th scope="col"><center>Payment Method</center></th>
                                                     <th scope="col"><center>Total</center></th>
                                                     <th scope="col"><center>Show</center></th>
@@ -182,7 +183,8 @@
                                                 <% for(let i = 0; i < order.length; i++) { %>
                                                     <tr>
                                                         <td align="center"><%= i+1 %></td>
-                                                        <td align="center"><%= order[i]._id %></td>
+                                                        <td align="center"><%= order[i]._id.toString().substring(0, 6) %></td>
+                                                        <td align="center"><%= new Date(order[i].purchaseDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %></td>
                                                         <td align="center"><%= order[i].paymentMethod %></td>
                                                         <td align="center"><%= order[i].totalAmount %></td>
                                                         <td align="center"><a href="/admin/showorder?id=<%= order[i]._id %>">Click</a></td>

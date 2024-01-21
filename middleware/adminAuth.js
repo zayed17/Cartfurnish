@@ -7,7 +7,7 @@ const isLogin = (req, res, next) => {
       }
     } catch (error) {
       console.error(error.message);
-      res.redirect('/admin/login'); // Redirect in case of unexpected error
+      res.redirect('/admin/login'); 
     }
   };
 
