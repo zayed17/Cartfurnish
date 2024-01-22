@@ -335,7 +335,7 @@ const userLogout = async (req, res) => {
 const loadshop = async (req, res) => {
     try {
         const categoryId = req.query.category;
-        const cart =  await Cart.findOne({user:req.session.user_id}).populate("product.productId")
+        const cart = await Cart.findOne({ user: req.session.user_id }).populate("product.productId");
         const priceFilter = req.query.priceFilter === "low-to-high" ? 1 : -1;
         const page = parseInt(req.query.page) || 1;
         const itemsPerPage = 9;
@@ -344,18 +344,17 @@ const loadshop = async (req, res) => {
         const search = req.query.search;
 
         let productData;
-
         let filterCriteria = {
             is_blocked: false,
             isCategoryBlocked: false
         };
 
-        if (search) {
-            filterCriteria.name = { $regex: search, $options: 'i' };
-        }
-
         if (categoryId) {
             filterCriteria.categoryId = categoryId;
+        }
+
+        if (search) {
+            filterCriteria.name = { $regex: search, $options: 'i' };
         }
 
         const totalCount = await Product.countDocuments(filterCriteria);
@@ -371,22 +370,32 @@ const loadshop = async (req, res) => {
 
             const category = await Category.find({});
 
+            // Pass selected filters and pagination to the EJS template
+            const selectedFilters = {
+                category: categoryId,
+                priceFilter: req.query.priceFilter,
+                search: req.query.search, // Preserve the search term in selectedFilters
+            };
+
             res.render("shop", {
                 product: productData,
                 user: userData,
                 category,
                 totalPages,
                 currentPage: page,
-                cart
+                cart,
+                selectedFilters, // Pass selected filters to the template
             });
-        } else { 
+        } else {
             res.render("shop", {
                 product: [],
                 user: userData,
                 category: [],
                 totalPages: 0,
                 currentPage: 0,
-                cart
+                cart,
+                selectedFilters: { category: null, priceFilter: null, search: req.query.search || null }, // Preserve the search term in selectedFilters
+                noProductsAvailable: true, // Flag to indicate no products are available
             });
         }
     } catch (error) {
@@ -394,6 +403,7 @@ const loadshop = async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 };
+
 
   
 const loadeachproduct = async(req,res)=>{

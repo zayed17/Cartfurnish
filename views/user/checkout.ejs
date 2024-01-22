@@ -896,7 +896,6 @@ function verifyPayment(payment, order) {
 function applyCoupon() {
     const couponCodeInput = document.getElementById("couponinput"); 
     const couponCode = couponCodeInput.value;
-
     $.ajax({
         type: "POST",
         url: "/checkcoupon", 

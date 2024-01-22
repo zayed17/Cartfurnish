@@ -163,75 +163,6 @@
 
 
 
-<script>
-         let previousInputValue = '';
-
-async function handleSearchInput(event) {
-    const partialInput = document.getElementById('searchInput').value;
-
-    if (event.key === 'Enter') {
-        // If Enter key is pressed, navigate to the search URL
-        window.location.href = `/shop?search=${partialInput}`;
-    } else {
-        // If other keys are pressed, perform autocomplete and send query to the backend
-        if (partialInput !== previousInputValue) {
-            const response = await fetch(`/search?input=${partialInput}`);
-            const data = await response.json();
-            displayAutocompleteSuggestions(data.suggestions);
-            
-            // Note: sendSearchQueryToBackend is not needed in this case
-            // Backend query will be handled when navigating to /shop
-            previousInputValue = partialInput;
-        }
-    }
-}
-
-    function displayAutocompleteSuggestions(suggestions) {
-    const partialInput = document.getElementById('searchInput').value.toLowerCase();
-
-    // If the input is empty, hide the suggestions and return
-    if (partialInput.trim() === '') {
-        document.querySelector('.suggestions-container').style.display = 'none';
-        return;
-    }
-
-    suggestions.sort((a, b) => {
-        const nameA = a.name.toLowerCase();
-        const nameB = b.name.toLowerCase();
-
-        // Sort by the number of occurrences of the partial input in the name
-        const countA = (nameA.match(new RegExp(partialInput, 'g')) || []).length;
-        const countB = (nameB.match(new RegExp(partialInput, 'g')) || []).length;
-
-        return countB - countA;
-    });
-
-    const suggestionsList = document.getElementById('suggestionsList');
-    suggestionsList.innerHTML = '';
-
-    // Display the top three most matching suggestions
-    suggestions.slice(0, 2).forEach(suggestion => {
-        const listItem = document.createElement('li');
-        listItem.textContent = suggestion.name;
-        suggestionsList.appendChild(listItem);
-
-        // Add a click event listener to each suggestion
-        listItem.addEventListener('click', () => {
-            // Set the selected suggestion as the input value
-            document.getElementById('searchInput').value = suggestion.name;
-            // Clear the suggestions list
-            suggestionsList.innerHTML = '';
-        });
-    });
-
-    // Show or hide the suggestions container based on whether there are suggestions
-    document.querySelector('.suggestions-container').style.display = suggestions.length > 0 ? 'block' : 'none';
-}
-        </script>
-
-
-
-
 
 
 
@@ -324,101 +255,200 @@ async function handleSearchInput(event) {
 
 
 
-                     <nav aria-label="Page navigation">
-                         <ul class="pagination justify-content-center">
-                             <% for (let page = 1; page <= totalPages; page++) { %>
-                                 <li class="page-item<%= currentPage === page ? ' active' : '' %>">
-                                     <a class="page-link" href="/shop?page=<%= page %>"><%= page %></a>
-                                 </li>
-                             <% } %>
-                         </ul>
-                     </nav>
+                            <nav aria-label="Page navigation">
+                                <ul class="pagination justify-content-center">
+                                    <% for (let page = 1; page <= totalPages; page++) { %>
+                                        <li class="page-item<%= currentPage === page ? ' active' : '' %>">
+                                            <a class="page-link" href="/shop?page=<%= page %>"><%= page %></a>
+                                        </li>
+                                    <% } %>
+                                </ul>
+                            </nav>
                      
 
                     </div><!-- End .col-lg-9 -->
-                    <aside class="col-lg-3 order-lg-first">
-                        <div class="sidebar sidebar-shop">
-                           
                     
-                            <div class="widget widget-collapsible">
-                                <h3 class="widget-title">
-                                    <a data-toggle="collapse" href="#widget-category" role="button" aria-expanded="true" aria-controls="widget-category">
-                                        Category
-                                    </a>
-                                </h3>
-                                <div class="collapse show" id="widget-category">
-                                    <div class="widget-body">
-                                        <div class="filter-items filter-items-count">
-                                            <% category.forEach(category => { %>
-                                                <div class="filter-item">
-                                                    <div class="custom-control custom-radio">
-                                                        <input type="radio" class="custom-control-input" id="<%= `category-${category._id}` %>" name="category" value="<%= category._id %>">
-                                                        <label class="custom-control-label" for="<%= `category-${category._id}` %>"><%= category.name %></label>
-                                                    </div>
-                                                </div>
-                                            <% }) %>                                            
-                                        </div>
+    <aside class="col-lg-3 order-lg-first">
+        <div class="sidebar sidebar-shop">
+            <div class="widget widget-collapsible">
+                <!-- Category Filter -->
+                <h3 class="widget-title">
+                    <a data-toggle="collapse" href="#widget-category" role="button" aria-expanded="true" aria-controls="widget-category">
+                        Category
+                    </a>
+                </h3>
+                <div class="collapse show" id="widget-category">
+                    <div class="widget-body">
+                        <div class="filter-items filter-items-count">
+                            <!-- Render categories and check selected category -->
+                            <% category.forEach(category => { %>
+                                <div class="filter-item">
+                                    <div class="custom-control custom-radio">
+                                        <input type="radio" class="custom-control-input" id="<%= `category-${category._id}` %>" name="category" value="<%= category._id %>" <%= selectedFilters.category === category._id ? 'checked' : '' %>>
+                                        <label class="custom-control-label" for="<%= `category-${category._id}` %>"><%= category.name %></label>
                                     </div>
                                 </div>
-                            </div><!-- End .widget widget-collapsible -->
-                    
-                            <div class="widget widget-collapsible">
-                                <h3 class="widget-title">
-                                    <a data-toggle="collapse" href="#widget-price" role="button" aria-expanded="true" aria-controls="widget-price">
-                                        Price
-                                    </a>
-                                </h3><!-- End .widget-title -->
-                                <div class="collapse show" id="widget-price">
-                                    <div class="widget-body">
-                                        <div class="filter-price">
-                                            <div class="filter-sort-options">
-                                                <div class="custom-control custom-radio">
-                                                    <input type="radio" class="custom-control-input" id="high-to-low" name="price-filter" value="high-to-low">
-                                                    <label class="custom-control-label" for="high-to-low">High to Low</label>
-                                                </div>
-                                                <div class="custom-control custom-radio">
-                                                    <input type="radio" class="custom-control-input" id="low-to-high" name="price-filter" value="low-to-high">
-                                                    <label class="custom-control-label" for="low-to-high">Low to High</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div><!-- End .widget-body -->
-                                </div><!-- End .collapse -->
-                                <button id="applyFiltersBtn">Apply Filters</button>
-                            </div><!-- End .widget -->
-                        </div><!-- End .sidebar sidebar-shop -->
-                    </aside><!-- End .col-lg-3 -->
-                </div><!-- End .row -->
-            </div><!-- End .container -->
-    </div><!-- End .page-content -->
-    </main><!-- End .main -->
+                            <% }) %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="widget widget-collapsible">
+                <!-- Price Filter -->
+                <h3 class="widget-title">
+                    <a data-toggle="collapse" href="#widget-price" role="button" aria-expanded="true" aria-controls="widget-price">
+                        Price
+                    </a>
+                </h3>
+                <div class="collapse show" id="widget-price">
+                    <div class="widget-body">
+                        <div class="filter-price">
+                            <div class="filter-sort-options">
+                                <div class="custom-control custom-radio">
+                                    <input type="radio" class="custom-control-input" id="high-to-low" name="price-filter" value="high-to-low" <%= selectedFilters.priceFilter === 'high-to-low' ? 'checked' : '' %>>
+                                    <label class="custom-control-label" for="high-to-low">High to Low</label>
+                                </div>
+                                <div class="custom-control custom-radio">
+                                    <input type="radio" class="custom-control-input" id="low-to-high" name="price-filter" value="low-to-high" <%= selectedFilters.priceFilter === 'low-to-high' ? 'checked' : '' %>>
+                                    <label class="custom-control-label" for="low-to-high">Low to High</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button id="applyFiltersBtn">Apply Filters</button>
+            </div>
+        </div>
+    </aside>
+                </div>
+            </div>
+    </div>
+    </main>
+
+
 
 
 
 
 <script>
-    document.getElementById('applyFiltersBtn').addEventListener('click', function () {
+   
+
+document.addEventListener('DOMContentLoaded', function () {
+    // Retrieve the selected category, price filter, and search from server-side rendering or template engine
+    const selectedCategory = '<%= selectedFilters.category %>'; // Replace with your actual value
+    const selectedPriceFilter = '<%= selectedFilters.priceFilter %>'; // Replace with your actual value
+    const selectedSearch = '<%= selectedFilters.search %>'; // Replace with your actual value
+
+    // Check the selected category radio button
+    if (selectedCategory) {
+        const categoryRadioButton = document.getElementById(`category-${selectedCategory}`);
+        if (categoryRadioButton) {
+            categoryRadioButton.checked = true;
+        }
+    }
+
+    // Check the selected price filter radio button
+    if (selectedPriceFilter) {
+        const priceFilterRadioButton = document.getElementById(selectedPriceFilter);
+        if (priceFilterRadioButton) {
+            priceFilterRadioButton.checked = true;
+        }
+    }
+
+    // Set the search input value
+    document.getElementById('searchInput').value = selectedSearch || '';
+});
+
+// Your existing JavaScript code
+
+let previousInputValue = '';
+
+async function handleSearchInput(event) {
+    const partialInput = document.getElementById('searchInput').value;
+
+    if (event.key === 'Enter') {
+        const urlParams = new URLSearchParams(window.location.search);
+        urlParams.set('search', partialInput);
+        window.location.href = `/shop?${urlParams.toString()}`;
+    } else {
+        if (partialInput !== previousInputValue) {
+            const response = await fetch(`/search?input=${partialInput}`);
+            const data = await response.json();
+            displayAutocompleteSuggestions(data.suggestions);
+            previousInputValue = partialInput;
+        }
+    }
+}
+
+
+function displayAutocompleteSuggestions(suggestions) {
+    const partialInput = document.getElementById('searchInput').value.toLowerCase();
+
+    if (partialInput.trim() === '') {
+        document.querySelector('.suggestions-container').style.display = 'none';
+        return;
+    }
+
+    suggestions.sort((a, b) => {
+        const nameA = a.name.toLowerCase();
+        const nameB = b.name.toLowerCase();
+
+        const countA = (nameA.match(new RegExp(partialInput, 'g')) || []).length;
+        const countB = (nameB.match(new RegExp(partialInput, 'g')) || []).length;
+
+        return countB - countA;
+    });
+
+    const suggestionsList = document.getElementById('suggestionsList');
+    suggestionsList.innerHTML = '';
+
+    suggestions.slice(0, 2).forEach(suggestion => {
+        const listItem = document.createElement('li');
+        listItem.textContent = suggestion.name;
+        suggestionsList.appendChild(listItem);
+
+        listItem.addEventListener('click', () => {
+            document.getElementById('searchInput').value = suggestion.name;
+            suggestionsList.innerHTML = '';
+        });
+    });
+
+    document.querySelector('.suggestions-container').style.display = suggestions.length > 0 ? 'block' : 'none';
+}
+
+document.getElementById('applyFiltersBtn').addEventListener('click', function () {
     const selectedCategory = document.querySelector('input[name="category"]:checked');
     const categoryValue = selectedCategory ? selectedCategory.value : null;
 
     const selectedPriceFilter = document.querySelector('input[name="price-filter"]:checked');
     const priceFilterValue = selectedPriceFilter ? selectedPriceFilter.value : null;
 
+    const searchParam = (new URLSearchParams(window.location.search)).get('search') || null;
+
     const filters = {
         category: categoryValue,
-        priceFilter: priceFilterValue
+        priceFilter: priceFilterValue,
+        search: searchParam,
     };
-    console.log(filters);
 
-    const queryString = Object.keys(filters)
-        .filter(key => filters[key] !== null)
-        .map(key => `${key}=${encodeURIComponent(filters[key])}`)
-        .join('&');
-
-    const url = `/shop?${queryString}`;
-
-    window.location.href = url;
+    const queryString = buildQueryString(filters);
+    window.location.href = `/shop?${queryString}`;
 });
+
+// New function to build query string
+function buildQueryString(params) {
+    return Object.keys(params)
+        .filter(key => params[key] !== null && params[key] !== undefined)
+        .map(key => `${key}=${encodeURIComponent(params[key])}`)
+        .join('&');
+}
+
+
+
+
+
+</script>
 
 </script>
 
