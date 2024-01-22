@@ -209,14 +209,14 @@ const verifyOtp = async (req, res) => {
     try {
         const { otp, id: userId } = req.body;
 
-        console.log(userId);
+        console.log(userId,req.body);
 
         const userOtpVerificationRecord = await userOtpVerification.findOne({ userId });
 
         console.log(userOtpVerificationRecord);
 
         if (!userOtpVerificationRecord) {
-            return res.render('otp', { message: 'Otp expired' });
+            return res.json( { expired:true, message: 'Otp expired' });
         }
 
         const { otp: hashedOtp } = userOtpVerificationRecord;
@@ -229,16 +229,18 @@ const verifyOtp = async (req, res) => {
         console.log(validOtp, "is it valid");
 
         if (!validOtp) {
-            return res.render('otp', { message: 'Invalid Otp. Please try again', id: userId });
+            return res.json({ valid:true, message: 'Invalid Otp. Please try again'});
         }
 
         await User.updateOne({ _id: userId }, { $set: { is_verified: true } });
 
-        await userOtpVerification.deleteOne({ userId });
-
         req.session.user_id = userId;
 
-        return res.redirect('/');
+        res.json({ success: true, message: 'Otp verified successfully' });
+
+        await userOtpVerification.deleteOne({ userId });
+
+
     } catch (error) {
         console.log(error.message);
     }

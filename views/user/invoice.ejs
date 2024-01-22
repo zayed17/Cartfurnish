@@ -4,14 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Invoice</title>
-  <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Arial', sans-serif;
       background-color: #f4f4f4;
       margin: 0;
       padding: 0;
@@ -23,10 +18,31 @@
       background-color: #fff;
       border: 1px solid #ddd;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      position: relative;
+    }
+    .watermark {
+      font-size: 48px; /* Adjust the font size as needed */
+      font-weight: bold;
+      color: rgba(0, 0, 0, 0.1); /* Adjust the color and opacity as needed */
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      pointer-events: none; /* Make sure the watermark doesn't interfere with clicks */
     }
     .header {
       text-align: center;
       margin-bottom: 20px;
+    }
+    .header h2 {
+      color: #333;
+      border-bottom: 2px solid #333;
+      padding-bottom: 5px;
     }
     .invoice-details {
       display: flex;
@@ -37,6 +53,18 @@
     .order-details {
       width: 48%;
     }
+    .customer-details h4,
+    .order-details h4 {
+      color: #333;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 8px;
+      margin-bottom: 12px;
+    }
+    .customer-details p,
+    .order-details p {
+      margin: 8px 0;
+      color: #555;
+    }
     .items-table {
       width: 100%;
       border-collapse: collapse;
@@ -44,18 +72,25 @@
     }
     .items-table th,
     .items-table td {
-      border: 1px solid #c62727;
+      border: 1px solid #ddd;
       padding: 12px;
       text-align: left;
+    }
+    .items-table th {
+      background-color: #f2f2f2;
     }
     .total {
       margin-top: 20px;
       text-align: right;
     }
+    .total h4 {
+      color: #c62727;
+    }
   </style>
 </head>
 <body>
   <div class="invoice-container">
+    <div class="watermark">FurnishCart</div>
     <div class="header">
       <h2>Invoice</h2>
     </div>
@@ -63,18 +98,24 @@
 
     <div class="invoice-details">
       <div class="customer-details">
-        <h4>Customer Details:</h4>
+        <h4>Customer Details</h4>
         <p><strong>Name:</strong> <%= orderData.userId.name %></p>
         <p><strong>Email:</strong> <%= orderData.userId.email %></p>
-<p><strong>Address:</strong> <%= orderData.deliveryDetails.fullName %>, <%= orderData.deliveryDetails.housename %>, <%= orderData.deliveryDetails.city %>, <%= orderData.deliveryDetails.state %> - <%= orderData.deliveryDetails.pincode %></p>
-<p><strong>Contact:</strong> <%= orderData.deliveryDetails.phone %>, <%= orderData.deliveryDetails.email %></p>
+        <p><strong>Address:</strong> <%= orderData.deliveryDetails.fullName %>, <%= orderData.deliveryDetails.housename %>, <%= orderData.deliveryDetails.city %>, <%= orderData.deliveryDetails.state %> - <%= orderData.deliveryDetails.pincode %></p>
+        <p><strong>Contact:</strong> <%= orderData.deliveryDetails.phone %>, <%= orderData.deliveryDetails.email %></p>
       </div>
       <div class="order-details">
-        <h4>Order Details:</h4>
-        <p><strong>Order ID:</strong> <%= product._id %></p>
+        <h4>Order Details</h4>
+        <p><strong>Order ID:</strong> <%= orderData._id.toString().substring(0, 6) %>%></p>
         <p><strong>Date:</strong> <%= orderData.purchaseDate.toDateString() %></p>
-        <p><strong>Total Amount:</strong> ₹<%= product.totalPrice %></p>
-      </div>`
+        <p><strong>Subtotal Amount:</strong> ₹<%= orderData.subtotal %></p>
+        <% if (orderData.discountamount!==0) { %>
+          <p style="color: #c62727;"><strong>Discount Amount:</strong>-<%= orderData.discountamount %></p>
+      <% }else{ %>
+          <p><strong>Discount Amount:</strong> No Discount</p>
+          <% }%>
+          <p><strong>Total Amount:</strong> ₹<%= orderData.totalAmount %></p>  
+      </div>
     </div>
     <table class="items-table">
       <thead>
@@ -92,11 +133,15 @@
           <td>₹<%= product.price %></td>
           <td>₹<%= product.totalPrice %></td>
         </tr>
-        <!-- Add more rows for additional products if needed -->
       </tbody>
     </table>
     <div class="total">
-      <h4>Total Amount: ₹<%= product.totalPrice %></h4>
+      <% if (orderData.discountamount!==0) { %>
+      <h4>Discount Amount: ₹-<%= orderData.discountamount %></h4>
+      <% }else{ %>
+        <h4>No discount</h4>
+        <%}%>
+      <h2>Total Amount: ₹<%= orderData.totalAmount %></h4>
     </div>
   </div>
 </body>

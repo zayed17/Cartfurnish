@@ -152,7 +152,7 @@
                                                 <input type="text" id="otp" name="otp" class="form-control">
                                                 <span id="otpError" class="error-message text-danger"></span>
                                             </div>
-                                            <input type="text" name="id" value="<%=id%>" hidden>
+                                            <input type="text" id="id" name="id" value="<%=id%>" hidden>
                                             <div class="row g-2">
                                                 <div class="col">
                                                     <button type="submit" class="btn btn-outline-primary-2">
@@ -178,29 +178,49 @@
         </main><!-- End .main -->
 
         <script>
-           async function validate(event){
-            event.preventDefault();
+            async function validate(event) {
+    event.preventDefault();
 
-            const otp = document.getElementById('otp');
-            const errorshow = document.getElementById('otpError');
-            const otpForm = document.getElementById('otpForm');
-            if(otp.value.trim() == ""){
-                errorshow.textContent = "Enter OTP"
-                clearError(errorshow,2000)
-            }else if(/[a-z,A-Z]/.test(otp.value)){
-                errorshow.textContent = "Enter valid OTP"
-                clearError(errorshow,2000)
-            }else if(otp.value.length!= 4){
-                errorshow.textContent = "Enter 4 digits"
-                clearError(errorshow,2000)
-            }else{
-                otpForm.submit(); 
+    const otp = document.getElementById('otp');
+    const errorshow = document.getElementById('otpError');
+    const id = document.getElementById("id").value;
+
+    if (otp.value.trim() == "") {
+        errorshow.textContent = "Enter OTP";
+        clearError(errorshow, 2000);
+    } else if(/[a-z,A-Z]/.test(otp.value)) {
+        errorshow.textContent = "Enter valid OTP";
+        clearError(errorshow, 2000);
+    } else if (otp.value.length != 4) {
+        errorshow.textContent = "Enter 4 digits";
+        clearError(errorshow, 2000);
+    } else {
+        try {
+            const response = await $.ajax({
+                url: 'verifyotp',
+                method: 'POST',
+                data: { otp: otp.value, id }  
+            });
+
+            if (response.expired) {
+                errorshow.textContent = response.message;
+                clearError(errorshow, 2000);
+            } else if(response.valid) {
+                errorshow.textContent = response.message;
+                clearError(errorshow, 2000);
+            } else {
+                window.location.href = '/';
             }
+        } catch (error) {
+            console.error('Error during AJAX request:', error);
         }
-        function clearError(element, time) {
-            setTimeout(() => element.textContent = "", time);
-        }
-    
+    }
+}
+
+function clearError(element, time) {
+    setTimeout(() => element.textContent = "", time);
+}
+ 
         </script>
         
 

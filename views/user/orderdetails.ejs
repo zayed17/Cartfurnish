@@ -164,7 +164,7 @@
                     <h5 class="card-title">Order Summary</h5>
                     <div class="card">
                         <div class="card-body">
-                            <p>Order Id: <%= order._id %></p>
+                            <p>Order Id: <%= order._id.toString().substring(0, 6) %> %></p>
                             <p>Ordered Date: <%= new Date(order.purchaseDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %></p>
                             <p>Ordered Items : <%= order.products.length %></p>
                             <p>Subtotal Amount: <%= order.subtotal %></p>

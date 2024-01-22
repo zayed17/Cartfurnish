@@ -173,27 +173,37 @@
 						<form id="orderForm">
 							<div class="row" style="justify-content: space-around;" id="addrassArea"> 
 								<% if (addresses && addresses.address && addresses.address.length > 0) { %>
-									<% addresses?.address?.forEach(function (address, index) { %>
-										<div class="col-lg-4" >
-											<div class="card card-dashboard" >
-												<div class="card-body" >
-													<input type="radio" name="address" value="<%= index %>" <%= index === 0 ? 'checked' : '' %> >
-													<h3 class="card-title">Address <%= index + 1 %></h3>
-													<p>
-														Name: <%= address.fullName %><br>
-														Country: <%= address.country %><br>
-														House Name: <%= address.housename %><br>
-														State: <%= address.state %><br>
-														City: <%= address.city %><br>
-														Pincode: <%= address.pincode %><br>
-														Phone: <%= address.phone %><br>
-														Email: <%= address.email %><br>
-														<a href="#" data-toggle="modal" data-target="#addAddressModals" onclick="showEditAddressModal('<%= address.fullName %>','<%= address.country %>', '<%= address.housename %>', '<%= address.state %>', '<%= address.city %>', '<%= address.pincode %>', '<%= address.phone %>', '<%= address.email %>','<%= address._id %>')">Edit <i class="icon-edit"></i></a>
-													</p>
+									<div id="addressAccordion">
+										<% addresses?.address?.forEach(function (address, index) { %>
+											<div class="card">
+												<div class="card-header" id="addressHeading<%= index %>">
+													<h2 class="mb-0">
+														<button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse<%= index %>" aria-expanded="<%= index === 0 ? 'true' : 'false' %>" aria-controls="collapse<%= index %>">
+															Address <%= index + 1 %>
+														</button>
+													</h2>
+												</div>
+												<div id="collapse<%= index %>" class="collapse <%= index === 0 ? 'show' : '' %>" aria-labelledby="addressHeading<%= index %>" data-parent="#addressAccordion">
+													<div class="card-body">
+														<input type="radio" name="address" value="<%= index %>" <%= index === 0 ? 'checked' : '' %> >
+														<h3 class="card-title">Address <%= index + 1 %></h3>
+														<p>
+															Name: <%= address.fullName %><br>
+															Country: <%= address.country %><br>
+															House Name: <%= address.housename %><br>
+															State: <%= address.state %><br>
+															City: <%= address.city %><br>
+															Pincode: <%= address.pincode %><br>
+															Phone: <%= address.phone %><br>
+															Email: <%= address.email %><br>
+															<a href="#" data-toggle="modal" data-target="#addAddressModals" onclick="showEditAddressModal('<%= address.fullName %>','<%= address.country %>', '<%= address.housename %>', '<%= address.state %>', '<%= address.city %>', '<%= address.pincode %>', '<%= address.phone %>', '<%= address.email %>','<%= address._id %>')">Edit <i class="icon-edit"></i></a>
+														</p>
+													</div>
 												</div>
 											</div>
-										</div>
-									<% }); %>
+										<% }); %>
+									</div>
+									
 										<%}else{%>
 											<div class="col-lg-9 billing-details">
 												<h2 class="checkout-title">Billing Details</h2>
