@@ -112,7 +112,7 @@
     border: 2px solid #333; /* Optional: Add a border to the active thumbnail */
 }
 #preloader{
-    background: black url(/public/assets/loader.gif) no-repeat center;
+    background: #f4f5f8 url(/public/assets/puf.gif) no-repeat center;
     background-size: 10%;
     height: 100vh;
     width: 100%;
