@@ -19,7 +19,7 @@ const placeorder = async (req, res) => {
     const addressIndex = !req.body.address ? 0 : req.body.address;
     const paymentMethod = req.body.payment;
     console.log(req.body,"is it getting")
-    const status = paymentMethod == "COD" ? 'placed' : 'pending';
+    const status = paymentMethod == "onlinePayment"  ? 'pending' :'placed';
     console.log(paymentMethod, addressIndex, status, userId);
 
     if (!req.body.address) {
