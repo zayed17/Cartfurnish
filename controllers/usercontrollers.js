@@ -68,25 +68,13 @@ const loadsignup = async (req, res) => {
 
 const insertuser = async (req, res) => {
     try {
-        if (!req.body.name.trim() || !req.body.email.trim() || !req.body.mobile.trim() || !req.body.password.trim()) {
-            return res.status(400).render('signup', { message: 'All fields are required.' });
-        }
-
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(req.body.email.trim())) {
-            return res.status(400).render('signup', { message: 'Invalid email format.' });
-        }
-
-        if (req.body.password.trim().length < 8) {
-            return res.status(400).render('signup', { message: 'Password must be at least 8 characters long.' });
-        }
-
+        console.log("1",req.body)
         const existingUser = await User.findOne({
-            $or: [{ email: req.body.email.trim() }, { mobile: req.body.mobile.trim() }],
+            $or: [{ email: req.body.email }, { mobile: req.body.mobile }],
           });
       
           if (existingUser) {
-            res.render('signup', { message: "User already exists" });
+            res.json({user:true,  message: "User already exists" });
             return;
           }
 
@@ -94,7 +82,7 @@ const insertuser = async (req, res) => {
             const existReferral = await User.findOne({ referral_code: req.body.referralCode });
         
             if (!existReferral) {
-                return res.status(400).render('signup', { message: 'Referral code is not valid.' });
+                return res.json( { referral:true,message: 'Referral code is not valid.' });
             } else {
                 const data = {
                     amount: 1000,
@@ -111,21 +99,22 @@ const insertuser = async (req, res) => {
             }
         }
           const id = generateUniqueId(7);
-        //   console.log(id,"id keto a");
 
-        const spassword = await securePassword(req.body.password.trim());
+        const spassword = await securePassword(req.body.password);
 
         const { name, email, mobile } = req.body;
         const user = new User({
-            name: name.trim(),
-            email: email.trim(),
-            mobile: mobile.trim(),
+            name: name,
+            email: email,
+            mobile: mobile,
             password: spassword,
             referral_code: id
         });
         
-
         const userData = await user.save();
+        const redirectPath = `/verifyotp?id=${user._id}`;
+
+        res.json({ redirectPath });
         await sendOtpVerificationEmail(userData, res);
         req.session.user_email = req.body.email
         console.log( req.session.user_email,"vvero");
@@ -198,7 +187,7 @@ const sendOtpVerificationEmail = async ({ email, _id }, res) => {
 
 
         await transporter.sendMail(mailOptions);
-        res.redirect(`/verifyotp?id=${_id}`);
+
     } catch (error) {
         console.error('Error in sendOtpVerificationEmail:', error);
         res.status(500).json({ error: 'Internal server error' });
