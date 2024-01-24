@@ -24,10 +24,13 @@
     
         <!-- Cropper.js script -->
         <script src="path/to/cropper.min.js"></script>
+        <link rel="stylesheet" href="/public/assets/css/style2.css">
+
     </head>
 
       
     <body>
+        <div id="preloader"></div>
         <div class="screen-overlay"></div>
         <aside class="navbar-aside" id="offcanvas_aside">
             <div class="aside-top">
@@ -182,11 +185,11 @@
                                         </div>
                                         <div class="form-group">
                                             <label>Category</label>
-                                            <select class="form-control" id="product-category" name="category">
-                                            <% for (let i = 0; i < category.length; i++) { %>
-                                                    <option value="<%= category[i]._id %>"><%= category[i].name %></option>
-                                            <% } %>
-                                        </select>
+                                            <select class="form-control"  name="category">
+                                                <% for (let i = 0; i < category.length; i++) { %>
+                                                        <option value="<%= category[i]._id %>"><%= category[i].name %></option>
+                                                <% } %>
+                                            </select>
                                         </div>
                                         <div class="form-group">
                                             <label>Price</label>
@@ -210,6 +213,7 @@
                                                 <input class="form-control" id="choosen-file" type="file" multiple
                                                     accept="image/*" />
                                             </div>
+                                            <span class="text-danger" id="fourimage"> </span> 
                                         </div>
                                         
                                         
@@ -243,12 +247,10 @@ async function handleFileChange(e) {
         const output = document.querySelector('#result');
 
         if (files.length !== 4) {
-            filesValid = false;
             displayErrorMessage('Please select 4 images.');
             return;
         } else {
             hideErrorMessage();
-            filesValid = true;
         }
 
         for (let i = 0; i < files.length; i++) {
@@ -274,11 +276,12 @@ function supportsFileAPI() {
 }
 
 function displayErrorMessage(message) {
-    $('#msg-message').css('display', 'block').text(message);
+    const fourimage = $('#fourimage');
+    fourimage.text(message);
 }
 
 function hideErrorMessage() {
-    $('#msg-message').css('display', 'none');
+    $('#fourimage').css('display', 'none');
 }
 
 function createImageContainer(imageSrc) {
@@ -393,8 +396,8 @@ function dataURItoBlob(dataURI) {
 
 
 
-c
 
+<script src="/public/assets/js/loader.js"></script>
         <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.11/cropper.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>

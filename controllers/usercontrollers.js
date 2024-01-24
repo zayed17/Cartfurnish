@@ -644,18 +644,19 @@ const loadforgot = async(req,res)=>{
         console.log(error);
     }
 }
-
-const forgot = async(req,res)=>{
+const forgot = async (req, res) => {
     try {
         const email = req.body.email;
-        const user = await User.findOne({email:email});
-        if(!user){
-            res.render('forgot',{message:"User not found"})
-        }else{
+        const user = await User.findOne({ email: email });
+
+        if (!user) {
+            res.status(400).json({ error: "User not found" });
+        } else {
             const token = crypto.randomBytes(20).toString('hex');
             user.resetToken = token;
-            user.resetTokenExpiry = Date.now() + 300000; 
-            await user.save()
+            user.resetTokenExpiry = Date.now() + 300000;
+            await user.save();
+
             const resetLink = `http://localhost:3009/resetPassword${token}`;
             const mailOptions = {
                 from: process.env.email_user,
@@ -670,13 +671,15 @@ const forgot = async(req,res)=>{
                     <p>CartFurnish</p>
                 `,
             };
-              await transporter.sendMail(mailOptions);
-              res.render('login',{success: "verification mail have been send"})
+
+            await transporter.sendMail(mailOptions);
+            res.status(200).json({ success: true, message: "Verification mail has been sent" });
         }
     } catch (error) {
         console.log(error);
+        res.status(500).json({ success: false, error: error.message });
     }
-}
+};
 
 const loadresetpassword = async(req,res)=>{
     try {
@@ -686,31 +689,36 @@ const loadresetpassword = async(req,res)=>{
         console.log(error);
     }
 }
+
+
+
 const resetPassword = async (req, res) => {
     try {
         const token = req.body.token;
-        const pass1 = req.body.password1;
+        const newPassword = req.body.password;
+
         const user = await User.findOne({ resetToken: token, resetTokenExpiry: { $gt: Date.now() } });
 
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
 
-            const newPasswordHash = await bcrypt.hash(pass1, 10);
+        const newPasswordHash = await bcrypt.hash(newPassword, 10);
 
-            if (await bcrypt.compare(pass1, user.password)) {
-                res.render('resetPassword', { message: "Your old password and new password are the same!", token });
-            } else {
-                user.password = newPasswordHash;
-                user.resetToken = null;
-                user.resetTokenExpiry = null;
-                await user.save();
-                res.render('login');
-            }
-        
+        if (await bcrypt.compare(newPassword, user.password)) {
+            return res.json({ error: "Your old password and new password are the same!" });
+        } else {
+            user.password = newPasswordHash;
+            user.resetToken = null;
+            user.resetTokenExpiry = null;
+            await user.save();
+            return res.status(200).json({ message: 'Password reset successfully' });
+        }
     } catch (error) {
         console.error(error);
-        res.status(500).send('Internal Server Error');
+        return res.status(500).json({ error: 'Internal Server Error' });
     }
 };
-
 
 
 module.exports = {

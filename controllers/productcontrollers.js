@@ -79,6 +79,11 @@ console.log(req.body.price);
       console.log(error);
     }
   }
+
+
+  
+
+
   const editproduct = async (req, res) => {
     try {
       const id = req.query.id;
@@ -86,42 +91,30 @@ console.log(req.body.price);
       const files = req.files;
       console.log(id);
       console.log(details);
-      console.log(files,req.files[0])
+      console.log(details.category);
   
-      const existingData = await Product.findOne({ _id: id });
   
-      const img = [
-        files?.image1 ? (files.image1[0]?.filename || existingData.images.image1) : existingData.images.image1,
-        files?.image2 ? (files.image2[0]?.filename || existingData.images.image2) : existingData.images.image2,
-        files?.image3 ? (files.image3[0]?.filename || existingData.images.image3) : existingData.images.image3,
-        files?.image4 ? (files.image4[0]?.filename || existingData.images.image4) : existingData.images.image4,
-      ];
-  
-
+      
   
       if (details.quantity > 0 && details.price > 0) {
         const product = {
           name: details.name,
           quantity: details.quantity,
-          category: details.category,
+          categoryId: details.category,
           price: details.price,
           offer: details.offer,
           description: details.description,
-          images: {
-          image1: img[0],
-          image2: img[1],
-          image3: img[2],
-          image4: img[3],
-          },
+          
         };
   
        await Product.findOneAndUpdate({ _id: id }, product, { new: true });
-        res.redirect('/admin/product');
+       res.redirect('/admin/product')
       }
     } catch (error) {
       console.log(error.message);
     }
   };
+
 
   const blockProducts=async(req,res)=>{
     try {
@@ -140,8 +133,7 @@ console.log(req.body.price);
 
 const deleteImage = async (req,res)=>{
   try {
-
-console.log("delete");
+    console.log("delete");
     const productId = req.query.id;
     const imageNumber = req.query.imageNumber;
     const number = req.query.number;
@@ -159,7 +151,6 @@ console.log("delete");
 
     await product.save();
     console.log("delete6");
-
     res.status(200).json({ success: true, message: `Image ${imageNumber} deleted successfully.` });
 
   } catch (error) {

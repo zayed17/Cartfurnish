@@ -111,6 +111,7 @@
 .product-gallery-item.active img {
     border: 2px solid #333; /* Optional: Add a border to the active thumbnail */
 }
+
 #preloader{
     background: #f4f5f8 url(/public/assets/puf.gif) no-repeat center;
     background-size: 10%;
@@ -119,3 +120,11 @@
     position: fixed;
     z-index: 100;
 }
+#preloader {
+    transition: opacity 0.5s ease-in-out;
+  }
+  
+  .fade-out {
+    opacity: 0;
+  }
+  

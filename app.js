@@ -29,6 +29,7 @@ mongoose.connection.on('error', (err) => {
 app.use('/public', express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'ejs');
 
+
 app.use(noCache());
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms'));
 
@@ -40,7 +41,10 @@ app.use('/', userRoute);
 const adminRoute = require('./routes/adminroute');
 app.use('/admin', adminRoute);
 
-// Start the Express server
+
+app.use((req, res) => {
+  res.status(404).render('404');
+});
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
 });
