@@ -27,7 +27,7 @@
     <link rel="stylesheet" href="public/assets/css/bootstrap.min.css">
     <!-- Main CSS File -->
     <link rel="stylesheet" href="public/assets/css/style.css">
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI/t1zFqELYZxMVexh5tRaxfInq60eaQW7NbMU=" crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI/t1zFqELYZxMVexh5tRaxfInq60eaQW7NbMU=" crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -137,7 +137,6 @@
                             <div class="text-center text-dark ">
                                 Sign-Up
                             </div>
-                                <span id="message" style="color: rgb(255, 0, 0);"></span>
 
 							<div class="tab-content">
 							    	<form  id="myForm" onsubmit="validation(event)"  method="post" novalidate>
@@ -277,10 +276,10 @@ async function validation(event) {
         message.textContent = "All fields are required";
         clearError(message, 2000);
     } else if (/[0-9]/.test(email.charAt(0))) {
-        message.textContent = "Enter valid format";
+        message.textContent = "Enter valid email format";
         clearError(message, 2000);
     } else if (!/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
-        message.textContent = "Enter valid format";
+        message.textContent = "Enter valid email format";
         clearError(message, 2000);
     } else if (mobile.length !== 10) {
         message.textContent = "Enter 10 digits for mobile";

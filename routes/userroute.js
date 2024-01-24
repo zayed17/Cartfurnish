@@ -36,7 +36,7 @@ userRoute.get('/signup',auth.isLogout,usercontrollers.loadsignup)
 userRoute.post('/signup',auth.isLogout,usercontrollers.insertuser);
 userRoute.get('/verifyotp',auth.isLogout,usercontrollers.loadVerificationPage)
 userRoute.post('/verifyotp',auth.isLogout,usercontrollers.verifyOtp)
-userRoute.get('/login',usercontrollers.loadlogin);
+userRoute.get('/login',auth.isLogout,usercontrollers.loadlogin);
 userRoute.post('/login',auth.isLogout,usercontrollers.verifyLogin)
 userRoute.get('/shop',usercontrollers.loadshop);
 // userRoute.post('/shop',usercontrollers.loadshop);

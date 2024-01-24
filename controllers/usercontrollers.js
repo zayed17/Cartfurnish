@@ -251,22 +251,24 @@ const verifyLogin = async (req, res) => {
         if (userData) {
             if (userData.is_verified === true) {
                 if (userData.is_blocked==true) {
-                    res.render('login', { message: "Your account is blocked by the admin." });
+                    res.json({ blocked:true});
                 } else {
                     const passwordMatch = await bcrypt.compare(password, userData.password);
 
                     if (passwordMatch) {
                         req.session.user_id = userData._id;
-                        res.redirect('/');
+                        res.json({success:true})
                     } else {
-                        res.render('login', { message: "Incorrect password" });
+                        res.json({ password:true });
                     }
                 }
             } else {
-                sendOtpVerificationEmail(userData, res);
+                const redirectPath = `/verifyotp?id=${userData._id}`;
+                res.json({ redirectPath });
+               await sendOtpVerificationEmail(userData, res);
             }
         } else {
-            res.render('login', { message: "Email is not registered. Please register first." });
+            res.json({ notuser:true });
         }
     } catch (error) {
         console.log(error.message);
@@ -641,6 +643,7 @@ const forgot = async (req, res) => {
         if (!user) {
             res.status(400).json({ error: "User not found" });
         } else {
+            res.status(200).json({ success: true, message: "Verification mail has been sent" });
             const token = crypto.randomBytes(20).toString('hex');
             user.resetToken = token;
             user.resetTokenExpiry = Date.now() + 300000;
@@ -662,7 +665,6 @@ const forgot = async (req, res) => {
             };
 
             await transporter.sendMail(mailOptions);
-            res.status(200).json({ success: true, message: "Verification mail has been sent" });
         }
     } catch (error) {
         console.log(error);
