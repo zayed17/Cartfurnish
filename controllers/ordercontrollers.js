@@ -58,7 +58,7 @@ const placeorder = async (req, res) => {
       quantity: product.quantity,
       price: product.price,
       totalPrice: product.quantity * product.price,
-      productstatus: "placed"
+      productstatus : (status === "pending") ? "pending" : "placed"
     }));
 
     const data = new Order({
@@ -72,6 +72,7 @@ const placeorder = async (req, res) => {
       status: status,
       paymentMethod: paymentMethod,
     });
+    
     const orderData = await data.save();
     const orderId = orderData._id;
 
@@ -248,21 +249,31 @@ const returnproduct = async (req, res) => {
   try {
     const userId = req.session.user_id;
     const productId = req.body.productId
+    console.log(req.body)
+    const totalPrice = parseInt(req.body.totalPrice);
+    console.log(productId, typeof(productId),totalPrice,typeof(totalPrice))
     const orderData = await Order.findOneAndUpdate(
       { "products._id": productId },
       { $set: { "products.$.productstatus": 'Return' } }
     );
+  
+    console.log(orderData)
     for (const orderProduct of orderData.products) {
       const product = orderProduct.productId;
       const quantity = orderProduct.quantity;
+      console.log(quantity,typeof(quantity))
 
       await Product.updateOne({ _id: product }, { $inc: { quantity: quantity } });
     }
+    const couponAmount = parseInt(orderData.discountamount);
+    const productLength = parseInt(orderData.products.length) ; 
+    const discountamount = parseInt(couponAmount / productLength);
       const data = {
-        amount: orderData.totalAmount,
+        amount:  totalPrice  - discountamount,
         date: new Date()
       }
-      await User.findOneAndUpdate({ _id: userId }, { $inc: { wallet: orderData.totalAmount }, $push: { walletHistory: data } })
+      console.log(couponAmount,productLength,discountamount,data)
+      await User.findOneAndUpdate({ _id: userId }, { $inc: { wallet:totalPrice - discountamount }, $push: { walletHistory: data } })
     res.json({ cancel: true })
     console.log(productId, "product Id");
   } catch (error) {

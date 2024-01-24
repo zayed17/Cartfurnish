@@ -200,7 +200,7 @@
                             <% if(product.productstatus == "placed" || product.productstatus == "Shipped" ) { %>
                                 <button class="btn btn-danger custom-btn" onclick="cancelProduct('<%= product._id %>')">Cancel</button>
                             <% } else if(product.productstatus == "Delivered") { %>
-                                <button class="btn btn-danger custom-btn" onclick="returnProduct('<%= product._id %>')">Return</button>
+                                <button class="btn btn-danger custom-btn" onclick="returnProduct('<%= product._id %>','<%= product.totalPrice %>')">Return</button>
                             <% } %>
                         </div>
                         <% if(product.productstatus=="Delivered") { %>
@@ -387,7 +387,8 @@
     });
 }
 
-function returnProduct(productId) {
+function returnProduct(productId,totalPrice) {
+    console.log(productId,totalPrice)
     Swal.fire({
         title: 'Enter Return Reason',
         input: 'text',
@@ -406,9 +407,10 @@ function returnProduct(productId) {
         if (result.isConfirmed) {
             const data = {
                 productId,
+                totalPrice,
                 cancelReason: result.value,
             };
-
+console.log(data)
             fetch('/returnproduct', {
                 method: 'POST',
                 headers: {
