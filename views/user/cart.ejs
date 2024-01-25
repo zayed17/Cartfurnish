@@ -364,7 +364,6 @@
                     if (response.success) {
                         $("#reloadDiv").load("/cart #reloadDiv");
                     } else {
-                        // Handle other cases or errors here
                         swal.fire({
                             icon: "error",
                             title: "Oops...",
@@ -386,7 +385,7 @@
                 .then(response => response.json())
                 .then(response => {
                     if (response.success) {
-                        Swal.fire({  // Change "swal" to "Swal"
+                        Swal.fire({ 
                             title: "Item Removed!",
                             text: "The item has been successfully removed from your cart.",
                             icon: "success",
@@ -394,10 +393,9 @@
                             timer: 5000,
                         });
                         setTimeout(() => {
-                            location.reload(); // Reload the page
+                            location.reload(); 
                         }, 1500);
                     } else {
-                        // Handle error
                         console.error('Error removing item:', response.error);
                     }
                 })
@@ -409,7 +407,6 @@
 
     </script>
 
-    <!-- Plugins JS File -->
     <script src="/public/assets/js/loader.js"></script>
     <script src="public/assets/js/jquery.min.js"></script>
     <script src="public/assets/js/bootstrap.bundle.min.js"></script>
@@ -418,11 +415,9 @@
     <script src="public/assets/js/superfish.min.js"></script>
     <script src="public/assets/js/owl.carousel.min.js"></script>
     <script src="public/assets/js/bootstrap-input-spinner.js"></script>
-    <!-- Main JS File -->
     <script src="public/assets/js/main.js"></script>
 </body>
 
 
-<!-- molla/cart  22 Nov 2019 09:55:06 GMT -->
 
 </html>

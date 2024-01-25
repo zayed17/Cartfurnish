@@ -5,7 +5,7 @@ const Product = require('../models/productmodal')
 const User = require('../models/usermodel')
 const Razorpay = require('razorpay');
 const crypto = require("crypto")
-
+const Review = require("../models/reviewmodels")
 const instance = new Razorpay({
   key_id: process.env.RAZORPAY_ID_KEY,
   key_secret: process.env.RAZORPAY_SECRET_KEY
@@ -159,8 +159,8 @@ const loadorderdetail = async (req, res) => {
   try {
     const id = req.query.id;
     const orderData = await Order.findOne({ _id: id }).populate('products.productId')
-    
-    res.render('orderdetails', { order: orderData })
+    const review = await Review.find({userId:req.session.user_id})
+    res.render('orderdetails', { order: orderData ,review})
   } catch (error) {
     console.log(error);
   }

@@ -160,7 +160,6 @@
                     </div>
                 </div>
 
-                <!-- Order Summary -->
                 <div class="col-md-6">
                     <h5 class="card-title">Order Summary</h5>
                     <div class="card">
@@ -209,7 +208,19 @@
                                     <a href="/invoice?productId=<%= product._id %>&orderId=<%= order._id %>" download="invoice.pdf" class="btn btn-primary btn-sm w-100">Download Invoice</a>
                                 </div>
                                 <div>
-                                    <button type="button" class="btn btn-success btn-sm mt-2" data-toggle="modal" onclick="getProductId('<%= product.productId._id %>','<%= order._id %>')" data-target="#reviewModal">Leave a Review</button>
+                                    <% var hasReview = false; %>
+                                       <% review.forEach(function(reviewItem) { %>
+                                         <% if (reviewItem.productId.equals(product.productId._id)) { %>
+                                           <% hasReview = true; %>
+                                         <% } %>
+                                       <% }); %>
+                                       
+                                       <% if (hasReview) { %>
+                                         <button type="button" class="btn btn-success btn-sm mt-2" data-toggle="modal">Edit Review</button>
+                                       <% } else { %>
+                                         <button type="button" class="btn btn-success btn-sm mt-2" data-toggle="modal" onclick="getProductId('<%= product.productId._id %>','<%= order._id %>')" data-target="#reviewModal">Leave a Review</button>
+                                       <% } %>
+
                                 </div>
                             </div>
                         <% } %>

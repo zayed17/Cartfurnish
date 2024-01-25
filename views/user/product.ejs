@@ -193,23 +193,8 @@
                         <li class="breadcrumb-item"><a href="#">Products</a></li>
                         <li class="breadcrumb-item active" aria-current="page">Default</li>
                     </ol>
-
-                    <nav class="product-pager ml-auto" aria-label="Product">
-                        <a class="product-pager-link product-pager-prev" href="#" aria-label="Previous" tabindex="-1">
-                            <i class="icon-angle-left"></i>
-                            <span>Prev</span>
-                        </a>
-
-                        <a class="product-pager-link product-pager-next" href="#" aria-label="Next" tabindex="-1">
-                            <span>Next</span>
-                            <i class="icon-angle-right"></i>
-                        </a>
-                    </nav><!-- End .pager-nav -->
-                </div><!-- End .container -->
-            </nav><!-- End .breadcrumb-nav -->
-
-
-
+                </div>
+            </nav>
             <div class="page-content">
                 <div class="container">
                     <div class="product-details-top">
@@ -257,11 +242,10 @@
 
                                 <div class="ratings-container">
                                     <div class="ratings">
-                                        <div class="ratings-val" style="width: 80%;"></div><!-- End .ratings-val -->
-                                    </div><!-- End .ratings -->
-                                    <a class="ratings-text" href="#product-review-link" id="review-link">( 2 Reviews
-                                        )</a>
-                                </div><!-- End .rating-container -->
+                                        <div class="ratings-val" style="width: 80%;"></div>
+                                    </div>
+                                    <a class="ratings-text" href="#product-review-link" id="review-link">( 2 Reviews)</a>
+                                </div>
 
                                 <div class="product-price">
                                     <p>₹</p>
@@ -385,13 +369,13 @@
                                                         <h4><a href="#"><%= reviewItem.userId.name %>.</a></h4>
                                                         <div class="ratings-container">
                                                             <div class="ratings">
-                                                                <!-- <div class="ratings-val" style="width: '<%= (reviewItem.rating * 20) + '%' %>></div> -->
+                                                                <div class="ratings-val" style="width: <%= (reviewItem.rating * 20) %>%"></div>
                                                             </div>
                                                         </div>
                                                         <% 
                                                             const currentDate = new Date();
                                                             const reviewDate = new Date(reviewItem.createdAt);
-                                                            const timeDifference = Math.floor((currentDate - reviewDate) / (1000 * 60 * 60 * 24)); // Difference in days
+                                                            const timeDifference = Math.floor((currentDate - reviewDate) / (1000 * 60 * 60 * 24)); 
                                                             const formattedDate = timeDifference === 0 ? 'today' : `${timeDifference} day${timeDifference > 1 ? 's' : ''} ago`;
                                                         %>
                                                         <span class="review-date"><%= formattedDate %></span>
@@ -399,14 +383,7 @@
                                                 </div>
                                                 <div class="col-4">
                                                     <h4><%= reviewItem.comment %></h4>
-                                                    <div class="review-action">
-                                                        <button onclick="vote('like', '<%=reviewItem._id%>', '<%=reviewItem.productId%>')">
-                                                            <i class="icon-thumbs-up"></i> Like (<span id="likeCount">2</span>)
-                                                        </button>
-                                                        <button onclick="vote('dislike', '<%=reviewItem._id%>', '<%=reviewItem.productId%>')">
-                                                            <i class="icon-thumbs-down"></i> Dislike (<span id="dislikeCount">0</span>)
-                                                        </button>
-                                                    </div>
+                                                   
                                                 </div>
                                             </div>
                                         </div>
@@ -481,7 +458,6 @@ function addToCart(productId) {
 
 
 
-                <h2 class="title text-center mb-4">You May Also Like</h2><!-- End .title text-center -->
 
 
             </div><!-- End .container -->

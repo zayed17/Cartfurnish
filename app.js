@@ -4,13 +4,14 @@ const path = require('path');
 const mongoose = require('mongoose');
 const noCache = require('nocache');
 const morgan = require('morgan')
+require('dotenv').config();
 
 // Set up Express application
 const app = express();
 const port = 3009;
 
 // MongoDB connection configuration
-const dbUrl = 'mongodb://127.0.0.1:27017/furni';
+const dbUrl = process.env.MONGODB_URI;
 
 // Connect to MongoDB
 mongoose.connect(dbUrl);
