@@ -401,7 +401,9 @@
 
 
                 <script>
-function addToCart(productId) {
+
+                      
+ function addToCart(productId) {
     $.ajax({
         url: '/addtocart',
         method: 'patch',
@@ -415,26 +417,26 @@ function addToCart(productId) {
                     response.error || 'Product is Out of stock',
                     'warning'
                 );
-            }
-            
-            else if(response.session== false){
-                    Swal.fire({
+            } else if (response.session == false) {
+                Swal.fire({
                     title: 'Login Required',
                     text: response.error || 'You want to login.',
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonText: 'Login',
                     cancelButtonText: 'Cancel',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = '/login';
+                    }
                 });
-                
-            }else if(response.success==false){
+            } else if (response.success == false) {
                 Swal.fire(
                     'Product already in cart',
                     response.error || 'Product already in cart',
                     'warning'
                 );
-            }
-             else {
+            } else {
                 Swal.fire(
                     'Saved to cart!',
                     'Product added to cart successfully!',
@@ -452,7 +454,6 @@ function addToCart(productId) {
         }
     });
 }
-
 
                 </script>
 

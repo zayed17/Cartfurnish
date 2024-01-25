@@ -48,8 +48,9 @@ const loadhome = async (req, res) => {
         const cartData =  await Cart.findOne({user:user_id}).populate("product.productId")
         const userData = await User.findOne({_id:user_id})
         const banner = await Banner.find({})
+        const product = await Product.find({}).populate("categoryId").limit(8)
 
-        res.render('home',{user:userData,cart:cartData,banner});
+        res.render('home',{user:userData,cart:cartData,banner,product});
     } catch (error) {
         console.log(error.message);
     }
