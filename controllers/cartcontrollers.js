@@ -105,6 +105,7 @@ const updatecart = async (req, res) => {
                 },
             }
         );
+        //CHECK $ 
 
         res.json({ success: true });
     } catch (error) {

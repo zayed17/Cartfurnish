@@ -402,7 +402,7 @@ const loadeachproduct = async(req,res)=>{
     try {
         const userData = await User.findOne({_id:req.session.user_id})
         const id = req.query.id;
-        console.log(id, id)
+        console.log(id,typeof(id), "dfasfesd",id)
         const date = Date.now()
         const product = await Product.findOne({_id:id})
         const review = await Review.find({productId:id}).populate('userId')

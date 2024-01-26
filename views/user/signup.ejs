@@ -139,6 +139,8 @@
                             </div>
 
 							<div class="tab-content">
+                                <span id="messagess" style="color: rgb(255, 0, 0);"></span>
+
 							    	<form  id="myForm" onsubmit="validation(event)"  method="post" novalidate>
                                         <div class="form-group">
 							    			<label for="name">Name</label>
@@ -269,7 +271,7 @@ async function validation(event) {
     const email = document.getElementById("email").value;
     const mobile = document.getElementById("mobile").value;
     const password = document.getElementById("password").value;
-    const message = document.getElementById('message');
+    const message = document.getElementById('messagess');
     const myForm = document.getElementById('myForm');
 
     if (email.trim() == "" || name.trim() == "" || mobile.trim() == "" || password.trim() == "") {
