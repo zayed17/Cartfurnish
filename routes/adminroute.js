@@ -10,6 +10,7 @@ const bannercontrollers = require('../controllers/bannercontrollers');
 const multer = require('../middleware/multer');
 const auth = require('../middleware/adminAuth')
 // Configure session
+
 adminRoute.use(session({
     secret: config.sessionSecret,
     resave: false,
