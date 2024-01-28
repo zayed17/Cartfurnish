@@ -311,38 +311,46 @@
     }
 
     function confirmDelete(imageNumber, imageNumbers) {
-        const confirmDelete = confirm(`Are you sure you want to delete Image ${imageNumber}?`);
-
-        if (confirmDelete) {
+    Swal.fire({
+        title: `Are you sure you want to delete Image ${imageNumbers}?`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
             fetch(`/admin/deleteImage?id=<%= product._id %>&imageNumber=${imageNumber}&number=${imageNumbers}`, {
                 method: 'DELETE',
             })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    if (data.success) {
-                        Swal.fire(
-                            'Deleted!',
-                            `Image ${imageNumber} deleted successfully.`,
-                            'success'
-                        ).then(() => {
-                            location.reload();
-                        });
-                    } else {
-                        Swal.fire(
-                            'Error!',
-                            'Network response was not ok',
-                            'error'
-                        );
-                    }
-                })
-                .catch(error => console.error('Error:', error));
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    Swal.fire(
+                        'Deleted!',
+                        `Image ${imageNumbers} deleted successfully.`,
+                        'success'
+                    ).then(() => {
+                        location.reload();
+                    });
+                } else {
+                    Swal.fire(
+                        'Error!',
+                        'Network response was not ok',
+                        'error'
+                    );
+                }
+            })
+            .catch(error => console.error('Error:', error));
         }
-    }
+    });
+}
+
 });
 
 function submitForm(event) {
