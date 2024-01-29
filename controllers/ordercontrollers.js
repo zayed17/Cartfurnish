@@ -143,7 +143,7 @@ const verifypayment = async (req, res) => {
 
     const orders = await Order.findByIdAndUpdate(
       { _id: paymentData.order.receipt },
-      { $set: { status: "placed", paymentId: paymentData.payment.razorpay_payment_id } }
+      { $set: { status: "placed",paymentId: paymentData.payment.razorpay_payment_id } }
     );
 
     const orderId = orders._id

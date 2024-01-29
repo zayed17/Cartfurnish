@@ -1,5 +1,4 @@
 const Product = require('../models/productmodal')
-const Sharp = require('sharp');
 const Category = require('../models/categorymodal')
 const fs = require('fs');
 
