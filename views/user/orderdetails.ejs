@@ -216,7 +216,7 @@
                                        <% }); %>
                                        
                                        <% if (hasReview) { %>
-                                         <button type="button" class="btn btn-success btn-sm mt-2" data-toggle="modal">Edit Review</button>
+                                         <button type="button" class="btn btn-success btn-sm mt-2" data-toggle="modal" data-target="#editreviewModal" onclick="editreview('<%= product.productId._id %>','<%= order._id %>')">Edit Review</button>
                                        <% } else { %>
                                          <button type="button" class="btn btn-success btn-sm mt-2" data-toggle="modal" onclick="getProductId('<%= product.productId._id %>','<%= order._id %>')" data-target="#reviewModal">Leave a Review</button>
                                        <% } %>
@@ -265,8 +265,56 @@
             </div>
           </div>
           
+          <div class="modal fade" id="editreviewModal" tabindex="-1" role="dialog" aria-labelledby="editreviewModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="reviewModalLabel">Leave a Review</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <form action="/submit-editreview" method="post">
+                    <div class="form-group">
+                      <label for="reviewText">Your Review</label>
+                      <textarea class="form-control" id="editreviewText" name="reviewText" rows="3" required></textarea>
+                    </div>
+          
+                    <input type="text" id="productIds" name="productId" hidden>
+                    <input type="text" id="orderIds" name="orderId" hidden>
+                    <div class="form-group">
+                      <label for="starRating">Rate the Product</label>
+                      <select class="form-control" id="starRating"  name="starRating" required>
+                        <option value="5">⭐⭐⭐⭐⭐ (5 Stars)</option>
+                        <option value="4">⭐⭐⭐⭐ (4 Stars)</option>
+                        <option value="3">⭐⭐⭐ (3 Stars)</option>
+                        <option value="2">⭐⭐ (2 Stars)</option>
+                        <option value="1">⭐ (1 Star)</option>
+                      </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-success">Submit Review</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+<script>
+async function editreview(productid,orderid) {
+    const response = await fetch(`/editReview?productid=${productid}&orderid=${orderid}`);
+    const data = await response.json();
+console.log(data.comment)
+document.getElementById('editreviewText').value = data.review.comment;
+document.getElementById('productIds').value = data.productid;
+document.getElementById('orderIds').value = data.orderid;
 
 
+   
+    $('#editreviewModal').modal('show');
+}
+
+</script>
 
 
         <footer class="footer mt-5">

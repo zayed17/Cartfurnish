@@ -1,3 +1,4 @@
+const { findOne } = require('../models/cartmodels');
 const Review = require('../models/reviewmodels');
 const addreview = async(req,res)=>{
     try {
@@ -59,7 +60,41 @@ const addreview = async(req,res)=>{
 
 
 
+    const loadeditreview = async(req,res)=>{
+        try {
+            const { productid,orderid} = req.query;
+            const userId = req.session.user_id;
+            const review = await Review.findOne({productId:productid,userId})
+            console.log(productid,review)
+            res.json({review,orderid,productid});
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const editReview = async(req,res)=>{
+        try {
+            const userId = req.session.user_id;
+            const productId = req.body.productId;
+            const comment =req.body.reviewText;
+            const orderId = req.body.orderId;
+            console.log(req.body)
+                const updatedReview = await Review.findOneAndUpdate(
+                    { productId: productId, userId },
+                    { $set: { comment: comment } },
+                  );
+ 
+              
+              res.redirect(`/orderdetails?id=${orderId}`);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
 module.exports = {
     addreview,
     // voting
+    loadeditreview,
+    editReview
 }
