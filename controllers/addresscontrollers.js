@@ -85,21 +85,7 @@ const success = async(req,res)=>{
     }
 }
 
-// const loadeditaddress = async(req,res)=>{
-//     try {
-//         const userId = req.session.user_id;
-//         // const ind = req.query.ind
 
-//     const userData = await Address.findOne({user:userId})
-//     console.log(userData,"userntedata")
-//     const address = userData.address[0]
-//     console.log(address,"nthelum vero")
-
-//     res.render('account',{address});
-//     } catch (error) {
-//         console.log(error);
-//     }
-// }
 
 const editaddress = async (req, res) => {
     try {

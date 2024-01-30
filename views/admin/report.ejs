@@ -157,32 +157,56 @@
                                 <div class="col-lg-12">
                                     <h4 class="card-title">Latest Orders</h4>
                                 </div>
-                                <div >
-                                    <form action="/admin/report" method="GET" id="filterForm">
+                                <div>
+                                    <form action="/admin/report" method="GET" id="filterForm" onsubmit="saveDates()">
                                         <div class="row align-items-center">
                                             <label for="startDate" class="col-md-4 col-12">Start Date:</label>
                                             <input type="date" id="startDate" name="startDate" class="col-md-8 col-12 form-control mb-2">
                                         </div>
-                    
+                                
                                         <div class="row align-items-center">
                                             <label for="endDate" class="col-md-4 col-12">End Date:</label>
                                             <input type="date" id="endDate" name="endDate" class="col-md-8 col-12 form-control mb-2">
                                         </div>
-                    
-                                        <button type="submit" class="btn btn-primary ">Filter Sales</button>
-                                        <a href="/admin/report-download?startDate=<%= startDate %>&endDate=<%= endDate %>" download="report-download.pdf" class="btn btn-primary ">Download Invoice</a>
-                                        <a href="/admin/excelreport?startDate=<%= startDate %>&endDate=<%= endDate %>"  class="btn btn-primary ">Excel Report</a>
+                                
+                                        <button type="submit" class="btn btn-primary">Filter Sales</button>
+                                        <a href="/admin/report-download?startDate=<%= startDate %>&endDate=<%= endDate %>" download="report-download.pdf" class="btn btn-primary">Download Invoice</a>
+                                        <a href="/admin/excelreport?startDate=<%= startDate %>&endDate=<%= endDate %>" class="btn btn-primary">Excel Report</a>
                                     </form>
                                 </div>
+                                
                             </div>
                         </div>
                     </header>
+                    <script>
+                        function saveDates() {
+                            var startDate = document.getElementById('startDate').value;
+                            var endDate = document.getElementById('endDate').value;
+                    
+                            localStorage.setItem('savedStartDate', startDate);
+                            localStorage.setItem('savedEndDate', endDate);
+                        }
+                    
+                        window.onload = function () {
+                            var savedStartDate = localStorage.getItem('savedStartDate');
+                            var savedEndDate = localStorage.getItem('savedEndDate');
+                    
+                            if (savedStartDate) {
+                                document.getElementById('startDate').value = savedStartDate;
+                            }
+                    
+                            if (savedEndDate) {
+                                document.getElementById('endDate').value = savedEndDate;
+                            }
+                        };
+                    </script>
                     
                 
                     <div class="card-body">
                         <div class="table-responsive">
                             <table class="table align-middle table-nowrap mb-0">
                                 <thead class="table-light">
+                                    <% if (order.length > 0) { %>
                                     <tr>
                                         <th class="align-middle" scope="col">Order ID</th>
                                         <th class="align-middle" scope="col">Billing Name</th>
@@ -191,22 +215,26 @@
                                         <th class="align-middle" scope="col">Payment Method</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <% order.forEach(order => { %>
-                                        <% order?.products?.forEach(product => { %>
-                                            <tr>
-                                                <td><a class="fw-bold"><%= order._id.toString().substring(6, 12).toUpperCase() %></a></td>
-                                                <td><%= order?.userId?.name %></td>
-                                                <td><%= new Date(order.purchaseDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %></td>
-                                                <td><%= product.price %></td>
-                                                <td><i class="material-icons md-payment font-xxl text-muted mr-5"></i> <%= order.paymentMethod %></td>
-                                            </tr>
+                                    <tbody>
+                                        <% order.forEach(order => { %>
+                                            <% order?.products?.forEach(product => { %>
+                                                <tr>
+                                                    <td><a class="fw-bold"><%= order._id.toString().substring(6, 12).toUpperCase() %></a></td>
+                                                    <td><%= order?.userId?.name %></td>
+                                                    <td><%= new Date(order.purchaseDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %></td>
+                                                    <td><%= product.price %></td>
+                                                    <td><i class="material-icons md-payment font-xxl text-muted mr-5"></i> <%= order.paymentMethod %></td>
+                                                </tr>
+                                            <% }); %>
                                         <% }); %>
-                                    <% }); %>
-                                </tbody>
+                                    </tbody>
+                                <% } else { %>
+                                    <h2 class="text-center">No orders</h2>
+                                <% } %>
                             </table>
                         </div>
                     </div>
+                    
                     
                 </div>                
             </section>
