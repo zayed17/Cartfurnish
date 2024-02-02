@@ -58,7 +58,7 @@ const placeorder = async (req, res) => {
       quantity: product.quantity,
       price: product.price,
       totalPrice: product.quantity * product.price,
-      productstatus : (status === "pending") ? "pending" : "placed"
+      productstatus: "placed"
     }));
 
     const data = new Order({
