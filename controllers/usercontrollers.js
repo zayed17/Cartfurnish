@@ -362,11 +362,10 @@ const loadshop = async (req, res) => {
 
             const category = await Category.find({});
 
-            // Pass selected filters and pagination to the EJS template
             const selectedFilters = {
                 category: categoryId,
                 priceFilter: req.query.priceFilter,
-                search: req.query.search, // Preserve the search term in selectedFilters
+                search: req.query.search,
             };
 
             res.render("shop", {
@@ -376,7 +375,7 @@ const loadshop = async (req, res) => {
                 totalPages,
                 currentPage: page,
                 cart,
-                selectedFilters, // Pass selected filters to the template
+                selectedFilters, 
             });
         } else {
             res.render("shop", {
@@ -386,8 +385,8 @@ const loadshop = async (req, res) => {
                 totalPages: 0,
                 currentPage: 0,
                 cart,
-                selectedFilters: { category: null, priceFilter: null, search: req.query.search || null }, // Preserve the search term in selectedFilters
-                noProductsAvailable: true, // Flag to indicate no products are available
+                selectedFilters: { category: null, priceFilter: null, search: req.query.search || null }, 
+                noProductsAvailable: true, 
             });
         }
     } catch (error) {
@@ -538,7 +537,6 @@ const invoice = async (req, res) => {
   
       await page.setContent(htmlContent);
   
-      // Generate PDF
       const pdfBuffer = await page.pdf();
   
       res.setHeader('Content-Type', 'application/pdf');

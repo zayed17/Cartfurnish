@@ -7,9 +7,8 @@ fetch(salesEndpoint)
     .then(salesData => {
         console.log(salesData);
 
-        // Create an array with sales data for each month
         const monthlySales = Array.from({ length: 12 }, (_, month) => {
-            const dataForMonth = salesData.find(monthlyData => monthlyData.month === (month + 1)); // Adjust month value
+            const dataForMonth = salesData.find(monthlyData => monthlyData.month === (month + 1)); 
             return dataForMonth ? dataForMonth.totalAmount : 0;
         });
 
@@ -40,7 +39,6 @@ fetch(salesEndpoint)
     })
     .catch(error => console.error('Error fetching sales data:', error));
 
-// Event listener for the "Fetch Weekly Chart" button
 $('#fetchWeeklyChart').on('click', function () {
     const weeklySalesEndpoint = '/admin/weeklyChart';
 
@@ -49,7 +47,6 @@ $('#fetchWeeklyChart').on('click', function () {
         .then(weeklySalesData => {
             console.log(weeklySalesData);
 
-            // Create an array with sales data for each week
             const weeklySales = Array.from({ length: 52 }, (_, week) => {
                 const dataForWeek = weeklySalesData.find(order => order.week === week + 1);
 
@@ -84,7 +81,6 @@ $('#fetchWeeklyChart').on('click', function () {
         .catch(error => console.error('Error fetching weekly sales data:', error));
 });
 
-        /*Sale statistics Chart*/
         if ($('#myChart2').length) {
             const paymentEndpoint = '/admin/paymentChart';
         
@@ -103,7 +99,7 @@ $('#fetchWeeklyChart').on('click', function () {
                             labels: paymentLabels,
                             datasets: [{
                                 label: 'Payment Method',
-                                backgroundColor: ['#5897fb', '#7bcf86', '#ff9076'], // Adjust colors as needed
+                                backgroundColor: ['#5897fb', '#7bcf86', '#ff9076'], 
                                 barThickness: 30,
                                 data: paymentValues,
                             }],

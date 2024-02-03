@@ -664,7 +664,8 @@ function showEditAddressModal(fullName, country, housename, state, city, pincode
 			   data: formData,
 			   success: function(response) {
 				   if (response.success == true) {
-					   $('#addrassArea').load('/checkout #addrassArea');
+					//    $('#addrassArea').load('/checkout #addrassArea');
+					window.location.reload();
 					   $('#addAddressModals').modal('hide');
 					   $('.modal-backdrop').remove();
 	   
