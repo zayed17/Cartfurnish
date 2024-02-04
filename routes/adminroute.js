@@ -47,7 +47,7 @@ adminRoute.patch('/blockproducts/:id',productcontrollers.blockProducts)
 adminRoute.get('/addproduct',auth.isLogin, productcontrollers.loadaddproduct);
 adminRoute.post('/addproduct',auth.isLogin, multer.uploadproduct, productcontrollers.addproduct);
 adminRoute.get('/editproduct',auth.isLogin,productcontrollers.loadeditproduct)
-adminRoute.post('/editproduct',auth.isLogin,multer.uploadproduct,productcontrollers.editproduct)
+adminRoute.post('/editproduct',auth.isLogin,multer.uploadproducts,productcontrollers.editproduct)
 adminRoute.delete('/deleteImage',auth.isLogin,productcontrollers.deleteImage)
 
 //coupon

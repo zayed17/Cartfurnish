@@ -218,39 +218,50 @@
                                             <span class="text-danger" id="descriptionError"></span>
 
                                         </div>
-
-                                        <div class="row mt-3">
-                                            <% for (let i = 1; i <= 4; i++) { %>
-                                                <div class="col-lg-3 col-md-6">
-                                                    <label>Existing Image <%= i %></label>
-                                                    <div class="rounded-image-preview" id="roundedImagePreview<%= i %>">
-                                                        <% if (product.images['image' + i]) { %>
-                                                            <img src="/public/assets/images/products/sharpened/<%= product.images['image' + i] %>" alt="Preview" />
-                                                        <% } else { %>
-                                                            <span class="image-not-found">Image not found</span>
-                                                        <% } %>
-                                                    </div>
-                                                    <% if (product.images['image' + i]) { %>
-                                                        <button type="button" class="btn btn-danger delete-btn" data-image-number="<%= i %>" data-image-name="<%= product.images['image' + i] %>">
-                                                            <i class="fas fa-trash-alt"></i> Delete Image <%= i %>
-                                                        </button>
-                                                    <% } %>
-                                                    <label for="addImage<%= i %>">
-                                                        <input type="file" accept="image/*" id="addImage<%= i %>" class="add-image-input" name="cropedImages" data-image-number="<%= i %>" style="display: none" onchange="handleFileSelection(this, '<%= i %>')">
-                                                        <button type="button" class="btn btn-success add-image-btn" data-image-number="<%= i %>">
-                                                            <i class="fas fa-plus"></i> Add Image <%= i %>
-                                                        </button>
+                                        <div class="row d-flex justify-content-center ">
+                                            <div class="row d-flex justify-content-between ">
+                                                <div class="col-lg-3 col-md-6 rounded-image-preview">
+                                                    <label for="imageInput1" class="image-label">Image 1
+                                                        <img src="/public/assets/images/products/sharpened/<%= product.images.image1 %>"
+                                                        style="width: 130px;" alt="">
                                                     </label>
-                                                    
+                                                    <input name="image1" type="file" accept="image/*"
+                                                        id="imageInput1" class="imageInput">
                                                 </div>
-                                            <% } %>
+
+
+                                        <div class="col-lg-3 col-md-6 rounded-image-preview">
+                                            <label for="imageInput2" class="image-label">Image 2
+                                                <img src="/public/assets/images/products/sharpened/<%= product.images.image2 %>"
+                                                    style="width: 130px;" alt="">
+                                            </label>
+                                            <input name="image2" type="file" accept="image/*"
+                                                id="imageInput2" class="imageInput">
                                         </div>
-                                        <div class="form-group mt-3">
-                                            <button type="submit" id="editbutton" class="btn btn-primary">Submit</button>
-                                            <a href="product" class="btn btn-primary">
-                                                <span class="text">Back</span>
-                                            </a>
+
+                                        <div class="col-lg-3 col-md-6 rounded-image-preview">
+                                            <label for="imageInput3" class="image-label">Image 3
+                                                <img src="/public/assets/images/products/sharpened/<%= product.images.image3 %>"
+                                                    style="width: 130px;" alt="">
+                                            </label>
+                                            <input name="image3" type="file" accept="image/*"
+                                                id="imageInput3" class="imageInput">
                                         </div>
+
+                                        <div class="col-lg-3 col-md-6 rounded-image-preview">
+                                            <label for="imageInput4" class="image-label">Image 4
+                                                <img src="/public/assets/images/products/sharpened/<%= product.images.image4 %>"
+                                                    style="width: 130px;" alt="">
+                                            </label>
+                                            <input name="image4" type="file" accept="image/*"
+                                                id="imageInput4" class="imageInput">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="error-message text-center mt-4" id="imageError"></div>
+                                <div class="container">
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </div>
                                     </form>
                                 </div>
                             </div>

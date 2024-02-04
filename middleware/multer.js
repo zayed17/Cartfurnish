@@ -22,9 +22,15 @@ const BannerStorage = multer.diskStorage({
 const products = multer({ storage:productStorage});
 const uploadproduct =products.array('cropedImages', 4)
 const uploadBanner = multer({ storage:BannerStorage})
-
+const uploadproducts = products.fields([
+    { name: "image1", maxCount: 1 },
+    { name: "image2", maxCount: 1 },
+    { name: "image3", maxCount: 1 },
+    { name: "image4", maxCount: 1 },
+])
 module.exports = {
     uploadproduct,
-    uploadBanner
+    uploadBanner,
+    uploadproducts
 }
 

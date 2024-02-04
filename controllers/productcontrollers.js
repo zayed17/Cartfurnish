@@ -88,27 +88,33 @@ console.log(req.body.price);
       const id = req.query.id;
       const details = req.body;
       const files = req.files;
-      console.log(id);
-      console.log(details);
-      console.log(details.category);
   
+      const existingData = await Product.findOne({ _id: id });
   
-      
+      const img = [
+        files?.image1 ? (files.image1[0]?.filename || existingData.images.image1) : existingData.images.image1,
+        files?.image2 ? (files.image2[0]?.filename || existingData.images.image2) : existingData.images.image2,
+        files?.image3 ? (files.image3[0]?.filename || existingData.images.image3) : existingData.images.image3,
+        files?.image4 ? (files.image4[0]?.filename || existingData.images.image4) : existingData.images.image4,
+      ];
   
-      if (details.quantity > 0 && details.price > 0) {
-        const product = {
-          name: details.name,
-          quantity: details.quantity,
-          categoryId: details.category,
-          price: details.price,
-          offer: details.offer,
-          description: details.description,
-          
-        };
+      const product = {
+        name: details.name,
+        quantity: details.quantity,
+        categoryId: details.category,
+        price: details.price,
+        description: details.description,
+        images: {
+          image1: img[0],
+          image2: img[1],
+          image3: img[2],
+          image4: img[3],
+        },
+      };
   
-       await Product.findOneAndUpdate({ _id: id }, product, { new: true });
-       res.redirect('/admin/product')
-      }
+      const result = await Product.findOneAndUpdate({ _id: id }, product, { new: true });
+      res.redirect('/admin/product');
+  
     } catch (error) {
       console.log(error.message);
     }
