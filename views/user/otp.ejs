@@ -144,7 +144,7 @@
                                         <% if (typeof message !== 'undefined') { %>
                                             <p style="color: rgb(255, 0, 0);"><%= message %></p>
                                         <% } %>
-                                
+                                        <span id="otpError" class="error-message text-danger"></span>
                                         <form id="otpForm" action="/verifyotp"  onsubmit="validate(event)" method="post">
                                             <div class="mb-3">
                                                 <input type="hidden" name="email" id="email" value="">
@@ -152,7 +152,6 @@
                                             <div class="mb-3">
                                                 <label for="otp" class="form-label">OTP:</label>
                                                 <input type="text" id="otp" name="otp" class="form-control">
-                                                <span id="otpError" class="error-message text-danger"></span>
                                             </div>
                                             <input type="text" id="id" name="id" value="<%=id%>" hidden>
                                             <div class="row g-2">

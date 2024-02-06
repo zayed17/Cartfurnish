@@ -217,7 +217,6 @@
                                         </thead>
                                         <tbody>
                                             <% for (let i = 0; i < products.length; i++) { %>
-                                                <% if (products[i].is_blocked == false) { %>
                                                     <tr>
                                                         <td align="center">
                                                             <%= i + 1 %>
@@ -255,7 +254,7 @@
                                                                 <% } %>
                                                         </td>
                                                     </tr>
-                                                <% } %>
+                                                
                                             <% } %>
                                         </tbody>
                                     </table>

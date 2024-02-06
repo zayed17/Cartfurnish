@@ -289,6 +289,7 @@ const loademailinput = async (req,res)=>{
 
 const sentOtpbyMail = async(req,res)=>{
     try {
+
         const userData = await User.findOne({email:req.body.email});
    
         if(!userData){
@@ -296,6 +297,7 @@ const sentOtpbyMail = async(req,res)=>{
         }else{
             if(userData.is_verified==true){
                 sendOtpVerificationEmail(userData,res);
+                res.redirect(`/verifyotp?id=${userData._id}`)
             }else{
                 res.render('loginwithotp',{message:'user not verifed. Verify now'});  
             }
