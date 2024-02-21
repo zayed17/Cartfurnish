@@ -6,7 +6,7 @@ const isLogin = async (req, res, next) => {
       console.log(req.session.user_id);
       const userData = await User.findById(req.session.user_id);
       if (userData.is_blocked) {
-        res.redirect('/signup');
+        res.redirect('/login');
       } else {
         next();
       }
