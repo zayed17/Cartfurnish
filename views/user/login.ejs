@@ -31,24 +31,11 @@
     <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI/t1zFqELYZxMVexh5tRaxfInq60eaQW7NbMU=" crossorigin="anonymous"></script>
    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-<style>.input-group {
-    position: relative;
-}
-
-.input-group .form-control {
-    padding-right: 30px; 
-}
-
-.input-group .password-toggle {
-    position: absolute;
-    top: 50%;
-    right: 15px; 
-    transform: translateY(-50%);
-    background: transparent;
-    border: none;
-    padding: 0;
-    cursor: pointer;
-}
+<style>
+    #togglePassword{
+        border: none;
+        background-color: transparent;
+    }
 </style>
 </head>
 
@@ -157,18 +144,16 @@
             	<div class="container">
             		<div class="form-box">
             			<div class="form-tab">
-                            <div class="text-center text-dark text-lg">
+                            <div class="text-center text-dark ">
                                 Login-In
                             </div>
 							<div class="tab-content">
                                     <span id="messages" style="color: rgb(255, 0, 0);"></span>
-                                        <form id="myForm" method="post" >
+
+                                        <form id="myForm" onsubmit="validation(event)">
                                             <div class="form-group">
                                                 <label for="email">Email *</label>
                                                 <input type="email" class="form-control" id="email" name="email" placeholder="Enter email" >
-                                                <div class="invalid-feedback" id="email-error-message">
-                                                    Please enter a valid email address.
-                                                </div>
                                             </div>
                                         
                                             <div class="form-group">
@@ -179,19 +164,22 @@
                                                         <i class="fa fa-eye" aria-hidden="true"></i>
                                                     </button>
                                                 </div>
-                                                <div class="invalid-feedback" id="password-error-message">
-                                                    Please enter a password.
+                                                <div class="text-right ">
+                                                    <a href="/forgot" class="btn btn-link text-muted">Forgot Password?</a>
                                                 </div>
                                             </div>
                                             
                                             
-                                            <button  onclick="validation(event)" type="button" class="btn btn-outline-primary-2">
+                                            
+                                            
+                                            <button  type="submit" class="btn btn-outline-primary-2">
                                                 <span>LOGIN IN </span>
                                                 <i class="icon-long-arrow-right"></i>
                                             </button>
                                         </form>
                                         <div class="form-footer">
-                                            <a href="/forgot" class="btn btn-link" id="forgot-password-link">Forgot Password?</a>
+                                    
+                                    
                                             <div>
                                                 <p>New User <a href="/signup">click here!</a></p>
                                                 <p><a href="/loginwithotp">Login with OTP</a></p>
@@ -206,6 +194,10 @@
 
         <script>
 
+// async function sum(event){
+//     event.preventDefault()
+//     console.log("ya ist");
+// }
         
             async function validation(event) {
                 event.preventDefault();
