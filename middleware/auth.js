@@ -3,7 +3,7 @@ const User = require("../models/usermodel");
 const isLogin = async (req, res, next) => {
   try {
     if (req.session.user_id) {
-      console.log(req.session.user_id);
+      // console.log(req.session.user_id);
       const userData = await User.findById(req.session.user_id);
       if (userData.is_blocked) {
         res.redirect('/login');
