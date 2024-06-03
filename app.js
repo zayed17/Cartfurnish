@@ -11,7 +11,7 @@ const app = express();
 const port = 3009;
 
 // MongoDB connection configuration
-const dbUrl = process.env.MONGODB_URI;
+const dbUrl = 'mongodb+srv://mzayed9745:zayed%40100@cluster0.mpnqcan.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'
 
 // Connect to MongoDB
 mongoose.connect(dbUrl);
