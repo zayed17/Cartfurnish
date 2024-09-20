@@ -8,10 +8,10 @@ require('dotenv').config();
 
 // Set up Express application
 const app = express();
-const port = 3009;
+const port = process.env.PORT || 3009;
 
 // MongoDB connection configuration
-const dbUrl = 'mongodb+srv://mzayed9745:zayed%40100@cluster0.mpnqcan.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'
+const dbUrl = 'mongodb+srv://mzayed9745:mohammadzayed9745@projectcluster.dozic4b.mongodb.net/ecommerce?retryWrites=true&w=majority&appName=ProjectCluster'
 
 // Connect to MongoDB
 mongoose.connect(dbUrl);

@@ -16,14 +16,12 @@ const addaddress = async (req, res) => {
             email: req.body.email
         };
 
-        // Update the address
         await Address.findOneAndUpdate(
             { user: userId },
             { $set: { user: userId }, $push: { address: data } },
             { upsert: true, new: true }
         );
 
-        // Redirect to '/success'
         res.redirect('/success');
 
     } catch (error) {
@@ -47,14 +45,12 @@ const addaddressprofile = async (req, res) => {
             email: req.body.email
         };
 
-        // Update the address
         const updatedAddress = await Address.findOneAndUpdate(
             { user: userId },
             { $set: { user: userId }, $push: { address: data } },
             { upsert: true, new: true }
         );
 
-        // Send a JSON response
         res.json({ add: true, address: updatedAddress });
 
     } catch (error) {
