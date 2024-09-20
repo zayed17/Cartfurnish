@@ -9,7 +9,6 @@ const ordercontrollers = require('../controllers/ordercontrollers')
 const bannercontrollers = require('../controllers/bannercontrollers');
 const multer = require('../middleware/multer');
 const auth = require('../middleware/adminAuth')
-// Configure session
 
 adminRoute.use(session({
     secret: config.sessionSecret,
@@ -17,11 +16,9 @@ adminRoute.use(session({
     saveUninitialized: true
 }));
 
-// Parse JSON and URL-encoded data
 adminRoute.use(express.json());
 adminRoute.use(express.urlencoded({ extended: true }));
 
-// Set the view engine and views directory
 adminRoute.set('views', './views/admin');
 
 // Admin Routes
